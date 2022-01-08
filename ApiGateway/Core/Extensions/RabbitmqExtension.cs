@@ -2,6 +2,8 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace ApiGateway.Core.Extensions
             Console.WriteLine("RPC Client");
             var t = InvokeAsync(JsonConvert.SerializeObject(sender));
             t.Wait();
+            Console.WriteLine(t.Result);
             // return JsonConvert.DeserializeObject<DataMessage>(t.Result);
             return t.Result;
         }
@@ -29,7 +32,15 @@ namespace ApiGateway.Core.Extensions
             Console.WriteLine("send to service");
             var response = await rpcClient.CallAsync(message);
             Console.WriteLine(" [.] Got '{0}'", response);
-            rpcClient.Close();
+            try
+            {
+                rpcClient.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             return response;
         }
     }

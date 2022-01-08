@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -9,7 +11,7 @@ namespace Connection
     {
         public static void Main()
         {
-            var factory = new ConnectionFactory() {HostName = "localhost"};
+            var factory = new ConnectionFactory() {HostName = "1.1.1.84"};
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
             channel.QueueDeclare(
@@ -35,11 +37,12 @@ namespace Connection
                 try
                 {
                     var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    
+                    var json = JsonConvert.DeserializeObject<DataMessage>(message);
+                    json.Message = "message from connection";
                     // var n = int.Parse(message);
                     // Console.WriteLine(" [.] fib({0})", message);
                     // response = fib(n).ToString();
-                    response = message;
+                    response = JsonConvert.SerializeObject(json);
                 }
                 catch (Exception e)
                 {

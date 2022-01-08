@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiGateway.Core.Extensions;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -22,7 +23,9 @@ namespace ApiGateway.Library
 
         public RpcClient()
         {
-            var factory = new ConnectionFactory() {HostName = "localhost"};
+            var server_ip = "1.1.1.84";
+            //var factory = new ConnectionFactory() {HostName = "localhost"};
+            var factory = new ConnectionFactory() {HostName = server_ip};
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
@@ -68,7 +71,13 @@ namespace ApiGateway.Library
 
         public void Close()
         {
-            _connection.Close();
+            try
+            {
+                // _connection.Close();
+            }
+            catch
+            {
+            }
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:5.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["Connection/Connection.csproj", "Connection/"]
-RUN dotnet restore "Connection/Connection.csproj"
+COPY Connection.csproj ./
+RUN dotnet restore "./Connection.csproj"
 COPY . .
-WORKDIR "/src/Connection"
+WORKDIR /src/.
 RUN dotnet build "Connection.csproj" -c Release -o /app/build
 
 FROM build AS publish

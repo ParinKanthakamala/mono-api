@@ -1,0 +1,10 @@
+version: '3'
+services:
+  gateway:
+    container_name: api-gateway
+    image: api_gateway
+    ports:
+      - '80:5001'
+    #    volumes:
+    #      - ./public:/app/public
+    restart: always
