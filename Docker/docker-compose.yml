@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq:management-alpine
+        tty: true
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+
+#### Add more Containers below ####
+# use [ docker network create microservicenetwork ] เพื่อสร้าง mapmagiccloud(your network name) network ขึ้นมาก่อน
+networks:
+    default:
+        external:
+            name: microservicenetwork

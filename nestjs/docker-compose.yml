@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+  gateway:
+    container_name: api-gateway
+    image: api-gateway
+    ports:
+      - '80:80'
+    restart: always
