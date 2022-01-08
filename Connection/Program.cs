@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
