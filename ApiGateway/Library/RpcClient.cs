@@ -62,7 +62,7 @@ namespace ApiGateway.Library
             _channel.BasicConsume(
                 consumer: _consumer,
                 queue: _replyQueueName,
-                autoAck: true
+                autoAck: false
             );
 
             cancellationToken.Register(() => _callbackMapper.TryRemove(correlationId, out var tmp));
