@@ -56,7 +56,8 @@ namespace ApiGateway.Library
                 exchange: "",
                 routingKey: QUEUE_NAME,
                 basicProperties: props,
-                body: messageBytes);
+                body: messageBytes
+            );
 
             _channel.BasicConsume(
                 consumer: _consumer,
@@ -72,10 +73,11 @@ namespace ApiGateway.Library
         {
             try
             {
-                // _connection.Close();
+                _connection.Close();
             }
-            catch
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
             }
         }
     }

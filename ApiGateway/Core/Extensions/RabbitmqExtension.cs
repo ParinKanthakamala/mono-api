@@ -27,7 +27,7 @@ namespace ApiGateway.Core.Extensions
 
         private static async Task<string> InvokeAsync(string message)
         {
-            var rnd = new Random(Guid.NewGuid().GetHashCode());
+            // var rnd = new Random(Guid.NewGuid().GetHashCode());
             var rpcClient = new RpcClient();
             Console.WriteLine("send to service");
             var response = await rpcClient.CallAsync(message);

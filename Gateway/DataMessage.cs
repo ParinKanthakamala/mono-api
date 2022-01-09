@@ -1,6 +1,6 @@
 using System.Dynamic;
 
-namespace Connection
+namespace Gateway
 {
     public class DataMessage
     {

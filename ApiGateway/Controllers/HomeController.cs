@@ -14,7 +14,7 @@ namespace ApiGateway.Controllers
         [HttpGet("{*url}")]
         public IActionResult MakeGet()
         {
-            return Make("post", null);
+            return Make("get", null);
         }
 
         [HttpPost("{*url}")]
