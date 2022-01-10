@@ -76,10 +76,10 @@ namespace ApiGateway.Library
             {
                 // _channel.Close();
                 // _connection.Close();
-                _channel.Abort();
-                _channel.Close();
-                _connection.Abort();
-                _connection.Close();
+                _channel?.Abort();
+                _channel?.Close();
+                _connection?.Abort();
+                _connection?.Close();
             }
             catch (Exception exception)
             {
