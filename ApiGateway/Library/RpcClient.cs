@@ -55,7 +55,7 @@ namespace ApiGateway.Library
 
             _channel.BasicPublish(
                 exchange: "",
-                routingKey: message.To,
+                routingKey: "rpc_queue",
                 basicProperties: props,
                 body: messageBytes
             );
