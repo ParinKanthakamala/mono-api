@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -41,19 +42,20 @@ namespace ApiGateway.Library
             };
         }
 
-        public Task<string> CallAsync(string message, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<string> CallAsync(DataMessage message,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var props = _channel.CreateBasicProperties();
             var correlationId = Guid.NewGuid().ToString();
             props.CorrelationId = correlationId;
             props.ReplyTo = _replyQueueName;
-            var messageBytes = Encoding.UTF8.GetBytes(message);
+            var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
             var tcs = new TaskCompletionSource<string>();
             _callbackMapper.TryAdd(correlationId, tcs);
 
             _channel.BasicPublish(
                 exchange: "",
-                routingKey: QUEUE_NAME,
+                routingKey: message.To,
                 basicProperties: props,
                 body: messageBytes
             );

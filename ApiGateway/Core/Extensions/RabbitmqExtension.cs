@@ -18,14 +18,14 @@ namespace ApiGateway.Core.Extensions
         public static string Send(this ControllerBase source, DataMessage sender)
         {
             Console.WriteLine("RPC Client");
-            var t = InvokeAsync(JsonConvert.SerializeObject(sender));
+            var t = InvokeAsync(sender);
             t.Wait();
             Console.WriteLine(t.Result);
             // return JsonConvert.DeserializeObject<DataMessage>(t.Result);
             return t.Result;
         }
 
-        private static async Task<string> InvokeAsync(string message)
+        private static async Task<string> InvokeAsync(DataMessage message)
         {
             // var rnd = new Random(Guid.NewGuid().GetHashCode());
             var rpcClient = new RpcClient();
