@@ -22,7 +22,7 @@ namespace ApiGateway.Library
 
         public RpcClient()
         {
-            var server_ip = "1.1.1.84";
+            var server_ip = "159.138.230.118";
             //var factory = new ConnectionFactory() {HostName = "localhost"};
             var factory = new ConnectionFactory() {HostName = server_ip};
 

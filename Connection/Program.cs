@@ -11,7 +11,7 @@ namespace Connection
     {
         public static void Main()
         {
-            var factory = new ConnectionFactory() {HostName = "1.1.1.84"};
+            var factory = new ConnectionFactory() {HostName = "159.138.230.118"};
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
             channel.QueueDeclare(
