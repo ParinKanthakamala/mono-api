@@ -25,7 +25,6 @@ namespace ApiGateway.Library
             var server_ip = "159.138.230.118";
             //var factory = new ConnectionFactory() {HostName = "localhost"};
             var factory = new ConnectionFactory() {HostName = server_ip};
-
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
             _replyQueueName = _channel.QueueDeclare().QueueName;
