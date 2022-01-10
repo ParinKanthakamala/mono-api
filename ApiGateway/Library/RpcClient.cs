@@ -72,6 +72,7 @@ namespace ApiGateway.Library
         {
             try
             {
+                _channel.Close();
                 _connection.Close();
             }
             catch (Exception exception)
