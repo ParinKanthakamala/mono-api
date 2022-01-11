@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Text;
 using Gateway;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace Connection
 {
@@ -12,7 +8,7 @@ namespace Connection
         public static void Main()
         {
             var server = new RpcServer(host: "host.docker.internal", name: "connection");
-            server.start();
+            server.Start();
             // var factory = new ConnectionFactory() {HostName = "host.docker.internal"};
             // using var connection = factory.CreateConnection();
             // using var channel = connection.CreateModel();

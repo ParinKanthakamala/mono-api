@@ -1,15 +1,9 @@
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System;
-using System.Collections.Concurrent;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using ApiGateway.Library;
+using Gateway;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+
 
 namespace ApiGateway.Core.Extensions
 {
@@ -30,18 +24,22 @@ namespace ApiGateway.Core.Extensions
             // var rnd = new Random(Guid.NewGuid().GetHashCode());
             var rpcClient = new RpcClient();
             Console.WriteLine("send to service");
-            var response = await rpcClient.CallAsync(message);
-            Console.WriteLine(" [.] Got '{0}'", response);
+
             try
             {
+                var response = rpcClient.CallAsync(message);
+                Console.WriteLine(JsonConvert.DeserializeObject(response));
+                Console.WriteLine(" [.] Got '{0}'", response);
                 rpcClient.Close();
+                return response;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return response;
+            // return default(Task<string>);
+            return "";
         }
     }
 }

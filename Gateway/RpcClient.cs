@@ -11,22 +11,23 @@ namespace Gateway
 {
     public class RpcClient
     {
-        private IConnection _connection;
-        private IModel _channel;
-        private string _replyQueueName;
-        private EventingBasicConsumer _consumer;
+        private const string QUEUE_NAME = "rpc_queue";
 
-        private ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper =
+        private readonly IConnection _connection;
+        private readonly IModel _channel;
+        private readonly string _replyQueueName;
+        private readonly EventingBasicConsumer _consumer;
+
+        private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper =
             new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
         public RpcClient()
         {
-            var server_ip = "1.1.1.84";
+            var server_ip = "localhost";
             //var factory = new ConnectionFactory() {HostName = "localhost"};
             var factory = new ConnectionFactory() {HostName = server_ip};
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            // _replyQueueName = _channel.QueueDeclare().QueueName;
             _replyQueueName = _channel.QueueDeclare().QueueName;
             _consumer = new EventingBasicConsumer(_channel);
             _consumer.Received += (model, ea) =>
@@ -41,7 +42,7 @@ namespace Gateway
             };
         }
 
-        public Task<string> CallAsync(DataMessage message,
+        public string CallAsync(DataMessage message,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var props = _channel.CreateBasicProperties();
@@ -62,25 +63,27 @@ namespace Gateway
             _channel.BasicConsume(
                 consumer: _consumer,
                 queue: _replyQueueName,
-                autoAck: true
+                autoAck: false
             );
 
             cancellationToken.Register(() => _callbackMapper.TryRemove(correlationId, out var tmp));
-            return tcs.Task;
+            return tcs.Task.Result;
         }
 
         public void Close()
         {
             try
             {
-                // while (_channel.IsOpen)
-                // {
-                _channel.Close();
-                // }
+                // _channel.Close();
+                // _connection.Close();
+                // _channel?.Abort();
+                // _channel?.Close();
+                // _connection?.Abort();
+                // _connection?.Close();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(exception);
             }
         }
     }

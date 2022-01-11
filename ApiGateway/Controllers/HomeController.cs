@@ -1,6 +1,6 @@
 ﻿using System;
 using ApiGateway.Core.Extensions;
-using ApiGateway.Library;
+using Gateway;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
