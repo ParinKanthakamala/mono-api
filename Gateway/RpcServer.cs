@@ -15,14 +15,14 @@ namespace Gateway
         private ConnectionFactory factory;
         private IConnection connection;
         private IModel channel;
-        private BasicDeliverEventArgs args = null;
+        private BasicDeliverEventArgs args ;
         private IBasicProperties props;
         private IBasicProperties replyProps;
 
         private void OnMessage(object? sender, BasicDeliverEventArgs ea)
         {
             this.args = ea;
-            string response = null;
+            string response = string.Empty;
             this.props = ea.BasicProperties;
             this.replyProps = channel.CreateBasicProperties();
             this.replyProps.CorrelationId = props.CorrelationId;
