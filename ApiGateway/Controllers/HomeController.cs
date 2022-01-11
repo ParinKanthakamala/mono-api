@@ -62,7 +62,8 @@ namespace ApiGateway.Controllers
                 sender.Method = (string.IsNullOrEmpty(method)) ? Request.Method : method;
                 sender.Message = "";
                 sender.From = "api-gateway";
-                sender.To = this.GetApiName();
+                // sender.To = this.GetApiName();
+                sender.To = "connection";
                 sender.Route = this.GetRoute();
                 sender.Host = Request.Host.ToString();
                 sender.Type = "Request"; // request | response | error
