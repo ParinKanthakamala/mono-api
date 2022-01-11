@@ -37,7 +37,7 @@ namespace Gateway
             catch (Exception e)
             {
                 Console.WriteLine(" [.] " + e.Message);
-                response = "";
+                response = string.Empty;
             }
             finally
             {
