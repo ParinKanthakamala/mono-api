@@ -8,7 +8,7 @@ dotnet add package Microsoft.EntityFrameworkCore --version 3.1.6
 dotnet add package Microsoft.EntityFrameworkCore.Design --version 3.1.6
 dotnet add package Pomelo.Entityframeworkcore.MySql --version 3.1.2
 
-dotnet ef dbcontext scaffold "Server=localhost;User=root;Password=password;Database=perfex;Convert Zero Datetime=True" pomelo.entityframeworkcore.mysql -c MyContext -o ./ -t clients -t customer_admins -t customer_groups -t customers_groups -t roles -t staff -t staff_departments -t staff_permissions -t user_auto_login -t user_meta-f
+dotnet ef dbcontext scaffold "Server=localhost;User=root;Password=password;Database=perfex;Convert Zero Datetime=True" pomelo.entityframeworkcore.mysql -c MyContext -o ./ -t customfields -t ticket_attachments -t ticket_replies -t tickets -t tickets_pipe_log -t tickets_predefined_replies -t tickets_priorities -t tickets_status -f
 
 rm -rf bin
 rm -rf obj

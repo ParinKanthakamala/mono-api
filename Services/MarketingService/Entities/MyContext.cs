@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Website.Core.Entities
+namespace MarketingService.Entities
 {
     public partial class MyContext : DbContext
     {

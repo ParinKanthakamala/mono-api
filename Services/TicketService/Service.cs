@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Gateway;
 using Microsoft.Extensions.Hosting;
 
-namespace Connection
+namespace TicketService
 {
     public class Service : IHostedService, IDisposable
     {

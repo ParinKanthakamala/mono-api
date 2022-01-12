@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Website.Core.Entities
+namespace UserService.Entities
 {
     public partial class Clients
     {

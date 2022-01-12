@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Gateway;
 using Microsoft.Extensions.Hosting;
 
-namespace Connection
+namespace NotificationService
 {
     public class Service : IHostedService, IDisposable
     {
