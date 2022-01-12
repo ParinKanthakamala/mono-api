@@ -3,6 +3,8 @@ using ApiGateway.Core.Extensions;
 using Gateway;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RestSharp;
+
 
 namespace ApiGateway.Controllers
 {
@@ -14,31 +16,31 @@ namespace ApiGateway.Controllers
         [HttpGet("{*url}")]
         public IActionResult MakeGet()
         {
-            return Make("get", null);
+            return Make(Method.Get, null);
         }
 
         [HttpPost("{*url}")]
         public IActionResult MakePost(DataMessage data)
         {
-            return Make("post", data);
+            return Make(Method.Post, data);
         }
 
         [HttpDelete("{*url}")]
         public IActionResult MakeDelete(DataMessage data)
         {
-            return Make("delete", data);
+            return Make(Method.Delete, data);
         }
 
         [HttpPatch("{*url}")]
         public IActionResult MakePatch(DataMessage data)
         {
-            return Make("patch", data);
+            return Make(Method.Patch, data);
         }
 
         [HttpPut("{*url}")]
         public IActionResult MakePut(DataMessage data)
         {
-            return Make("put", data);
+            return Make(Method.Put, data);
         }
 
         [HttpHead("{*url}")]
@@ -50,16 +52,16 @@ namespace ApiGateway.Controllers
         [HttpOptions("{*url}")]
         public IActionResult MakeOptions(DataMessage data)
         {
-            return Make("options", data);
+            return Make(Method.Options, data);
         }
 
-        private IActionResult Make(string method, DataMessage data = default(DataMessage))
+        private IActionResult Make(Method method, DataMessage data = default(DataMessage))
         {
             var sender = new DataMessage();
             try
             {
                 sender.User = "";
-                sender.Method = (string.IsNullOrEmpty(method)) ? Request.Method : method;
+                sender.Method = method;
                 sender.Message = "";
                 sender.From = "api-gateway";
                 // sender.To = this.GetApiName();

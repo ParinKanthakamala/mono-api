@@ -1,11 +1,12 @@
 using System.Dynamic;
+using RestSharp;
 
 namespace Gateway
 {
     public class DataMessage
     {
         public string User;
-        public string Method;
+        public Method Method;
         public string Message = "";
         public string From = "api-gateway";
         public string To;

@@ -1,66 +1,23 @@
-﻿using System;
-using Gateway;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Connection
 {
     class Program
     {
-        public static void Main()
+        static async Task Main(string[] args)
         {
-            var server = new RpcServer(host: "host.docker.internal", name: "connection");
-            server.Start();
-            // var factory = new ConnectionFactory() {HostName = "host.docker.internal"};
-            // using var connection = factory.CreateConnection();
-            // using var channel = connection.CreateModel();
-            // channel.QueueDeclare(
-            //     queue: "rpc_queue",
-            //     durable: false,
-            //     exclusive: false,
-            //     autoDelete: true,
-            //     arguments: null
-            // );
-            // channel.BasicQos(0, 1, false);
-            // var consumer = new EventingBasicConsumer(channel);
-            // channel.BasicConsume(queue: "rpc_queue", autoAck: false, consumer: consumer);
-            // Console.WriteLine(" [x] Awaiting RPC requests");
+            // Run with console or service
+            var asService = !(Debugger.IsAttached || args.ToList().Contains("--console"));
+            var builder = new HostBuilder()
+                .ConfigureServices((hostContext, services) => { services.AddHostedService<Service>(); });
             //
-            // consumer.Received += (model, ea) =>
-            // {
-            //     string response = null;
-            //     var props = ea.BasicProperties;
-            //     var replyProps = channel.CreateBasicProperties();
-            //     replyProps.CorrelationId = props.CorrelationId;
-            //
-            //     try
-            //     {
-            //         var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-            //         var json = JsonConvert.DeserializeObject<DataMessage>(message);
-            //         json.Message = "message from connection";
-            //         response = JsonConvert.SerializeObject(json);
-            //     }
-            //     catch (Exception e)
-            //     {
-            //         Console.WriteLine(" [.] " + e.Message);
-            //         response = "";
-            //     }
-            //     finally
-            //     {
-            //         var responseBytes = Encoding.UTF8.GetBytes(response);
-            //         channel.BasicPublish(
-            //             exchange: "",
-            //             routingKey: props.ReplyTo,
-            //             basicProperties: replyProps,
-            //             body: responseBytes
-            //         );
-            //         channel.BasicAck(
-            //             deliveryTag: ea.DeliveryTag,
-            //             multiple: false
-            //         );
-            //     }
-            // };
-
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
+            builder.UseEnvironment(asService ? EnvironmentName.Production : EnvironmentName.Development);
+            if (asService) await builder.RunAsServiceAsync();
+            else await builder.RunConsoleAsync();
         }
     }
 }
