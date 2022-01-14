@@ -21,11 +21,10 @@ namespace Gateway
         private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper =
             new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
-        public RpcClient()
+        public RpcClient(string host="localhost")
         {
-            var server_ip = "localhost";
             //var factory = new ConnectionFactory() {HostName = "localhost"};
-            var factory = new ConnectionFactory() {HostName = server_ip};
+            var factory = new ConnectionFactory() {HostName = host};
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
             _replyQueueName = _channel.QueueDeclare().QueueName;
@@ -79,7 +78,7 @@ namespace Gateway
                 // _channel?.Abort();
                 // _channel?.Close();
                 // _connection?.Abort();
-                // _connection?.Close();
+                _connection?.Close();
             }
             catch (Exception exception)
             {

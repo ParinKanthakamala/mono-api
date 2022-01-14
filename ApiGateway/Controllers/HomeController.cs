@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using ApiGateway.Core.Extensions;
 using Gateway;
+using Gateway.Libraries;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
@@ -55,26 +57,39 @@ namespace ApiGateway.Controllers
             return Make(Method.Options, data);
         }
 
+
+        private string MakeRoute(string route)
+        {
+            var output = route.Split('/').ToList();
+            output = output.ToArray().Slice(2, output.Count).ToList();
+            var temp = string.Join("/", output);
+            Console.WriteLine(temp);
+            return temp;
+        }
+
         private IActionResult Make(Method method, DataMessage data = default(DataMessage))
         {
             var sender = new DataMessage();
             try
             {
-                sender.User = "";
-                sender.Method = method;
-                sender.Message = "";
-                sender.From = "api-gateway";
-                // sender.To = this.GetApiName();
-                sender.To = "connection";
-                sender.Route = this.GetRoute();
-                sender.Host = Request.Host.ToString();
-                sender.Type = "Request"; // request | response | error
-                // sender.Body = new { };
-                sender.Body = Request.Path.HasValue ? Request.Path.Value : "";
-                sender.Query = this.GetQuery();
-                sender.Token = "";
+                if (string.IsNullOrEmpty(Request.Path.Value))
+                {
+                    sender.User = "";
+                    sender.Method = method;
+                    sender.Message = "";
+                    sender.From = "api-gateway";
+                    // sender.To = this.GetApiName();
+                    sender.To = "connection";
+                    sender.Route = this.MakeRoute(Request.Path.Value);
+                    sender.Host = Request.Host.ToString();
+                    sender.Type = "Request"; // request | response | error
+                    // sender.Body = new { };
+                    sender.Body = Request.Path.HasValue ? Request.Path.Value : "";
+                    sender.Query = this.GetQuery();
+                    sender.Token = "";
 
-                return Content(this.Send(sender));
+                    return Content(this.Send(sender));
+                }
             }
             catch (Exception ex)
             {

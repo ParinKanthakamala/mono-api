@@ -13,7 +13,7 @@ namespace Connection
             var text = $"{DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss")}, Testing write." + Environment.NewLine;
             // File.WriteAllText(@"./Service.Write.txt", text);
             Console.WriteLine($"[{nameof(Service)}] has been started.....");
-            var server = new RpcServer(name: "connection");
+            var server = new RpcServer(name: "connection", host: "159.138.230.118");
             server.Start();
             return Task.CompletedTask;
         }
