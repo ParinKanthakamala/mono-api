@@ -1,8 +1,3 @@
-using System;
-using System.IO;
-using System.Net;
-using RestSharp;
-
 namespace Gateway
 {
     public class RabbitApi

@@ -1,5 +1,3 @@
-using System;
-using Gateway.Routing;
 using Newtonsoft.Json;
 
 namespace Gateway.Controllers
@@ -11,7 +9,7 @@ namespace Gateway.Controllers
 
         public void Result(object sender)
         {
-            this.sharepoint.server.Send(message: JsonConvert.SerializeObject(sender), kick: true);
+            sharepoint.server.Send(message: JsonConvert.SerializeObject(sender), kick: true);
         }
     }
 }

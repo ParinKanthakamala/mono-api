@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Gateway;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 
@@ -23,7 +22,7 @@ namespace ApiGateway.Core.Extensions
         private static async Task<string> InvokeAsync(DataMessage message)
         {
             // var rnd = new Random(Guid.NewGuid().GetHashCode());
-            var rpcClient = new RpcClient(host: "159.138.230.118");
+            var rpcClient = new RpcClient(host: "localhost");
             Console.WriteLine("send to service");
 
             try

@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Gateway\Gateway.csproj" />
+        <ProjectReference Include="..\Libraries\Molecular\Molecular.csproj" />
+        <ProjectReference Include="..\Molecular\Molecular.csproj" />
     </ItemGroup>
 
 </Project>

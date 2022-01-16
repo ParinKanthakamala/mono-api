@@ -60,6 +60,11 @@ namespace ApiGateway.Controllers
 
         private string MakeRoute(string route)
         {
+            if (route.Contains("%2F"))
+            {
+                route = route.Replace("%2F", "/");
+            }
+
             var output = route.Split('/').ToList();
             output = output.ToArray().Slice(2, output.Count).ToList();
             var temp = string.Join("/", output);
@@ -72,7 +77,7 @@ namespace ApiGateway.Controllers
             var sender = new DataMessage();
             try
             {
-                if (string.IsNullOrEmpty(Request.Path.Value))
+                if (!string.IsNullOrEmpty(Request.Path.Value))
                 {
                     sender.User = "";
                     sender.Method = method;
@@ -80,15 +85,20 @@ namespace ApiGateway.Controllers
                     sender.From = "api-gateway";
                     // sender.To = this.GetApiName();
                     sender.To = "connection";
-                    sender.Route = this.MakeRoute(Request.Path.Value);
+                    sender.Route = MakeRoute(Request.Path.ToString());
                     sender.Host = Request.Host.ToString();
                     sender.Type = "Request"; // request | response | error
                     // sender.Body = new { };
                     sender.Body = Request.Path.HasValue ? Request.Path.Value : "";
                     sender.Query = this.GetQuery();
                     sender.Token = "";
+                    var output = this.Send(sender);
+                    if (string.IsNullOrEmpty(output))
+                    {
+                        return Content("empty");
+                    }
 
-                    return Content(this.Send(sender));
+                    return Content(output);
                 }
             }
             catch (Exception ex)

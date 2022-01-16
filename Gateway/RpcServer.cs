@@ -1,6 +1,5 @@
 using System;
 using System.Dynamic;
-using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -24,40 +23,45 @@ namespace Gateway
 
         private void OnMessage(object sender, BasicDeliverEventArgs ea)
         {
-            this.args = ea;
-            var response = string.Empty;
-            this.props = ea.BasicProperties;
-            this.replyProps = channel.CreateBasicProperties();
-            this.replyProps.CorrelationId = props.CorrelationId;
-
             try
             {
+                args = ea;
+                var response = string.Empty;
+                props = ea.BasicProperties;
+                replyProps = channel.CreateBasicProperties();
+                replyProps.CorrelationId = props.CorrelationId;
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
                 var json = JsonConvert.DeserializeObject<DataMessage>(message);
-                sharepoint.props = this.props;
-                if (string.IsNullOrEmpty(json.Route)) return;
+                sharepoint.props = props;
+                if (string.IsNullOrEmpty(json.Route))
+                {
+                    this.Send("not found route.");
+                    return;
+                }
+
                 sharepoint.message = json;
-                var result = Routing.Routing.Handle(json.Route.Split('/').ToArray());
+                // var result = Routing.Handle(json.Route.Split('/').ToArray());
+                this.Send("complete");
             }
             catch (Exception e)
             {
                 Console.WriteLine(" [.] " + e.Message);
+                this.Send(e.Message);
             }
         }
-
 
         public void Send(string message = "", string exchange = "", bool kick = false)
         {
             // var response = JsonConvert.SerializeObject(message);
             var responseBytes = Encoding.UTF8.GetBytes(message);
-            this.channel.BasicPublish(
+            channel.BasicPublish(
                 exchange: exchange,
                 routingKey: sharepoint.props.ReplyTo,
-                basicProperties: this.replyProps,
+                basicProperties: replyProps,
                 body: responseBytes
             );
-            this.channel.BasicAck(
-                deliveryTag: this.args.DeliveryTag,
+            channel.BasicAck(
+                deliveryTag: args.DeliveryTag,
                 multiple: false
             );
         }
@@ -69,23 +73,23 @@ namespace Gateway
             dynamic arguments = default(ExpandoObject)
         )
         {
-            this.factory = new ConnectionFactory() {HostName = this.host};
+            factory = new ConnectionFactory() {HostName = host};
 
-            this.connection = this.factory.CreateConnection();
-            this.channel = connection.CreateModel();
+            connection = factory.CreateConnection();
+            channel = connection.CreateModel();
 
-            this.channel.QueueDeclare(
-                queue: this.name,
+            channel.QueueDeclare(
+                queue: name,
                 durable: durable,
                 exclusive: exclusive,
                 autoDelete: autoDelete,
                 arguments: null
             );
-            this.channel.BasicQos(0, 1, false);
-            this.consumer = new EventingBasicConsumer(channel);
-            this.channel.BasicConsume(queue: this.name, autoAck: false, consumer: consumer);
+            channel.BasicQos(0, 1, false);
+            consumer = new EventingBasicConsumer(channel);
+            channel.BasicConsume(queue: name, autoAck: false, consumer: consumer);
             Console.WriteLine(" [x] Awaiting RPC requests");
-            this.consumer.Received += this.OnMessage;
+            consumer.Received += OnMessage;
         }
 
         public RpcServer(string host = "localhost", string name = "test")

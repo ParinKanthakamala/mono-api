@@ -11,4 +11,12 @@
       <PackageReference Include="RestSharp" Version="107.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Libraries\Console" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Libraries\Molecular\Molecular.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -19,7 +19,7 @@ namespace ApiGateway.Core.Extensions
         //     Response = Context.Response;
         //     Request = Context.Request;
         //     originalPath = Convert.ToString(Request.Path.Value);
-        //     Console.WriteLine(ApiName);
+        //     ConsoleApp.WriteLine(ApiName);
         // }
         
         

@@ -1,5 +1,3 @@
-using System.Dynamic;
-
 namespace Gateway
 {
     public interface ICrudObject

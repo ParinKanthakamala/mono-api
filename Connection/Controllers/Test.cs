@@ -1,6 +1,6 @@
 using System;
-using Gateway.Attributes;
 using Gateway.Controllers;
+using Molecular.Attributes;
 
 namespace Connection.Controllers
 {
@@ -10,8 +10,7 @@ namespace Connection.Controllers
         [Command]
         public void Message(string name)
         {
-            // this.sharepoint.server.Send("message form server");
-            Console.WriteLine("Hello " + name + " !");
+            Console.WriteLine("Examples " + name + " !");
         }
 
         [Command]
@@ -21,7 +20,7 @@ namespace Connection.Controllers
             Result(new
             {
                 status_code = 200,
-                message = "Hello from server"
+                message = "Examples from server"
             });
         }
     }
