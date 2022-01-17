@@ -14,27 +14,26 @@ namespace Molecular.Routing
         public bool HasCapture;
         public Capture Capture;
         public List<Node> Nodes;
-        public Help Help;
+        public Help Help; 
         public MethodInfo Method;
 
-        public Route(Module module, IEnumerable<Node> nodes, MethodInfo method, Help help, bool hidden, Capture capture,
-            bool isdefault)
+        public Route(Module module, IEnumerable<Node> nodes, MethodInfo method, Help help, bool hidden, Capture capture, bool isdefault)
         {
-            Module = module;
-            Nodes = nodes.ToList();
-            Method = method;
-            Help = help;
-            Capture = capture;
-            HasCapture = capture is not null;
-            Hidden = hidden | HasCapture;
-            Default = isdefault;
+            this.Module = module;
+            this.Nodes = nodes.ToList();
+            this.Method = method;
+            this.Help = help;
+            this.Capture = capture;
+            this.HasCapture = capture is not null;
+            this.Hidden = hidden | this.HasCapture;
+            this.Default = isdefault;
         }
 
         public string Description => Help?.Description;
 
         public override string ToString()
         {
-            string commands = string.Join(" ", Nodes);
+            string commands = string.Join(" ", Nodes); 
             var parameters = Method.ParametersAsText();
 
             string s = commands;
@@ -42,4 +41,5 @@ namespace Molecular.Routing
             return s;
         }
     }
+
 }

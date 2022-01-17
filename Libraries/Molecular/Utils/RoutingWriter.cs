@@ -17,7 +17,7 @@ namespace Molecular.Utils
 
         public RoutingWriter(Documentation.Documentation doc)
         {
-            documentation = doc;
+            this.documentation = doc;
         }
 
         public void WriteResult(RoutingResult result)

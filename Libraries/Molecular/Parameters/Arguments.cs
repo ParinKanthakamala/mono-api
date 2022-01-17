@@ -15,7 +15,7 @@ namespace Molecular.Parameters
         public Arguments(IEnumerable<IArgument> arguments)
         {
             
-            AddRange(arguments);
+            this.AddRange(arguments);
         }
 
 //        public Arguments(IEnumerable<IArgument> arguments)
@@ -40,7 +40,7 @@ namespace Molecular.Parameters
          
         public bool TryGetCommand(int index, out string result) 
         {
-            if (index < Count)
+            if (index < this.Count)
             {
                 result = this[index].Original;
                 return true;

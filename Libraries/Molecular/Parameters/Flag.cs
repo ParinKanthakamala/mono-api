@@ -25,16 +25,16 @@ namespace Molecular.Parameters
         public Flag(string value)
         {
 
-            Name = value.TrimStart('-');
-            IsSet = true;
-            Short = value.Length == 1;
+            this.Name = value.TrimStart('-');
+            this.IsSet = true;
+            this.Short = value.Length == 1;
         }
 
         public Flag(string name, bool set)
         {
-            Name = name;
-            IsSet = set;
-            Short = name.Length == 1;
+            this.Name = name;
+            this.IsSet = set;
+            this.Short = name.Length == 1;
         }
 
         public bool Match(string name)
@@ -43,11 +43,11 @@ namespace Molecular.Parameters
 
             if (Short) // short flag
             {
-                return name.StartsWith(Name, StringComparison.OrdinalIgnoreCase);
+                return name.StartsWith(this.Name, StringComparison.OrdinalIgnoreCase);
             }
             else
             {
-                return string.Compare(Name, name, ignoreCase: true) == 0;
+                return string.Compare(this.Name, name, ignoreCase: true) == 0;
             }
         }
 

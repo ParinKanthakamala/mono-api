@@ -11,7 +11,9 @@ namespace Molecular.Attributes
 
         public Alt(string name)
         {
-            Name = name;
+            this.Name = name;
         }
     }
+
+
 }

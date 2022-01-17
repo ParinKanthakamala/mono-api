@@ -109,5 +109,9 @@ namespace Molecular.Builders
             var route = new Route(module, clone, method, help, hidden, capture, isdefault);
             routes.Add(route);
         }
+      
     }
+
+
+
 }

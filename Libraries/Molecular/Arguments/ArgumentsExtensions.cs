@@ -6,9 +6,10 @@ using Molecular.Routing;
 
 namespace Molecular.Arguments
 {
+
     public static class ArgumentsExtensions
     {
-        public static Parameters.Arguments WithoutCommands(this Parameters.Arguments arguments, Route route)
+        public static Parameters.Arguments WithoutCommands(this Parameters.Arguments arguments, Route route) 
         {
             var offset = route.Nodes.Count();
             var args = arguments.Skip(offset);
@@ -19,7 +20,7 @@ namespace Molecular.Arguments
         {
             return new Parameters.Arguments(arguments.Where(a => !capture.Match(a)));
         }
-
+         
         //public static Arguments WithoutCommands(this Arguments arguments)
         //{
         //    return new Arguments(arguments.Skip(arguments.Commands));
@@ -43,7 +44,6 @@ namespace Molecular.Arguments
                 {
                 }
             }
-
             value = null;
             return false;
         }
@@ -54,20 +54,18 @@ namespace Molecular.Arguments
             {
                 return int.TryParse(s, out value);
             }
-
             value = default;
             return false;
         }
 
         public static bool TryGetAssignment(this Parameters.Arguments args, string name, out Assignment assignment)
-        {
+        { 
             var matches = args.OfType<Text>();
-
-            foreach (var m in matches)
+            
+            foreach (var m in matches) 
             {
                 if (m.TryGetAssignment(name, out assignment)) return true;
             }
-
             assignment = Assignment.NotProvided;
             return false;
         }
@@ -79,15 +77,14 @@ namespace Molecular.Arguments
             return items.Count == 1;
         }
 
-        public static bool TryGet<T>(this Parameters.Arguments args, Parameter parameter, out T item)
-            where T : IArgument
+        public static bool TryGet<T>(this Parameters.Arguments args, Parameter parameter, out T item) where T: IArgument
         {
             var items = args.Match<T>(parameter);
             item = items.FirstOrDefault();
             return items.Count == 1;
         }
 
-        public static bool TryGet<T>(this Parameters.Arguments args, int index, out T item) where T : IArgument
+        public static bool TryGet<T>(this Parameters.Arguments args, int index, out T item) where T: IArgument
         {
             if (index < args.Count && args[index] is T arg)
             {
@@ -99,8 +96,7 @@ namespace Molecular.Arguments
             return false;
         }
 
-        public static bool TryGetFollowing<T>(this Parameters.Arguments args, IArgument arg, out T item)
-            where T : IArgument
+        public static bool TryGetFollowing<T>(this Parameters.Arguments args, IArgument arg, out T item) where T: IArgument
         {
             int index = args.IndexOf(arg);
             if (index >= 0)
@@ -113,7 +109,7 @@ namespace Molecular.Arguments
         }
 
         public static bool TryGetOptionString(this Parameters.Arguments args, Parameter parameter, out string value)
-        {
+        { 
             if (args.TryGet(parameter, out Flag flag))
             {
                 if (args.TryGetFollowing(flag, out Text text))
@@ -126,5 +122,7 @@ namespace Molecular.Arguments
             value = null;
             return false;
         }
+
     }
+
 }

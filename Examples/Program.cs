@@ -9,8 +9,9 @@ namespace Hello
         static void Main(string[] args)
         {
             var list = new List<string>();
-            list.Add("message");
-            list.Add("show");
+            // list.Add("Sub");
+            list.Add("Greet");
+            list.Add("maxx");
             Routing.Handle(list.ToArray());
             Console.WriteLine("Examples World!");
         }

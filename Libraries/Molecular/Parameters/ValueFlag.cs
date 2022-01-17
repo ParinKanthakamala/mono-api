@@ -23,9 +23,9 @@ namespace Molecular.Parameters
 
         public Flag(string name, T value, bool isSet = true)
         {
-            Name = name;
-            Value = value;
-            IsSet = isSet;
+            this.Name = name;
+            this.Value = value;
+            this.IsSet = isSet;
             //this.HasFlag = hasflag;
             //this.HasValue = hasvalue;
         }

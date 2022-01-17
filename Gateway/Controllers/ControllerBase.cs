@@ -11,5 +11,10 @@ namespace Gateway.Controllers
         {
             sharepoint.server.Send(message: JsonConvert.SerializeObject(sender), kick: true);
         }
+
+        public string Json(object value)
+        {
+            return JsonConvert.SerializeObject(value);
+        }
     }
 }

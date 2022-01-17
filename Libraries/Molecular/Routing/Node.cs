@@ -9,12 +9,12 @@ namespace Molecular.Routing
 
         public Node(IEnumerable<string> names)
         {
-            Names = names.ToArray();
+            this.Names = names.ToArray();
         }
 
         public Node(string name)
         {
-            Names = new string[] { name };
+            this.Names = new string[] { name };
         }
 
         public bool Matches(string name)

@@ -8,8 +8,8 @@
 
         public Assignment(string name, string value)
         {
-            Key = name;
-            Value = value;
+            this.Key = name;
+            this.Value = value;
 
             Provided = true;
         }
@@ -35,7 +35,7 @@
 
         public bool Match(string name)
         {
-            return string.Compare(Key, name, ignoreCase: true) == 0;
+            return string.Compare(this.Key, name, ignoreCase: true) == 0;
         }
     }
 

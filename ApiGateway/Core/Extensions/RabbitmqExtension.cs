@@ -23,13 +23,18 @@ namespace ApiGateway.Core.Extensions
         {
             // var rnd = new Random(Guid.NewGuid().GetHashCode());
             var rpcClient = new RpcClient(host: "localhost");
-            Console.WriteLine("send to service");
+
 
             try
             {
+                var promise = new TaskCompletionSource<string>();
+                if (promise.Task.Wait(3000))
+                {
+                    var myResult = promise.Task.Result;
+                }
+
                 var response = rpcClient.CallAsync(message);
-                Console.WriteLine(JsonConvert.DeserializeObject(response));
-                Console.WriteLine(" [.] Got '{0}'", response);
+
                 rpcClient.Close();
                 return response;
             }

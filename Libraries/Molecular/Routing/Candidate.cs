@@ -20,8 +20,8 @@ namespace Molecular.Routing
 
         public Candidate(RouteMatch match, Route route)
         {
-            Match = match;
-            Route = route;
+            this.Match = match;
+            this.Route = route;
         }
 
         public override string ToString()

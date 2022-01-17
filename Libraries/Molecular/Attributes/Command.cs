@@ -20,7 +20,7 @@ namespace Molecular.Attributes
         public Command(params string[] names)
         {
             IsGeneric = (names.Length == 0);
-            Names = names;
+            this.Names = names;
         }
 
         public override string ToString()

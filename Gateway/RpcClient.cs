@@ -11,74 +11,87 @@ namespace Gateway
 {
     public class RpcClient
     {
-        private const string QUEUE_NAME = "rpc_queue";
+        private IConnection connection;
+        private IModel channel;
+        private string replyQueueName;
+        private EventingBasicConsumer consumer;
 
-        private readonly IConnection _connection;
-        private readonly IModel _channel;
-        private readonly string _replyQueueName;
-        private readonly EventingBasicConsumer _consumer;
-
-        private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper =
+        private ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper =
             new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
-        public RpcClient(string host="localhost")
+        public RpcClient(string host = "localhost")
         {
             //var factory = new ConnectionFactory() {HostName = "localhost"};
             var factory = new ConnectionFactory() {HostName = host};
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _replyQueueName = _channel.QueueDeclare().QueueName;
-            _consumer = new EventingBasicConsumer(_channel);
-            _consumer.Received += (model, ea) =>
-            {
-                if (!_callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out var tcs))
-                {
-                    return;
-                }
-
-                var response = Encoding.UTF8.GetString(ea.Body.ToArray());
-                tcs.TrySetResult(response);
-            };
+            connection = factory.CreateConnection();
+            channel = connection.CreateModel();
+            replyQueueName = channel.QueueDeclare().QueueName;
+            consumer = new EventingBasicConsumer(channel);
         }
 
         public string CallAsync(DataMessage message,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken)
+            // EventHandler<BasicDeliverEventArgs> callback = default(EventHandler<BasicDeliverEventArgs>)
+        )
         {
-            var props = _channel.CreateBasicProperties();
-            var correlationId = Guid.NewGuid().ToString();
-            props.CorrelationId = correlationId;
-            props.ReplyTo = _replyQueueName;
-            var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-            var tcs = new TaskCompletionSource<string>();
-            _callbackMapper.TryAdd(correlationId, tcs);
+            try
+            {
+                consumer.Received += (model, ea) =>
+                {
+                    if (!_callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out var tcs))
+                    {
+                        return;
+                    }
 
-            _channel.BasicPublish(
-                exchange: "",
-                routingKey: message.To,
-                basicProperties: props,
-                body: messageBytes
-            );
+                    var response = Encoding.UTF8.GetString(ea.Body.ToArray());
+                    tcs.TrySetResult(response);
+                };
 
-            _channel.BasicConsume(
-                consumer: _consumer,
-                queue: _replyQueueName,
-                autoAck: false
-            );
 
-            cancellationToken.Register(() => _callbackMapper.TryRemove(correlationId, out var tmp));
-            return tcs.Task.Result;
+                var props = channel.CreateBasicProperties();
+                var correlationId = Guid.NewGuid().ToString();
+                props.CorrelationId = correlationId;
+                message.From = props.ReplyTo = replyQueueName;
+                var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+                var tcs = new TaskCompletionSource<string>();
+                _callbackMapper.TryAdd(correlationId, tcs);
+
+                channel.BasicPublish(
+                    exchange: "",
+                    routingKey: message.To,
+                    basicProperties: props,
+                    body: messageBytes
+                );
+
+                channel.BasicConsume(
+                    consumer: consumer,
+                    queue: replyQueueName,
+                    autoAck: false
+                );
+
+                cancellationToken.Register(() =>
+                {
+                    //
+                    _callbackMapper.TryRemove(correlationId, out var tmp);
+                });
+                return tcs.Task.Result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public void Close()
         {
             try
             {
-                // _channel.Close();
-                // _connection.Close();
-                // _channel?.Abort();
-                // _channel?.Close();
-                // _connection?.Abort();
-                _connection?.Close();
+                // channel.Close();
+                // connection.Close();
+                // channel?.Abort();
+                // channel?.Close();
+                // connection?.Abort();
+                connection?.Close();
             }
             catch (Exception exception)
             {

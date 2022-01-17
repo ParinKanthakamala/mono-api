@@ -1,6 +1,8 @@
 using System;
 using System.Dynamic;
+using System.Linq;
 using System.Text;
+using Molecular.Routing;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -21,39 +23,76 @@ namespace Gateway
         private IBasicProperties replyProps;
         private Sharepoint sharepoint = Sharepoint.sharepoint;
 
+        public void Write(string queueName, string message = "", string exchange = "")
+        {
+            var responseBytes = Encoding.UTF8.GetBytes(message);
+            channel.BasicPublish(
+                exchange: exchange,
+                routingKey: queueName,
+                basicProperties: replyProps,
+                body: responseBytes
+            );
+            channel.BasicAck(
+                deliveryTag: args.DeliveryTag,
+                multiple: false
+            );
+        }
+
+
         private void OnMessage(object sender, BasicDeliverEventArgs ea)
         {
+            Console.WriteLine(" [x] Get message");
+            var response = string.Empty;
+            var body = ea.Body.ToArray();
+            var props = ea.BasicProperties;
+            var replyProps = channel.CreateBasicProperties();
+            replyProps.CorrelationId = props.CorrelationId;
+            sharepoint.channel = channel;
             try
             {
-                args = ea;
-                var response = string.Empty;
-                props = ea.BasicProperties;
-                replyProps = channel.CreateBasicProperties();
-                replyProps.CorrelationId = props.CorrelationId;
-                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                var json = JsonConvert.DeserializeObject<DataMessage>(message);
-                sharepoint.props = props;
-                if (string.IsNullOrEmpty(json.Route))
-                {
-                    this.Send("not found route.");
-                    return;
-                }
+                var message = Encoding.UTF8.GetString(body);
 
-                sharepoint.message = json;
-                // var result = Routing.Handle(json.Route.Split('/').ToArray());
-                this.Send("complete");
+                var json = JsonConvert.DeserializeObject<DataMessage>(message);
+                json.From = props.ReplyTo;
+                // var parts = ("test/message/maxx").Split('/').ToList();
+                var parts = json.Route.Split('/').ToList();
+                var result = (RoutingResult) Routing.Handle(parts.ToArray());
+                if (result.Ok)
+                {
+                    Console.WriteLine("result ok");
+                    // Console.WriteLine(result.Value);
+                    response = Convert.ToString(result.Value);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(" [.] " + e.Message);
-                this.Send(e.Message);
+                response = "";
+            }
+            finally
+            {
+                Console.WriteLine(props.ReplyTo);
+                var responseBytes = Encoding.UTF8.GetBytes(response);
+                channel.BasicPublish(
+                    exchange: "",
+                    routingKey: props.ReplyTo,
+                    basicProperties: replyProps,
+                    body: responseBytes
+                );
+                channel.BasicAck(
+                    deliveryTag: ea.DeliveryTag,
+                    multiple: false
+                );
             }
         }
 
         public void Send(string message = "", string exchange = "", bool kick = false)
         {
             // var response = JsonConvert.SerializeObject(message);
+            Console.WriteLine("reply to : ");
+            Console.WriteLine(sharepoint.props.ReplyTo);
             var responseBytes = Encoding.UTF8.GetBytes(message);
+            // channel.BasicPublish(exchange, sharepoint.props.ReplyTo, null, responseBytes);
             channel.BasicPublish(
                 exchange: exchange,
                 routingKey: sharepoint.props.ReplyTo,
@@ -65,6 +104,7 @@ namespace Gateway
                 multiple: false
             );
         }
+
 
         public void Start(
             bool durable = true,
@@ -92,8 +132,14 @@ namespace Gateway
             consumer.Received += OnMessage;
         }
 
-        public RpcServer(string host = "localhost", string name = "test")
+        public RpcServer(
+            string name = "test",
+            string host = "localhost",
+            string account = "guest",
+            string password = "guest"
+        )
         {
+            // this.host = "amqp://" + account + ":" + password + "@" + host;
             this.host = host;
             this.name = name;
             sharepoint.server = this;

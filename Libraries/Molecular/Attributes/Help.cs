@@ -11,7 +11,7 @@ namespace Molecular.Attributes
 
         public Help(string description = null)
         {
-            Description = description;
+            this.Description = description;
         }
 
         

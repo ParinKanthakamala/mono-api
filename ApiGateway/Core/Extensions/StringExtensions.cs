@@ -1,6 +1,8 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ApiGateway.Core.Extensions
 {
@@ -18,6 +20,40 @@ namespace ApiGateway.Core.Extensions
             }
 
             throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
+        public static bool IsValidJson(this string source)
+        {
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                return false;
+            }
+
+            source = source.Trim();
+            if ((source.StartsWith("{") && source.EndsWith("}")) || //For object
+                (source.StartsWith("[") && source.EndsWith("]"))) //For array
+            {
+                try
+                {
+                    var obj = JToken.Parse(source);
+                    return true;
+                }
+                catch (JsonReaderException jex)
+                {
+                    //Exception in parsing json
+                    Console.WriteLine(jex.Message);
+                    return false;
+                }
+                catch (Exception ex) //some other exception
+                {
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

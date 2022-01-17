@@ -29,11 +29,11 @@ namespace Molecular.Routing
             IEnumerable<Type> globals = null,
             Action<Router, Exception> exceptionhandler = null)
         {
-            Globals = globals?.ToList();
-            Routes = routes;
-            Binder = binder;
-            Parser = parser;
-            Writer = writer;
+            this.Globals = globals?.ToList();
+            this.Routes = routes;
+            this.Binder = binder;
+            this.Parser = parser;
+            this.Writer = writer;
             this.services = services;
             HandleException = exceptionhandler ?? DefaultExceptionHandler.Handle;
         }
@@ -66,7 +66,8 @@ namespace Molecular.Routing
             {
                 var method = result.Bind.Route.Method;
                 var instance = services.CreateInstance(method.DeclaringType, this);
-                method.Invoke(instance, result.Bind.Parameters);
+                result.Value = method.Invoke(instance, result.Bind.Parameters);
+                Console.WriteLine("Router.Invoke(RoutingResult result)");
             }
             catch (Exception e)
             {

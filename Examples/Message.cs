@@ -1,14 +1,15 @@
+using System;
 using Molecular.Attributes;
 
 namespace Hello
 {
-    [Module]
+    [Command]
     public class Message
     {
-        [Module]
-        public string show()
+        [Command]
+        public void Show()
         {
-            return "Hello from example.";
+            Console.WriteLine("Hello from example.");
         }
     }
 }

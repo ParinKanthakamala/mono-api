@@ -9,7 +9,7 @@ namespace Molecular.Attributes
 
         public Capture(params string[] values)
         {
-            Values = values;
+            this.Values = values;
         }
 
         public bool Match(Parameters.Arguments arguments)

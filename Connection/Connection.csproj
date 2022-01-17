@@ -20,7 +20,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Gateway\Gateway.csproj" />
         <ProjectReference Include="..\Libraries\Molecular\Molecular.csproj" />
-        <ProjectReference Include="..\Molecular\Molecular.csproj" />
     </ItemGroup>
 
 </Project>

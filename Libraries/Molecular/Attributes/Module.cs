@@ -9,7 +9,7 @@ namespace Molecular.Attributes
         
         public Module(string title = null)
         {
-            Title = title;
+            this.Title = title;
             
         }
     }

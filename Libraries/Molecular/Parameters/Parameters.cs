@@ -8,7 +8,7 @@ namespace Molecular.Parameters
     {
         public Parameters(IEnumerable<Parameter> parameters)
         {
-            AddRange(parameters);
+            this.AddRange(parameters);
         }
 
         public  string Text => $"({string.Join(", ", this)})";

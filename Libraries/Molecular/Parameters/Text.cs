@@ -10,13 +10,13 @@ namespace Molecular.Parameters
 
         public Text(string value)
         {
-            Value = value;
-            Original = value;
+            this.Value = value;
+            this.Original = value;
         }
 
         public virtual bool Match(string value)
         {
-            return string.Compare(Value, value, ignoreCase: true) == 0;
+            return string.Compare(this.Value, value, ignoreCase: true) == 0;
         }
 
         public bool MatchAssignment(string name) 

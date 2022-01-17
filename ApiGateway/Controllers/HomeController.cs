@@ -85,17 +85,27 @@ namespace ApiGateway.Controllers
                     sender.From = "api-gateway";
                     // sender.To = this.GetApiName();
                     sender.To = "connection";
-                    sender.Route = MakeRoute(Request.Path.ToString());
+                    sender.Route = MakeRoute(Request.Path.Value);
                     sender.Host = Request.Host.ToString();
                     sender.Type = "Request"; // request | response | error
                     // sender.Body = new { };
                     sender.Body = Request.Path.HasValue ? Request.Path.Value : "";
                     sender.Query = this.GetQuery();
                     sender.Token = "";
+
                     var output = this.Send(sender);
-                    if (string.IsNullOrEmpty(output))
+                    try
                     {
-                        return Content("empty");
+                        if (output.IsValidJson())
+                        {
+                            return Content(JsonConvert.SerializeObject(JsonConvert.DeserializeObject(output)));
+                        }
+
+                        return Content(output);
+                    }
+                    catch (Exception ex)
+                    {
+                        // return Content(ex.Message);
                     }
 
                     return Content(output);

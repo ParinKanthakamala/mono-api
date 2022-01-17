@@ -21,7 +21,7 @@ namespace Molecular.Documentation
                 var items = ReadMembersDocumentation(xdoc);
                 foreach(var item in items)
                 {
-                    documentation.Add(item);
+                    this.documentation.Add(item);
                 }
             }
             return this;

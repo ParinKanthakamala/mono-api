@@ -16,7 +16,7 @@ namespace Molecular.Builders
         public RouteDiscoverer Discovery = new();
         public List<IBinder> Binders = new();
         public IServiceCollection Services = new ServiceCollection();
-
+        
         Action<Router, Exception> exceptionHandler;
         private bool WithDocumentation { get; set; } = true;
 
@@ -31,9 +31,9 @@ namespace Molecular.Builders
             if (WithDocumentation)
             {
                 var docs =
-                    new DocumentationBuilder()
-                        .Add(Discovery.Assemblies)
-                        .Build();
+                   new DocumentationBuilder()
+                   .Add(Discovery.Assemblies)
+                   .Build();
 
                 return docs;
             }
@@ -42,19 +42,19 @@ namespace Molecular.Builders
 
         public RouterBuilder AddExceptionHandler(Action<Router, Exception> handler)
         {
-            exceptionHandler = handler;
+            this.exceptionHandler = handler;
             return this;
         }
 
         public RouterBuilder NoExceptionHandling()
         {
-            exceptionHandler = null;
+            this.exceptionHandler = null;
             return this;
         }
 
         public RouterBuilder AddBinder(IBinder binder)
         {
-            Binders.Add(binder);
+            this.Binders.Add(binder);
             return this;
         }
 
@@ -62,13 +62,14 @@ namespace Molecular.Builders
         /// You can add the default binders yourself if you want to append more.
         /// If you don't configure any binders at all, the defaults will be used regardless.
         /// </summary>
+
         public Router Build()
         {
             var documentation = BuildDocumentation();
 
             var globals = Discovery.DiscoverGlobals();
             var routes = Discovery.DiscoverRoutes().ToList();
-
+            
             var binder = CreateBinder();
             var parser = new ArgumentParser();
             var writer = new RoutingWriter(documentation);
@@ -87,5 +88,8 @@ namespace Molecular.Builders
             if (Binders.Count == 0) Binders.AddDefaultBinders();
             return new Binder(Binders);
         }
+
     }
+
+
 }
