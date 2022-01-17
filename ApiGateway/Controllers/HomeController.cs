@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ApiGateway.Core;
 using ApiGateway.Core.Extensions;
 using Gateway;
 using Gateway.Libraries;
@@ -79,13 +80,14 @@ namespace ApiGateway.Controllers
             {
                 if (!string.IsNullOrEmpty(Request.Path.Value))
                 {
+                    var apiData = new ApiData(Request);
                     sender.User = "";
                     sender.Method = method;
                     sender.Message = "";
                     // sender.From = "api-gateway";
                     // sender.To = this.GetApiName();
-                    sender.To = "connection";
-                    sender.Route = MakeRoute(Request.Path.Value);
+                    sender.To = apiData.Name;
+                    sender.Route = apiData.Route;
                     sender.Host = Request.Host.ToString();
                     sender.Type = "Request"; // request | response | error
                     // sender.Body = new { };
@@ -96,12 +98,9 @@ namespace ApiGateway.Controllers
                     var output = this.Send(sender);
                     try
                     {
-                        if (output.IsValidJson())
-                        {
-                            return Content(JsonConvert.SerializeObject(JsonConvert.DeserializeObject(output)));
-                        }
-
-                        return Content(output);
+                        return Content(output.IsValidJson()
+                            ? JsonConvert.SerializeObject(JsonConvert.DeserializeObject(output))
+                            : output);
                     }
                     catch (Exception ex)
                     {

@@ -84,15 +84,6 @@ namespace Connection
 
         static async Task Main(string[] args)
         {
-            try
-            {
-                Console.WriteLine(Sharepoint.sharepoint.config.Database.connection);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
             // var server = new RpcServer(name: "connection", host: "localhost");
             // server.Start();
             // MainSubCommands.Example();
@@ -104,6 +95,7 @@ namespace Connection
             // Console.WriteLine(JsonConvert.SerializeObject(result));
             // Run with console or service
             var asService = !(Debugger.IsAttached || args.ToList().Contains("--console"));
+            Console.WriteLine("asService : " + asService);
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
