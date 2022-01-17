@@ -2,7 +2,6 @@ using System;
 using System.Dynamic;
 using Gateway.Controllers;
 using Molecular.Attributes;
-using Newtonsoft.Json;
 
 namespace Connection.Controllers
 {

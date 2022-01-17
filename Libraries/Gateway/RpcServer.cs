@@ -57,12 +57,10 @@ namespace Gateway
                 // var parts = ("test/message/maxx").Split('/').ToList();
                 var parts = json.Route.Split('/').ToList();
                 var result = (RoutingResult) Routing.Handle(parts.ToArray());
-                if (result.Ok)
-                {
-                    Console.WriteLine("result ok");
-                    // Console.WriteLine(result.Value);
-                    response = Convert.ToString(result.Value);
-                }
+                if (!result.Ok) return;
+                Console.WriteLine("result ok");
+                // Console.WriteLine(result.Value);
+                response = Convert.ToString(result.Value);
             }
             catch (Exception e)
             {
