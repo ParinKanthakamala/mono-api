@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Connection.Controllers;
 using Gateway;
+using Gateway.Libraries;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Molecular.Routing;
@@ -82,6 +84,15 @@ namespace Connection
 
         static async Task Main(string[] args)
         {
+            try
+            {
+                Console.WriteLine(Sharepoint.sharepoint.config.Database.connection);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             // var server = new RpcServer(name: "connection", host: "localhost");
             // server.Start();
             // MainSubCommands.Example();

@@ -17,15 +17,13 @@ namespace Connection
     {
         public Sharepoint sharepoint = Sharepoint.sharepoint;
 
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             var text = $"{DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss")}, Testing write." + Environment.NewLine;
             // File.WriteAllText(@"./Service.Write.txt", text);
             Console.WriteLine($"[{nameof(Service)}] has been started.....");
-            var server = new RpcServer(host: "localhost", name: "connection");
+            var server = new RpcServer(host: sharepoint.config.RabbitMQ.host, name: sharepoint.config.RabbitMQ.name);
             server.Start();
-            ///
             return Task.CompletedTask;
         }
 
