@@ -82,7 +82,7 @@ namespace ApiGateway.Controllers
                     sender.User = "";
                     sender.Method = method;
                     sender.Message = "";
-                    sender.From = "api-gateway";
+                    // sender.From = "api-gateway";
                     // sender.To = this.GetApiName();
                     sender.To = "connection";
                     sender.Route = MakeRoute(Request.Path.Value);

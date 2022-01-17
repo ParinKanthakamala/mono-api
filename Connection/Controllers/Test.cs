@@ -19,7 +19,7 @@ namespace Connection.Controllers
                 Console.WriteLine("Examples " + name + " !");
                 // this.sharepoint[queueName].Write("read ok");
                 // return Json(data);
-                return JsonConvert.SerializeObject(data);
+                return Result(data);
             }
             catch (Exception ex)
             {
@@ -30,10 +30,10 @@ namespace Connection.Controllers
         }
 
         [Command]
-        public void Message()
+        public object Message()
         {
             Console.WriteLine("Test.Message");
-            Result(new
+            return Result(new
             {
                 status_code = 200,
                 message = "Examples from server"

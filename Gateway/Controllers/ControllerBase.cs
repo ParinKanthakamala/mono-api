@@ -7,9 +7,9 @@ namespace Gateway.Controllers
         public Sharepoint sharepoint = Sharepoint.sharepoint;
         public DataMessage message = Sharepoint.sharepoint.message;
 
-        public void Result(object sender)
+        public string Result(object sender)
         {
-            sharepoint.server.Send(message: JsonConvert.SerializeObject(sender), kick: true);
+            return JsonConvert.SerializeObject(sender);
         }
 
         public string Json(object value)
