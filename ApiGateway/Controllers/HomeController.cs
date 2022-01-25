@@ -3,47 +3,47 @@ using System.Linq;
 using ApiGateway.Core;
 using ApiGateway.Core.Extensions;
 using Gateway;
-using Gateway.Libraries;
+using Gateway.Libraries.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
-
+using static Gateway.Libraries.RabbitMQ.RpcClient;
 
 namespace ApiGateway.Controllers
 {
     [ApiController]
     [Produces("application/json")]
     [Route("/")]
-    public class HomeController : ControllerBase
+    public class HomeController : MyControllerBase
     {
         [HttpGet("{*url}")]
         public IActionResult MakeGet()
         {
-            return Make(Method.Get, null);
+            return Make(Method.GET, null);
         }
 
         [HttpPost("{*url}")]
         public IActionResult MakePost(DataMessage data)
         {
-            return Make(Method.Post, data);
+            return Make(Method.POST, data);
         }
 
         [HttpDelete("{*url}")]
         public IActionResult MakeDelete(DataMessage data)
         {
-            return Make(Method.Delete, data);
+            return Make(Method.DELETE, data);
         }
 
         [HttpPatch("{*url}")]
         public IActionResult MakePatch(DataMessage data)
         {
-            return Make(Method.Patch, data);
+            return Make(Method.PATCH, data);
         }
 
         [HttpPut("{*url}")]
         public IActionResult MakePut(DataMessage data)
         {
-            return Make(Method.Put, data);
+            return Make(Method.PUT, data);
         }
 
         [HttpHead("{*url}")]
@@ -55,9 +55,8 @@ namespace ApiGateway.Controllers
         [HttpOptions("{*url}")]
         public IActionResult MakeOptions(DataMessage data)
         {
-            return Make(Method.Options, data);
+            return Make(Method.OPTIONS, data);
         }
-
 
         private string MakeRoute(string route)
         {
@@ -84,30 +83,27 @@ namespace ApiGateway.Controllers
                     sender.User = "";
                     sender.Method = method;
                     sender.Message = "";
-                    // sender.From = "api-gateway";
-                    // sender.To = this.GetApiName();
+                    sender.From = this.AppSettings.RabbitOptions.Name;
                     sender.To = apiData.Name;
                     sender.Route = apiData.Route;
                     sender.Host = Request.Host.ToString();
-                    sender.Type = "Request"; // request | response | error
-                    // sender.Body = new { };
+                    sender.Type = "Request";
                     sender.Body = Request.Path.HasValue ? Request.Path.Value : "";
                     sender.Query = this.GetQuery();
                     sender.Token = "";
+                    // Console.WriteLine(JsonConvert.SerializeObject(sender));
+                    // var output = rpc_client.CallAsync(JsonConvert.SerializeObject(sender));
 
-                    var output = this.Send(sender);
                     try
                     {
-                        return Content(output.IsValidJson()
-                            ? JsonConvert.SerializeObject(JsonConvert.DeserializeObject(output))
-                            : output);
+                        return Content((output.GetType() != typeof(string))
+                            ? JsonConvert.SerializeObject(output)
+                            : (string) Convert.ChangeType(output, typeof(string)));
                     }
                     catch (Exception ex)
                     {
-                        // return Content(ex.Message);
+                        return Content(ex.Message);
                     }
-
-                    return Content(output);
                 }
             }
             catch (Exception ex)
@@ -115,7 +111,8 @@ namespace ApiGateway.Controllers
                 sender.Message = ex.Message;
             }
 
-            return Content(JsonConvert.SerializeObject(sender));
+            // return Content(JsonConvert.SerializeObject(sender));
+            return Ok();
         }
     }
 }

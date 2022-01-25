@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlockChain
+namespace Blockchain
 {
     class Program
     {

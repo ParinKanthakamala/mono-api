@@ -10,20 +10,6 @@ namespace ApiGateway.Core.Extensions
     {
         public static string ApiName = "";
 
-         
-
-        // public ApiGateway(HttpContext httpContext)
-        // {
-        //     source.dataHub = dataHub;
-        //     // Context = httpContext;
-        //     Response = Context.Response;
-        //     Request = Context.Request;
-        //     originalPath = Convert.ToString(Request.Path.Value);
-        //     ConsoleApp.WriteLine(ApiName);
-        // }
-        
-        
-        
 
         public static List<string> Segments(this ControllerBase source)
         {
@@ -32,7 +18,6 @@ namespace ApiGateway.Core.Extensions
                 ? originalPath.Split("/").ToList().Where(el => !string.IsNullOrEmpty(el)).ToList()
                 : new List<string>();
         }
-
 
         public static string GetApiName(this ControllerBase source)
         {

@@ -3,10 +3,10 @@ using System.Dynamic;
 using Gateway.Controllers;
 using Molecular.Attributes;
 
-namespace Connection.Controllers
+namespace Prototype.Controllers
 {
     [Module("Test"), Command]
-    public class Test : ControllerBase
+    public class Test : MyControllerBase
     {
         [Command]
         public object Message(string name)

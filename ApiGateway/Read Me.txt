@@ -1,0 +1,19 @@
+Projects
+Invoices
+Subscription
+Estimate
+Proposals
+Expenses
+Payments
+Leads Management
+Web To Lead Forms
+Support System
+Calendar
+Custom Fields
+Tasks
+Knowledge Base
+Contracts
+Reports
+Goals Tracking
+Personal Todo List
+Customer Area

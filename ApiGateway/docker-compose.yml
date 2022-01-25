@@ -1,26 +1,15 @@
-
-
-version: '3'
-
+version: "3.3"
 services:
-  api:
-    container_name: Connection
+  api_gateway:
+    container_name: api_gateway
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - NODE_ENV=development
-    environment:
-      - PORT=3000
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PW=crudjs
-    restart: always
     ports:
-      - '80:5001'
+      - "80:5001"
     volumes:
       - ./app/:/app/
-      # - /usr/src/app/node_modules
-      # command: npm run start:dev
-    
+  mariadb-galera-bootstrap:
+    extends:
+      file: docker-compose.mysql.yml
+      service: mariadb-galera-bootstrap

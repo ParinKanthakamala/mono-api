@@ -1,17 +1,17 @@
 using System;
 using System.Threading.Tasks;
 using Gateway;
+using Gateway.Libraries.RabbitMQ;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-
+using static Gateway.Libraries.RabbitMQ.RpcClient;
 
 namespace ApiGateway.Core.Extensions
 {
     public static class RabbitmqExtension
     {
-        public static string Send(this ControllerBase source, DataMessage sender)
+        public static string Send(this ControllerBase source, string sender)
         {
-            Console.WriteLine("RPC Client");
             var t = InvokeAsync(sender);
             t.Wait();
             Console.WriteLine(t.Result);
@@ -19,12 +19,8 @@ namespace ApiGateway.Core.Extensions
             return t.Result;
         }
 
-        private static async Task<string> InvokeAsync(DataMessage message)
+        private static async Task<string> InvokeAsync(string message)
         {
-            // var rnd = new Random(Guid.NewGuid().GetHashCode());
-            var rpcClient = new RpcClient(host: "localhost");
-
-
             try
             {
                 var promise = new TaskCompletionSource<string>();
@@ -33,9 +29,7 @@ namespace ApiGateway.Core.Extensions
                     var myResult = promise.Task.Result;
                 }
 
-                var response = rpcClient.CallAsync(message);
-
-                rpcClient.Close();
+                var response = rpc_client.CallAsync(message);
                 return response;
             }
             catch (Exception ex)

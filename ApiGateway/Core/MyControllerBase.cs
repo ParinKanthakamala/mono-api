@@ -1,5 +1,7 @@
+using Gateway.Libraries.Common;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+
 
 namespace ApiGateway.Core
 {
@@ -8,10 +10,18 @@ namespace ApiGateway.Core
         // protected MyContext db = new();
         protected ApiResponse output = new();
 
-
-        public object JsonObject(object input)
+        public AppSettings AppSettings
         {
-            return JsonConvert.DeserializeObject(JsonConvert.SerializeObject(input));
+            get
+            {
+                var item = new object();
+                return item.appsettings();
+            }
         }
+
+        // public object JsonObject(object input)
+        // {
+        //     return JsonConvert.DeserializeObject(JsonConvert.SerializeObject(input));
+        // }
     }
 }

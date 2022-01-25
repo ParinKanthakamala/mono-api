@@ -1,0 +1,38 @@
+version: '3.5'
+
+networks:
+  marianet:
+    driver: overlay
+
+services:
+  mariadb-galera-bootstrap:
+    image: 'bitnami/mariadb-galera:latest'
+    environment:
+      - MARIADB_GALERA_CLUSTER_NAME=galera
+      - MARIADB_GALERA_MARIABACKUP_USER=root
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=password
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
+      - MARIADB_USER=root
+      - MARIADB_PASSWORD=password
+      - MARIADB_DATABASE=my_database
+      - MARIADB_REPLICATION_USER=my_replication_user
+      - MARIADB_REPLICATION_PASSWORD=password
+    networks:
+      - marianet
+    deploy:
+      replicas: 1
+  mariadb-galera:
+    image: 'bitnami/mariadb-galera:latest'
+    environment:
+      - MARIADB_GALERA_CLUSTER_NAME=my_galera
+      - MARIADB_GALERA_CLUSTER_ADDRESS=gcomm://galsera_mariadb-galera-bootstrap:4567,0.0.0.0:4567
+      - MARIADB_GALERA_MARIABACKUP_USER=root
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=password
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_REPLICATION_USER=my_replication_user
+      - MARIADB_REPLICATION_PASSWORD=password
+    networks:
+      - marianet
+    deploy:
+      replicas: 3

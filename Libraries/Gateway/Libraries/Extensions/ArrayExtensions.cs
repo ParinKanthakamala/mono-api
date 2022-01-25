@@ -1,4 +1,4 @@
-namespace Gateway.Libraries
+namespace Gateway.Libraries.Extensions
 {
     public static class ArrayExtensions
     {

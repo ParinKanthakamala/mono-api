@@ -1,28 +1,23 @@
 using System;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Gateway;
+using Gateway.Libraries.Common;
+using Gateway.Libraries.RabbitMQ;
 using Microsoft.Extensions.Hosting;
-using Molecular.Routing;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
-namespace Connection
+namespace Prototype
 {
     public class Service : IHostedService, IDisposable
     {
-        public Sharepoint sharepoint = Sharepoint.sharepoint;
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             var text = $"{DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss")}, Testing write." + Environment.NewLine;
             // File.WriteAllText(@"./Service.Write.txt", text);
             Console.WriteLine($"[{nameof(Service)}] has been started.....");
-            var server = new RpcServer(host: sharepoint.config.RabbitMQ.host, name: sharepoint.config.RabbitMQ.name);
+            var appsettings = this.appsettings();
+            Console.WriteLine(appsettings.RabbitOptions.Name);
+            var rabbitmq = appsettings.RabbitOptions;
+            var server = new RpcServer(host: rabbitmq.Connection.HostName, name: rabbitmq.Name);
             server.Start();
             return Task.CompletedTask;
         }

@@ -4,19 +4,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace Connection
+namespace Prototype
 {
     public class ServiceBaseLifeTime : ServiceBase, IHostLifetime
     {
         private readonly TaskCompletionSource<object> _delayStart;
         private IApplicationLifetime ApplicationLifetime { get; }
 
-        public ServiceBaseLifeTime(IApplicationLifetime
-            applicationLifetime)
+        public ServiceBaseLifeTime(IApplicationLifetime applicationLifetime)
         {
             _delayStart = new TaskCompletionSource<object>();
-            ApplicationLifetime = applicationLifetime ?? throw new
-                ArgumentNullException(nameof(applicationLifetime));
+            ApplicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

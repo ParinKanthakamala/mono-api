@@ -2,7 +2,7 @@
 using Molecular.Attributes;
 using Molecular.Routing;
 
-namespace Connection.Controllers
+namespace Prototype.Controllers
 {
     /// <summary>
     /// This module shows how you can create sub commands through sub classing

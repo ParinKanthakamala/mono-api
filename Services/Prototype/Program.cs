@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Connection.Controllers;
 using Gateway;
-using Gateway.Libraries;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Molecular.Routing;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Connection
+namespace Prototype
 {
     class Program
     {
@@ -94,18 +89,22 @@ namespace Connection
             // var result = Routing.Handle(list.ToArray());
             // Console.WriteLine(JsonConvert.SerializeObject(result));
             // Run with console or service
+
+
             var asService = !(Debugger.IsAttached || args.ToList().Contains("--console"));
+            // asService = false;
             Console.WriteLine("asService : " + asService);
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
-                {
-                    //
-                    services.AddHostedService<Service>();
-                });
-            //
+                    services.AddHostedService<Service>()
+                );
+
             builder.UseEnvironment(asService ? EnvironmentName.Production : EnvironmentName.Development);
+            builder.UseEnvironment("Development");
             if (asService) await builder.RunAsServiceAsync();
             else await builder.RunConsoleAsync();
+
+            Console.WriteLine("test message");
         }
     }
 }
