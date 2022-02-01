@@ -1,6 +1,5 @@
 using Gateway.Libraries.Common;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 
 namespace ApiGateway.Core

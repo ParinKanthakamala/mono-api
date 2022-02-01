@@ -1,0 +1,16 @@
+{
+    "apps": [
+        {
+            "name": "blazor.client",
+            "project": "Web.Client.csproj",
+            "script": "dotnet",
+            "args": "watch",
+            "watch": [
+                "src"
+            ],
+            "env": {
+                "ENV": "dev"
+            }
+        }
+    ]
+}

@@ -15,14 +15,13 @@ namespace Molecular.Routing
         {
             return routes.Where(r => !r.Default);
         }
-  
+
         public static IEnumerable<Parameter> AsRoutingParameters(this IEnumerable<ParameterInfo> parameters)
         {
             foreach (var parameterInfo in parameters)
                 yield return parameterInfo.AsRoutingParameter();
-            
         }
-         
+
         public static Parameter AsRoutingParameter(this ParameterInfo info)
         {
             return new Parameter
@@ -51,7 +50,7 @@ namespace Molecular.Routing
             bool maybenull = parameter.IsNullable();
             bool hasdefault = parameter.IsOptional;
 
-            return hasAttr ||  maybenull || hasdefault;
+            return hasAttr || maybenull || hasdefault;
         }
 
         public static IEnumerable<Parameter> GetRoutingParameters(this Route route)
@@ -83,7 +82,7 @@ namespace Molecular.Routing
         {
             Type type = parameter.Type;
             string name = parameter.Name;
-            
+
             string rep;
 
             if (type == typeof(Flag) || type == typeof(bool))
@@ -102,20 +101,20 @@ namespace Molecular.Routing
             {
                 rep = $"<{name}>...";
             }
-            else if (type == typeof(string)) 
+            else if (type == typeof(string))
             {
-                rep = $"<{name}>"; 
+                rep = $"<{name}>";
             }
-            else  
+            else
             {
                 rep = $"{name}";
             }
+
             if (parameter.Optional) rep = $"({rep})";
 
             return rep;
         }
 
-    
 
         public static Parameters.Arguments Parse(this Router router, string text)
         {
@@ -126,6 +125,5 @@ namespace Molecular.Routing
         {
             return router.Parser.Parse(args);
         }
-
     }
 }

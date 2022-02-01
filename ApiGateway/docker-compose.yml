@@ -9,7 +9,5 @@ services:
       - "80:5001"
     volumes:
       - ./app/:/app/
-  mariadb-galera-bootstrap:
-    extends:
-      file: docker-compose.mysql.yml
-      service: mariadb-galera-bootstrap
+   
+    

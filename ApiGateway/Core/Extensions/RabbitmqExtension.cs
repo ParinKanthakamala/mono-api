@@ -1,9 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Gateway;
-using Gateway.Libraries.RabbitMQ;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using static Gateway.Libraries.RabbitMQ.RpcClient;
 
 namespace ApiGateway.Core.Extensions

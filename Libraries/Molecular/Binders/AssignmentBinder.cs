@@ -11,7 +11,8 @@ namespace Molecular.Binders
 
         public bool Match(Type type) => type == typeof(Assignment);
 
-        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result)
+        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
+            out object result)
         {
             if (arguments.TryGetAssignment(param.Name, out Assignment assignment))
             {
@@ -24,8 +25,6 @@ namespace Molecular.Binders
                 result = Assignment.NotProvided;
                 return BindStatus.NotFound;
             }
-            
         }
     }
-
 }

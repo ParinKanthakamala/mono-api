@@ -5,7 +5,6 @@ namespace Molecular.Arguments
 {
     public class ArgumentParser
     {
-
         public Parameters.Arguments Parse(string[] args)
         {
             var arguments = ParseArguments(args);
@@ -29,8 +28,7 @@ namespace Molecular.Arguments
             {
                 yield return new Flag(arg.Substring(2));
             }
-            else
-            if (arg.StartsWith("-"))
+            else if (arg.StartsWith("-"))
             {
                 foreach (var c in arg.Substring(1))
                 {
@@ -41,9 +39,6 @@ namespace Molecular.Arguments
             {
                 yield return new Text(arg);
             }
-
         }
-
     }
-
 }

@@ -2,9 +2,6 @@
 
 namespace Molecular.Attributes
 {
-    /// <summary>
-    /// Defines an alternative name for a parameter
-    /// </summary>
     public class Alt : Attribute
     {
         public string Name { get; }
@@ -14,6 +11,4 @@ namespace Molecular.Attributes
             this.Name = name;
         }
     }
-
-
 }

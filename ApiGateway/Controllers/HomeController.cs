@@ -7,7 +7,6 @@ using Gateway.Libraries.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
-using static Gateway.Libraries.RabbitMQ.RpcClient;
 
 namespace ApiGateway.Controllers
 {

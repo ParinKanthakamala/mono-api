@@ -1,5 +1,4 @@
 using System;
-using Gateway.Libraries;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
