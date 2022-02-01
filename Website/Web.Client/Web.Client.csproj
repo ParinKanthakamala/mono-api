@@ -19,4 +19,8 @@
       <Folder Include="Areas" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Web.Shared\Web.Shared.csproj" />
+    </ItemGroup>
+
 </Project>
