@@ -1,0 +1,118 @@
+@using Web.Shared.Entities
+@using Web.Shared.Libraries
+@inherits BulkPdfExporterRazor
+<div id="wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel_s">
+                    <div class="panel-body">
+                        <h4 class="no-margin"> title; </h4>
+                        <hr class="hr-panel-heading"/>
+                        form_open(this->uri->uri_string());
+                        <div class="form-group select-placeholder">
+                            <label for="export_type"> _l("bulk_pdf_export_select_type"); </label>
+                            <select name="export_type" id="export_type" class="selectpicker" data-width="100%" data-none-selected-text=" _l('dropdown_non_selected_tex');">
+                                <option value=""></option>
+                                @if (myself.has_permission("invoices", "view") || myself.has_permission("invoices", "view_own"))
+                                {
+                                    <option value="invoices"> _l("bulk_export_pdf_invoices"); </option>
+                                }
+                                @if (myself.has_permission("estimates", "view") || myself.has_permission("estimates", "view_own"))
+                                {
+                                    <option value="estimates"> _l("bulk_export_pdf_estimates"); </option>
+                                }
+                                @if (myself.has_permission("payments", "view") || myself.has_permission("invoices", "view_own"))
+                                {
+                                    <option value="payments"> _l("bulk_export_pdf_payments"); </option>
+                                }
+                                @if (myself.has_permission("credit_notes", "view") || myself.has_permission("credit_notes", "view_own"))
+                                {
+                                    <option value="credit_notes"> _l("credit_notes"); </option>
+                                }
+                                @if (myself.has_permission("proposals", "view") || myself.has_permission("proposals", "view_own"))
+                                {
+                                    <option value="proposals"> _l("bulk_export_pdf_proposals"); </option>
+                                }
+                            </select>
+                        </div>
+                        render_date_input("date-from","zip_from_date");
+                        render_date_input("date-to","zip_to_date");
+                        render_input("tag","bulk_export_include_tag","","text",array("data-toggle"=>"tooltip","title"=>"bulk_export_include_tag_help"));
+                        <div class="form-group hide shifter" id="estimates_status">
+                            <label for="estimate_zip_status"> _l("bulk_export_status"); </label>
+                            <div class="radio radio-primary">
+                                <input type="radio" value="estimates_all" checked name="estimate_export_status">
+                                <label for="estimates_all"> _l("bulk_export_status_all"); </label>
+                            </div>
+                            @foreach (var status in estimate_statuses)
+                            {
+                                <div class="radio radio-primary">
+                                    <input type="radio" id="  format_estimate_status(status,'',false); " value="  status; " name="estimate_export_status">
+                                    <label for=" format_estimate_status(status,'',false);"> format_estimate_status(status,"",false); </label>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group hide shifter" id="credit_notes_status">
+                            <label for="credit_notes_status_export"> _l("bulk_export_status"); </label>
+                            <div class="radio radio-primary">
+                                <input type="radio" id="all" value="all" checked name="credit_notes_status_export">
+                                <label for="all"> _l("bulk_export_status_all"); </label>
+                            </div>
+                            @foreach (var   status in credit_notes_statuses)
+                            {
+                                <div class="radio radio-primary">
+                                    <input type="radio" id="credit_note_status[id]" value="status[id]" name="credit_notes_status_export">
+                                    <label for="credit_note_@status.Id"> status["name"] </label>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group hide shifter" id="invoices_status">
+                            <label for="invoice_export_status"> _l("bulk_export_status"); </label>
+                            <div class="radio radio-primary">
+                                <input type="radio" id="all" value="all" checked name="invoice_export_status">
+                                <label for="all"> _l("bulk_export_status_all"); </label>
+                            </div>
+                            @foreach (var  status in invoice_statuses)
+                            {
+                                <div class="radio radio-primary">
+                                    <input type="radio" id="invoice_  format_invoice_status(status,'',false);" value="  status; " name="invoice_export_status">
+                                    <label for="invoice_  format_invoice_status(status,'',false);"> format_invoice_status(status,"",false); </label>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group hide shifter" id="proposal_status">
+                            <label for="proposal_export_status"> _l("bulk_export_status"); </label>
+                            <div class="radio radio-primary">
+                                <input type="radio" value="all" checked name="proposal_export_status">
+                                <label for="all"> _l("bulk_export_status_all"); </label>
+                            </div>
+                            @foreach (var status in proposal_statuses)
+                            {
+                                if (status == 0)
+                                {
+                                    continue;
+                                }
+
+                                <div class="radio radio-primary">
+                                    <input type="radio" value="  status; " name="proposal_export_status" id="proposal_  format_proposal_status(status,'',false);">
+                                    <label for="proposal_  format_proposal_status(status,'',false); "> format_proposal_status(status,"",false); </label>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group hide shifter" id="payment_modes">
+
+                            array_unshift(payment_modes,array("id"=>"","name"=>_l("bulk_export_status_all")));
+                            render_select("paymentmode",payment_modes,array("id","name"),"bulk_export_zip_payment_modes");
+
+                        </div>
+                        <button class="btn btn-info" type="submit"> _l("bulk_pdf_export_button"); </button>
+                        form_close();
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,18 +5,18 @@ namespace Web.Shared.Entities
 {
     public partial class Links
     {
-        public ulong LinkId { get; set; }
-        public string LinkUrl { get; set; }
-        public string LinkName { get; set; }
-        public string LinkImage { get; set; }
-        public string LinkTarget { get; set; }
-        public string LinkDescription { get; set; }
-        public string LinkVisible { get; set; }
-        public ulong LinkOwner { get; set; }
-        public int LinkRating { get; set; }
-        public DateTime LinkUpdated { get; set; }
-        public string LinkRel { get; set; }
-        public string LinkNotes { get; set; }
-        public string LinkRss { get; set; }
+        public ulong Id { get; set; }
+        public string Url { get; set; }
+        public string Name { get; set; }
+        public string Image { get; set; }
+        public string Target { get; set; }
+        public string Description { get; set; }
+        public string Visible { get; set; }
+        public ulong Owner { get; set; }
+        public int Rating { get; set; }
+        public DateTime Updated { get; set; }
+        public string Rel { get; set; }
+        public string Notes { get; set; }
+        public string Rss { get; set; }
     }
 }

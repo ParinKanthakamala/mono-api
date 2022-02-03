@@ -7,14 +7,6 @@ namespace Web.Shared.Helpers.Extensions
 {
     public static class StringHelper
     {
-        public static string BreakUpString(this string value)
-        {
-            return Regex.Replace(value,
-                "((?<=[a-z])[A-Z]|[A-Z](?=[a-z]))",
-                " $1",
-                RegexOptions.Compiled).Trim();
-        }
-
         public static List<int> GetIntList(this string value)
         {
             return string.IsNullOrWhiteSpace(value)

@@ -1,16 +1,12 @@
-using System;
 using Microsoft.AspNetCore.Components;
 
 namespace Web.Client.Areas.Admin.Components.LeftPanel
 {
-    public class LeftPanelBase : ComponentBase, IDisposable
+    public class LeftPanelBase : ComponentBase
     {
         [Inject] private LeftPanelService LeftPanelService { get; set; }
         protected bool IsVisible { get; set; }
 
-        public void Dispose()
-        {
-        }
 
         protected override void OnInitialized()
         {
@@ -36,17 +32,17 @@ namespace Web.Client.Areas.Admin.Components.LeftPanel
             switch (content)
             {
                 case PanelContent.MyApps:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
                 case PanelContent.MyNotification:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
                 case PanelContent.MyTasks:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
         }
     }

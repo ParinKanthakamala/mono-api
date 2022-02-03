@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using Append.Blazor.Notifications;
+using Blazored.LocalStorage;
+using Blazored.Modal;
+using Blazored.Toast; 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Web.Server.Data;
+using Web.Shared.Libraries.Label;
 
 namespace Web.Server
 {
@@ -26,9 +25,19 @@ namespace Web.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            /// info : my custom
+            // services.AddBlazorContextMenu();
+
+            // services.AddScoped<LeftPanelService>();
+            services.AddLanguageContainer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly());
+            services.AddBlazoredLocalStorage();
+            services.AddNotifications(); // maxx : system notification
+            services.AddBlazoredModal(); // maxx : float modal
+            services.AddBlazoredToast(); // maxx : toast 
+            // 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            // services.AddSingleton<WeatherForecastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

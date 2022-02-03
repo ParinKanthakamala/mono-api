@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Web.Client.Core.ComponentBases;
+using Web.Client.Core;
+using Web.Shared.Core;
 
 namespace Web.Client.Areas.Admin.Pages.Auth
 {
@@ -50,5 +52,14 @@ namespace Web.Client.Areas.Admin.Pages.Auth
         //     //NavManager.NavigateTo("/admin/dashboard");
         //     // toastService.ShowToast("please enter email", ToastLevel.Error);
         // }
+        public override void OnUpdate()
+        {
+
+        }
+
+        protected override void OnInitialized()
+        {
+
+        }
     }
 }

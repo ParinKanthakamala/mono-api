@@ -16,7 +16,8 @@ namespace Web.Shared.Entities
         public string ActivationKey { get; set; }
         public int Status { get; set; }
         public string DisplayName { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime RegisteredDate { get; set; }
+        public DateTime? LastLogin { get; set; }
         public DateTime? DeletedDate { get; set; }
     }
 }

@@ -18,13 +18,8 @@ namespace Web.Client.Areas.Admin.Components.LeftPanel
         Signout
     }
 
-    public class LeftPanelService : IDisposable
+    public class LeftPanelService
     {
-        public void Dispose()
-        {
-        }
-
-
         public event Action<string, PanelContent> OnShow;
         public event Action OnHide;
 

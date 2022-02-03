@@ -1,10 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using Append.Blazor.Notifications;
 using Blazored.Modal;
 using Blazored.Modal.Services;
-using Microsoft.AspNetCore.Components;
 using Web.Client.Areas.Admin.Components.Modal;
-using Web.Client.Core.ComponentBases;
+using Microsoft.AspNetCore.Components;
+using Web.Shared.Core;
 
 namespace Web.Client.Areas.Admin.Layout
 {
@@ -16,6 +17,10 @@ namespace Web.Client.Areas.Admin.Layout
 
         [Inject] public NavigationManager NavigationManager { get; set; }
         [CascadingParameter] public IModalService Modal { get; set; }
+
+        public override void OnUpdate()
+        {
+        }
 
         protected override void OnInitialized()
         {
@@ -96,10 +101,8 @@ namespace Web.Client.Areas.Admin.Layout
             var result = Modal.Show<SignoutPrompt>("Are you want to signout ?");
 
             if (result.Result.IsCompleted)
-            {
                 // this.sharepoint["name"] = null; 
                 NavigationManager.NavigateTo("admin/auth/signin");
-            }
         }
     }
 }

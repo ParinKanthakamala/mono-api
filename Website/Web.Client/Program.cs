@@ -16,6 +16,8 @@ namespace Web.Client
             builder.Services.AddScoped(
                 sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)});
 
+            // builder.Services.AddBlazorContextMenu(); 
+            builder.Services.AddBlazorContextMenu();
             await builder.Build().RunAsync();
         }
     }
