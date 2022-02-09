@@ -7,7 +7,10 @@ namespace Web.Shared.Libraries.Label
 {
     public class EmbeddedResourceKeysProvider : KeysProvider
     {
-        public EmbeddedResourceKeysProvider(Assembly assembly, string resourceFolderName = "Resources") : base(assembly, resourceFolderName)
+        public EmbeddedResourceKeysProvider(
+            Assembly assembly,
+            string resourceFolderName = "Resources") : base(assembly,
+            resourceFolderName)
         {
         }
 
