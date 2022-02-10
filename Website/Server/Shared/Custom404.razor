@@ -1,0 +1,15 @@
+﻿
+@inject NavigationManager NavigationManager
+
+<section>
+    <img class="error404page" src="/404Image.png" />
+    <button class="btn btn-link" @onclick="GoHome">Return Home</button>
+</section>
+
+@code {
+
+    void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

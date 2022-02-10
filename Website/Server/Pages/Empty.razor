@@ -1,0 +1,38 @@
+@page "/empty" 
+@using Tools.Label
+@using Blazored.LocalStorage
+@using System.Globalization
+
+@inject ILabel label
+@inject ILocalStorageService storage
+
+<h1>@label.get("Counter:Title")</h1>
+
+
+<img src="https://www.countryflags.io/us/shiny/64.png" @onclick='() => SetLanguage("en-US")' style="height:50px;cursor:pointer;margin:10px"/>
+<img src="https://www.countryflags.io/de/shiny/64.png" @onclick='() => SetLanguage("de-De")' style="height:50px;cursor:pointer;margin:10px"/>
+<img src="https://www.countryflags.io/es/shiny/64.png" @onclick='() => SetLanguage("ca-ES")' style="height:50px;cursor:pointer;margin:10px"/>
+<img src="https://www.countryflags.io/fr/shiny/64.png" @onclick='() => SetLanguage("fr-FR")' style="height: 50px;cursor: pointer;margin:10px"/>
+<img src="https://www.countryflags.io/it/shiny/64.png" @onclick='() => SetLanguage("it-IT")' style="height: 50px;cursor: pointer;margin:10px"/>
+<img src="https://www.countryflags.io/jp/shiny/64.png" @onclick='() => SetLanguage("ja-JP")' style="height: 50px;cursor: pointer;margin:10px"/>
+<img src="https://www.countryflags.io/in/shiny/64.png" @onclick='() => SetLanguage("ml-IN")' style="height: 50px;cursor: pointer;margin:10px"/>
+<img src="https://www.countryflags.io/sa/shiny/64.png" @onclick='() => SetLanguage("ar-SA")' style="height: 50px;cursor: pointer;margin:10px"/>
+<img src="https://www.countryflags.io/fi/shiny/64.png" @onclick='() => SetLanguage("fi-FI")' style="height: 50px;cursor: pointer;margin:10px"/>
+<img src="https://www.countryflags.io/bg/shiny/64.png" @onclick='() => SetLanguage("bg-BG")' style="height: 50px;cursor: pointer;margin:10px"/>
+
+@code
+{
+    async void SetLanguage(string language)
+    {
+        label.SetLanguage(CultureInfo.GetCultureInfo(language));
+    // Store the langauge 
+        await storage.SetItemAsync("language-code", language);
+    }
+
+    protected override void OnInitialized()
+    {
+        label.InitLocalizedComponent(this);
+        base.OnInitialized();
+    }
+
+}

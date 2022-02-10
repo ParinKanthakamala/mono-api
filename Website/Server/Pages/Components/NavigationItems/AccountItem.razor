@@ -1,0 +1,43 @@
+@inherits AccountItemRazor
+<ContextMenu Id="myMenu">
+    @if (!logged) 
+    {
+        <Item OnClick='@LoginClick'>Login</Item>
+        <Item OnClick="@RegisterClick">Register</Item>
+    }
+    else
+    {
+        <Item OnClick="@OnClick" Enabled="false">text_account</Item>
+        <Item OnClick="@OnClick" Enabled="false">text_order</Item>
+        <Item OnClick="@OnClick" Enabled="false">text_transaction</Item>
+        <Item OnClick="@OnClick" Enabled="false">text_download</Item>
+        <Item OnClick="@OnClick" Enabled="false">text_logout</Item>
+
+
+        <Item OnClick="@OnClick" Enabled="false">Item 3 (disabled)</Item>
+        <Seperator/>
+        <Item>
+            Submenu
+            <SubMenu>
+                <Item OnClick="@OnClick">Submenu Item 1</Item>
+                <Item OnClick="@OnClick">Submenu Item 2</Item>
+            </SubMenu>
+        </Item>
+    }
+</ContextMenu>
+
+<ContextMenuTrigger MenuId="myMenu" MouseButtonTrigger="MouseButtonTrigger.Left">
+    <a href="account" title="text_account" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-user"></i> <span class="hidden-xs hidden-sm hidden-md">text_account</span> <span class="caret"></span>
+    </a>
+</ContextMenuTrigger>
+
+@code {
+    public bool logged = false;
+
+    void OnClick(ItemClickEventArgs e)
+    {
+        Console.WriteLine($"Item Clicked => Menu: {e.ContextMenuId}, MenuTarget: {e.ContextMenuTargetId}, IsCanceled: {e.IsCanceled}, MenuItem: {e.MenuItemElement}, MouseEvent: {e.MouseEvent}");
+    }
+
+}

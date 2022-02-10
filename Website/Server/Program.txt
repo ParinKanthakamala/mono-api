@@ -1,0 +1,44 @@
+using System;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading.Tasks;
+using Append.Blazor.Notifications;
+using Blazored.LocalStorage;
+using Blazored.Modal;
+using Blazored.Toast; 
+using Docygen.Shared.Libraries.HubManager;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Tools.Label;
+
+namespace Docygen.Client
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("#app");
+            builder.Services.AddBlazorContextMenu();
+
+            // builder.Services.AddScoped<LeftPanelService>();
+            builder.Services.AddLanguageContainer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly());
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddNotifications(); // maxx : system notification
+            builder.Services.AddBlazoredModal(); // maxx : float modal
+            builder.Services.AddBlazoredToast(); // maxx : toast 
+            //
+            var baseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+            builder.Services.AddScoped(sp => new HttpClient {BaseAddress = baseAddress});
+            builder.Services.AddHttpClient<MyHttpClient>(client => client.BaseAddress = baseAddress);
+            // 
+            builder.Services.AddScoped(
+                sp => new HttpClient
+                {
+                    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+                });
+
+            await builder.Build().RunAsync();
+        }
+    }
+}

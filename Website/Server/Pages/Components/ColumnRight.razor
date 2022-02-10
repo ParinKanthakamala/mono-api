@@ -1,0 +1,12 @@
+﻿@inherits ColumnRightBase
+
+
+@if (modules.Count > 0)
+{
+    <aside id="column-right" class="col-sm-3 hidden-xs">
+        @foreach (var module in modules)
+        {
+            @module
+        }
+    </aside>
+}
