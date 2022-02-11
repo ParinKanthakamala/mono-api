@@ -58,8 +58,6 @@ namespace Server
         public static string Location => "https://localhost:5001/";
 
 
-        
-        
         public static DateTime Now
         {
             get { return _now ??= DateTime.Now; }

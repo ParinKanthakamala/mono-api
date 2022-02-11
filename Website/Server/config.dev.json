@@ -1,0 +1,14 @@
+{
+    "apps": [{
+        "name": "Blazor",
+        "script": "dotnet",
+        "args": "watch -p Server.csproj run",
+        "watch": [
+            "src"
+        ],
+        "interpreter": "bash",
+        "env": {
+            "ENV": "dev"
+        }
+    }]
+}

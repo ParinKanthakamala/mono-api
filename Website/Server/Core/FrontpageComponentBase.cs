@@ -11,9 +11,5 @@ namespace Server.Core
         public List<Href> Informations = new();
         public List<Limit> Limits = new();
         public List<Product> Products = new();
-        public string ContentTop { get; set; }
-        public string ContentBottom { get; set; }
-        public string ColumnRight { get; set; }
-        public string ColumnLeft { get; set; }
     }
 }

@@ -1,15 +1,35 @@
 ﻿@layout PageLayout
 @page "/"
-@inherits IndexRazor
 
-test
+test message
 <div id="common-home" class="container">
     <div class="row">
-        <ColumnLeft></ColumnLeft>
+        <ColumnLeft/>
         <div id="content" class="this.className">
-            <ContentTop></ContentTop>
-            <ContentBottom></ContentBottom>
+            <ContentTop/>
+            <ContentBottom/>
         </div>
-        <ColumnRight></ColumnRight>
+        <ColumnRight/>
     </div>
 </div>
+
+
+@code{
+    public string className { get; set; }
+
+    public void OnUpdate()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void OnInitialized()
+    {
+        className =
+            string.IsNullOrEmpty(ShareLayout.layout.ColumnLeft) || string.IsNullOrEmpty(ShareLayout.layout.ColumnRight)
+                ? !string.IsNullOrEmpty(ShareLayout.layout.ColumnLeft) || !string.IsNullOrEmpty(ShareLayout.layout.ColumnRight)
+                    ? "col-sm-9"
+                    : "col-sm-12"
+                : "col-sm-6";
+    }
+
+}
