@@ -3,10 +3,10 @@
 
 <h1>Scrollable Content</h1>
 
-<hr class="mb-5" />
+<hr class="mb-5"/>
 
 <p>
-    By default, a modals content will not scroll if the contents height is greater than the viewports height.<br />
+    By default, a modals content will not scroll if the contents height is greater than the viewports height.<br/>
     By setting <code>ContentScrollable</code> to <code>true</code> the Modal will include scroll bars allowing a user to scroll all the content.
 </p>
 
@@ -37,11 +37,12 @@
 
 @code {
 
-    [CascadingParameter] public IModalService Modal { get; set; }
+    [CascadingParameter]
+    public IModalService Modal { get; set; }
 
     void ContentScrollableEnabled()
     {
-        var options = new ModalOptions { ContentScrollable = true };
+        var options = new ModalOptions {ContentScrollable = true};
 
         Modal.Show<FullContentPage>("Content Scrollable", options);
     }
@@ -50,4 +51,5 @@
     {
         Modal.Show<FullContentPage>("Default Setting");
     }
+
 }

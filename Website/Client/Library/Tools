@@ -1,0 +1,7 @@
+namespace Docygen.Client.Library
+{
+    public class Tools
+    {
+        
+    }
+}

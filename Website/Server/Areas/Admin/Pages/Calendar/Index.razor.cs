@@ -1,4 +1,3 @@
-using System;
 using Shared.Core;
 
 namespace Server.Areas.Admin.Pages.Calendar

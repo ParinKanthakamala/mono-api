@@ -1,0 +1,177 @@
+@layout AdminLayout
+@page "/admin/chat"
+
+@inject IJSRuntime JsRuntime;
+
+<div class="col-lg-8 col-md-7">
+    <div class="card">
+        <div class="body overflowhidden">
+            <div class="chat">
+                <div class="user_detail @(UserDetailOpen ? "show" : null) " @onclick="DetailClick">
+                    <div class="row profile_state">
+                        <div class="col-12">
+                            <small class="text-muted">Email address: </small>
+                            <p>michael@gmail.com</p>
+                            <hr>
+                            <small class="text-muted">Phone: </small>
+                            <p>+ 202-555-9191</p>
+                            <hr>
+                            <small class="text-muted">Mobile: </small>
+                            <p>+ 202-555-2828</p>
+                            <hr>
+                            <small class="text-muted">Birth Date: </small>
+                            <p class="m-b-0">October 22th, 1990</p>
+                            <hr>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-6">
+                            <div class="body">
+                                <i class="zmdi zmdi-thumb-up col-blue"></i>
+                                <h5 class="m-b-0 number count-to" data-from="0" data-to="1203" data-speed="1000" data-fresh-interval="700">1203</h5>
+                                <small>Likes</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-6">
+                            <div class="body">
+                                <i class="zmdi zmdi-account text-success"></i>
+                                <h5 class="m-b-0 number count-to" data-from="0" data-to="1980" data-speed="1000" data-fresh-interval="700">1980</h5>
+                                <small>Profile Views</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-6">
+                            <div class="body">
+                                <i class="zmdi zmdi-attachment text-warning"></i>
+                                <h5 class="m-b-0 number count-to" data-from="0" data-to="52" data-speed="1000" data-fresh-interval="700">52</h5>
+                                <small>Attachment</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-header clearfix">
+                    <a href="javascript:void(0);" class="btn-detail">
+                        <img src="assets/images/xs/avatar2.jpg" alt="avatar">
+                        <div class="chat-about">
+                            <div class="chat-with">Aiden Chavez</div>
+                            <div class="chat-num-messages">already 8 messages</div>
+                        </div>
+                    </a>
+                </div>
+                <hr>
+                <div class="chat-history clearfix">
+                    <ul class="">
+                        <li class="clearfix">
+                            <div class="message-data text-right"> <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp; <span class="message-data-name">Michael</span> <i class="zmdi zmdi-circle me"></i> </div>
+                            <div class="message text-right other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
+                        </li>
+                        <li>
+                            <div class="message-data">
+                                <span class="message-data-name"><i class="zmdi zmdi-circle online"></i> Aiden</span> <span class="message-data-time">10:12 AM, Today</span>
+                            </div>
+                            <div class="message my-message">
+                                <span>Are we meeting today? Project has been already finished and I have results to show you.</span>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="message-data text-right"> <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp; <span class="message-data-name">Michael</span> <i class="zmdi zmdi-circle me"></i> </div>
+                            <div class="message text-right other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
+                        </li>
+                        <li>
+                            <div class="message-data">
+                                <span class="message-data-name"><i class="zmdi zmdi-circle online"></i> Aiden</span> <span class="message-data-time">10:31 AM, Today</span>
+                            </div>
+                            <i class="zmdi zmdi-circle online"></i> <i class="zmdi zmdi-circle online" style="color: #AED2A6"></i> <i class="zmdi zmdi-circle online" style="color:#DAE9DA"></i>
+                        </li>
+                    </ul>
+                </div>
+                <hr>
+                <div class="chat-message clearfix">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter text here...">
+                        <span class="input-group-addon">
+                            <i class="zmdi zmdi-mail-send"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="btn btn-raised btn-warning btn-round">
+                        <i class="zmdi zmdi-camera"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-raised btn-info btn-round">
+                        <i class="zmdi zmdi-file-text"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-4 col-md-5">
+    <div class="card">
+        <div class="body">
+            <div id="plist" class="people-list @(ToggleOpen ? "open" : null)" @onclick="ListBtnClick">
+                <ul class="nav nav-tabs padding-0" role="tablist">
+                    <li class="nav-item inlineblock">
+                        <a class="nav-link active" data-toggle="tab" href="#people">People</a>
+                    </li>
+                    <li class="nav-item inlineblock">
+                        <a class="nav-link" data-toggle="tab" href="#groups">Groups</a>
+                    </li>
+                </ul>
+                <div class="tab-content m-t-20">
+                    <div role="tabpanel" class="tab-pane stretchRight active" id="people">
+                        <ul class="chat-list list-unstyled m-b-0">
+                            <li class="clearfix">
+                                <img src="assets/images/xs/avatar1.jpg" alt="avatar">
+                                <div class="about">
+                                    <div class="name">Vincent Porter</div>
+                                    <div class="status"> <i class="zmdi zmdi-circle offline"></i> left 7 mins ago </div>
+                                </div>
+                            </li>
+                            <li class="clearfix active">
+                                <img src="assets/images/xs/avatar2.jpg" alt="avatar">
+                                <div class="about">
+                                    <div class="name">Aiden Chavez</div>
+                                    <div class="status"> <i class="zmdi zmdi-circle online"></i> online </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane stretchRight" id="groups">
+                        <ul class="chat-list list-unstyled m-b-0">
+                            <li class="clearfix">
+                                <img src="assets/images/xs/avatar6.jpg" alt="avatar">
+                                <div class="about">
+                                    <div class="name">PHP Lead</div>
+                                    <div class="status">6 People </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+
+    public bool ToggleOpen;
+    public bool UserDetailOpen;
+
+    public Task ListBtnClick()
+    {
+        ToggleOpen = !ToggleOpen;
+        @* $("#plist").toggleClass("open");*@
+    // await JsRuntime.InvokeVoidAsync("alert", "ListBtnClick"); // Alert
+        return null;
+    }
+
+    public Task DetailClick()
+    {
+        UserDetailOpen = !UserDetailOpen;
+    // await JsRuntime.InvokeVoidAsync("alert", "DetailClick"); // Alert
+        @* $(".chat .user_detail").toggleClass("show");*@
+        return null;
+    }
+
+
+}

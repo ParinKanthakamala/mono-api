@@ -1,4 +1,3 @@
-using System;
 using Shared.Core;
 using Microsoft.AspNetCore.Components;
 

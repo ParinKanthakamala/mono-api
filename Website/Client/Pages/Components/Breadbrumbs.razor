@@ -1,0 +1,9 @@
+@inherits BreadbrumbsRazorBase
+<ul class="breadcrumb">
+    @foreach (var breadcrumb in breadcrumbs)
+    {
+        <li>
+            <a href="breadcrumb.href">breadcrumb.title</a>
+        </li>
+    }
+</ul>
