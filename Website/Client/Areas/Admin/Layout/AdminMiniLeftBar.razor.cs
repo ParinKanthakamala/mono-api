@@ -41,7 +41,7 @@ namespace Client.Areas.Admin.Layout
 
         protected void MyApps()
         {
-            var result = Modal.Show<ApplicationList>("App Application");
+            // var result = Modal.Show<ApplicationList>("App Application");
 
             // if (result.Result.IsCompleted)
             // {
@@ -56,6 +56,7 @@ namespace Client.Areas.Admin.Layout
 
         protected void MyNotification()
         {
+            
             var result = Modal.Show<NotificationList>("My Notification");
         }
 
