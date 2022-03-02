@@ -5,8 +5,8 @@ namespace Molecular.Arguments
     public interface IArgument
     {
         string Original { get; }
-        bool Match(string name);
         string Value { get; }
+        bool Match(string name);
     }
 
     public static class ArgumentExtensions
@@ -15,8 +15,5 @@ namespace Molecular.Arguments
         {
             return argument.Match(parameter.Name) || argument.Match(parameter.AltName);
         }
-
     }
-
-
 }

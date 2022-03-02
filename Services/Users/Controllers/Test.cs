@@ -5,7 +5,8 @@ using Molecular.Attributes;
 
 namespace Users.Controllers
 {
-    [Module("Test"), Command]
+    [Module("Test")]
+    [Command]
     public class Test : MyControllerBase
     {
         [Command]

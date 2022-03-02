@@ -9,11 +9,13 @@ namespace Molecular.Utils
     // This class helps figuring out if a parameter is nullable
     public static class NullabilityReflection
     {
+        public static bool IsNullable(this ParameterInfo parameter)
+        {
+            return IsNullable(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
+        }
 
-        public static bool IsNullable(this ParameterInfo parameter) =>
-            IsNullable(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
-
-        private static bool IsNullable(Type memberType, MemberInfo declaringType, IEnumerable<CustomAttributeData> customAttributes)
+        private static bool IsNullable(Type memberType, MemberInfo declaringType,
+            IEnumerable<CustomAttributeData> customAttributes)
         {
             if (memberType.IsValueType)
                 return Nullable.GetUnderlyingType(memberType) != null;
@@ -26,33 +28,28 @@ namespace Molecular.Utils
                 var attributeArgument = nullable.ConstructorArguments[0];
                 if (attributeArgument.ArgumentType == typeof(byte[]))
                 {
-                    var args = (ReadOnlyCollection<CustomAttributeTypedArgument>)attributeArgument.Value!;
-                    if (args.Count > 0 && args[0].ArgumentType == typeof(byte))
-                    {
-                        return (byte)args[0].Value! == 2;
-                    }
+                    var args = (ReadOnlyCollection<CustomAttributeTypedArgument>) attributeArgument.Value!;
+                    if (args.Count > 0 && args[0].ArgumentType == typeof(byte)) return (byte) args[0].Value! == 2;
                 }
                 else if (attributeArgument.ArgumentType == typeof(byte))
                 {
-                    return (byte)attributeArgument.Value! == 2;
+                    return (byte) attributeArgument.Value! == 2;
                 }
             }
 
             for (var type = declaringType; type != null; type = type.DeclaringType)
             {
                 var context = type.CustomAttributes
-                    .FirstOrDefault(x => x.AttributeType.FullName == "System.Runtime.CompilerServices.NullableContextAttribute");
+                    .FirstOrDefault(x =>
+                        x.AttributeType.FullName == "System.Runtime.CompilerServices.NullableContextAttribute");
                 if (context != null &&
                     context.ConstructorArguments.Count == 1 &&
                     context.ConstructorArguments[0].ArgumentType == typeof(byte))
-                {
-                    return (byte)context.ConstructorArguments[0].Value! == 2;
-                }
+                    return (byte) context.ConstructorArguments[0].Value! == 2;
             }
 
             // Couldn't find a suitable attribute
             return false;
         }
-
     }
 }

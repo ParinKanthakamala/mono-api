@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 using Append.Blazor.Notifications;
 using Blazored.Modal;
 using Blazored.Modal.Services;
+using Microsoft.AspNetCore.Components;
 using Server.Areas.Admin.Components.Modal;
 using Shared.Core;
-using Microsoft.AspNetCore.Components;
 
 namespace Server.Areas.Admin.Layout
 {
@@ -19,7 +19,6 @@ namespace Server.Areas.Admin.Layout
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

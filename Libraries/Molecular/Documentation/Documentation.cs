@@ -6,13 +6,13 @@ namespace Molecular.Documentation
 {
     public class Documentation
     {
-        Dictionary<string, MemberDoc> xdoc = new();
+        private readonly Dictionary<string, MemberDoc> xdoc = new();
 
         public void Add(MemberDoc doc)
         {
             xdoc.Add(doc.Key, doc);
         }
-        
+
         public string GetCommandDoc(Route route)
         {
             var doc = GetDoc(route.Method);
@@ -36,7 +36,6 @@ namespace Molecular.Documentation
             var doc = GetEntry(key);
             return doc;
         }
-
     }
 
     public static class DocumentationExtensions

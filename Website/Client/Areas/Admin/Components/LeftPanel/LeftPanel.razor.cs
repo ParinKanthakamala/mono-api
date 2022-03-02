@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Components;
 
 namespace Client.Areas.Admin.Components.LeftPanel
@@ -6,7 +7,6 @@ namespace Client.Areas.Admin.Components.LeftPanel
     {
         [Inject] private LeftPanelService LeftPanelService { get; set; }
         protected bool IsVisible { get; set; }
-
 
         protected override void OnInitialized()
         {
@@ -43,6 +43,40 @@ namespace Client.Areas.Admin.Components.LeftPanel
                 {
                     break;
                 }
+                case PanelContent.Search:
+                {
+                    break;
+                }
+                case PanelContent.Collapse:
+                {
+                    break;
+                }
+                case PanelContent.MyEvent:
+                {
+                    break;
+                }
+                case PanelContent.MyContact:
+                {
+                    break;
+                }
+                case PanelContent.MyChat:
+                {
+                    break;
+                }
+                case PanelContent.FullScreen:
+                {
+                    break;
+                }
+                case PanelContent.Settings:
+                {
+                    break;
+                }
+                case PanelContent.Signout:
+                {
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(content), content, null);
             }
         }
     }

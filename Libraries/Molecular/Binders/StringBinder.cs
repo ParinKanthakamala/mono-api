@@ -14,22 +14,18 @@ namespace Molecular.Binders
             return type == typeof(string);
         }
 
-        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result)
+        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
+            out object result)
         {
-
-            if (arguments.TryGetText(index, out Text Text))
+            if (arguments.TryGetText(index, out var Text))
             {
                 used++;
                 result = Text.Value;
                 return BindStatus.Success;
-                
             }
-            else
-            {
-                result = null;
-                return BindStatus.NotFound;
-            }
+
+            result = null;
+            return BindStatus.NotFound;
         }
     }
-
 }

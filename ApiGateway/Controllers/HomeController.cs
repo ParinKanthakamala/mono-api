@@ -18,7 +18,7 @@ namespace ApiGateway.Controllers
         [HttpGet("{*url}")]
         public IActionResult MakeGet()
         {
-            return Make(Method.GET, null);
+            return Make(Method.GET);
         }
 
         [HttpPost("{*url}")]
@@ -59,10 +59,7 @@ namespace ApiGateway.Controllers
 
         private string MakeRoute(string route)
         {
-            if (route.Contains("%2F"))
-            {
-                route = route.Replace("%2F", "/");
-            }
+            if (route.Contains("%2F")) route = route.Replace("%2F", "/");
 
             var output = route.Split('/').ToList();
             output = output.ToArray().Slice(2, output.Count).ToList();
@@ -71,7 +68,7 @@ namespace ApiGateway.Controllers
             return temp;
         }
 
-        private IActionResult Make(Method method, DataMessage data = default(DataMessage))
+        private IActionResult Make(Method method, DataMessage data = default)
         {
             var sender = new DataMessage();
             try
@@ -82,7 +79,7 @@ namespace ApiGateway.Controllers
                     sender.User = "";
                     sender.Method = method;
                     sender.Message = "";
-                    sender.From = this.AppSettings.RabbitOptions.Name;
+                    sender.From = AppSettings.RabbitOptions.Name;
                     sender.To = apiData.Name;
                     sender.Route = apiData.Route;
                     sender.Host = Request.Host.ToString();
@@ -95,7 +92,7 @@ namespace ApiGateway.Controllers
 
                     try
                     {
-                        return Content((output.GetType() != typeof(string))
+                        return Content(output.GetType() != typeof(string)
                             ? JsonConvert.SerializeObject(output)
                             : (string) Convert.ChangeType(output, typeof(string)));
                     }

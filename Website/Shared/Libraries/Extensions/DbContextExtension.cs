@@ -1,5 +1,5 @@
-using Shared.Common;
 using Microsoft.EntityFrameworkCore;
+using Shared.Common;
 using Shared.Entities;
 
 namespace Shared.Libraries.Extensions

@@ -109,11 +109,6 @@ namespace Tools.Label
             // var dynamicResult = new Deserializer().Deserialize<dynamic>(languageContent);
             // var json = JsonConvert.SerializeObject(dynamicResult);
             // keyValues = JObject.Parse(json);
-
-
-
-
-
         }
 
 
@@ -124,7 +119,7 @@ namespace Tools.Label
                 if (key.Contains(":"))
                 {
                     var nestedKey = key.Split(':');
-                    var nestedValue = (JObject)keyValues[nestedKey[0]];
+                    var nestedValue = (JObject) keyValues[nestedKey[0]];
                     var value = string.Empty;
                     for (var i = 1; i < nestedKey.Length; i++)
                     {
@@ -134,10 +129,10 @@ namespace Tools.Label
                             if (result == null)
                                 return nestedKey[nestedKey.Length - 1];
 
-                            return (string)result;
+                            return (string) result;
                         }
 
-                        nestedValue = (JObject)nestedValue[nestedKey[i]];
+                        nestedValue = (JObject) nestedValue[nestedKey[i]];
                     }
 
                     return value;
@@ -148,7 +143,7 @@ namespace Tools.Label
                     if (result == null)
                         return key;
 
-                    return (string)result;
+                    return (string) result;
                 }
             }
             catch

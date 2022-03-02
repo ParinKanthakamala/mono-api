@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Shared.Entities;
 using Microsoft.AspNetCore.Http;
+using Shared.Entities;
 
 namespace Server.Middlewares
 {

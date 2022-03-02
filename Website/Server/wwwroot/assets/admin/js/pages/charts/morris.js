@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     "use strict";
     MorrisArea();
     MorrisLineChart();
@@ -11,36 +11,36 @@ function MorrisArea() {
     Morris.Area({
         element: 'm_area_chart',
         data: [{
-                period: '2011',
-                iphone: 45,
-                ipad: 75,
-                itouch: 18
-            }, {
-                period: '2012',
-                iphone: 130,
-                ipad: 110,
-                itouch: 82
-            }, {
-                period: '2013',
-                iphone: 80,
-                ipad: 60,
-                itouch: 85
-            }, {
-                period: '2014',
-                iphone: 78,
-                ipad: 205,
-                itouch: 135
-            }, {
-                period: '2015',
-                iphone: 180,
-                ipad: 124,
-                itouch: 140
-            }, {
-                period: '2016',
-                iphone: 105,
-                ipad: 100,
-                itouch: 85
-            },
+            period: '2011',
+            iphone: 45,
+            ipad: 75,
+            itouch: 18
+        }, {
+            period: '2012',
+            iphone: 130,
+            ipad: 110,
+            itouch: 82
+        }, {
+            period: '2013',
+            iphone: 80,
+            ipad: 60,
+            itouch: 85
+        }, {
+            period: '2014',
+            iphone: 78,
+            ipad: 205,
+            itouch: 135
+        }, {
+            period: '2015',
+            iphone: 180,
+            ipad: 124,
+            itouch: 140
+        }, {
+            period: '2016',
+            iphone: 105,
+            ipad: 100,
+            itouch: 85
+        },
             {
                 period: '2017',
                 iphone: 210,
@@ -65,36 +65,36 @@ function MorrisArea() {
     Morris.Area({
         element: 'm_area_chart2',
         data: [{
-                period: '2012',
-                SiteA: 10,
-                SiteB: 0,
+            period: '2012',
+            SiteA: 10,
+            SiteB: 0,
 
-            }, {
-                period: '2013',
-                SiteA: 126,
-                SiteB: 78,
+        }, {
+            period: '2013',
+            SiteA: 126,
+            SiteB: 78,
 
-            }, {
-                period: '2014',
-                SiteA: 78,
-                SiteB: 58,
+        }, {
+            period: '2014',
+            SiteA: 78,
+            SiteB: 58,
 
-            }, {
-                period: '2015',
-                SiteA: 89,
-                SiteB: 185,
+        }, {
+            period: '2015',
+            SiteA: 89,
+            SiteB: 185,
 
-            }, {
-                period: '2016',
-                SiteA: 175,
-                SiteB: 124,
+        }, {
+            period: '2016',
+            SiteA: 175,
+            SiteB: 124,
 
-            }, {
-                period: '2017',
-                SiteA: 126,
-                SiteB: 102  ,
+        }, {
+            period: '2017',
+            SiteA: 126,
+            SiteB: 102,
 
-            }
+        }
         ],
         xkey: 'period',
         ykeys: ['SiteA', 'SiteB'],
@@ -113,42 +113,42 @@ function MorrisArea() {
     });
     Morris.Area({
         element: 'e_area_chart',
-            data: [{
-                period: '2011',
-                iphone: 10,
-                ipad: 0,
-                itouch: 0
-            }, {
-                period: '2012',
-                iphone: 35,
-                ipad: 65,
-                itouch: 5
-            }, {
-                period: '2013',
-                iphone: 25,
-                ipad: 30,
-                itouch: 65
-            }, {
-                period: '2014',
-                iphone: 80,
-                ipad: 12,
-                itouch: 7
-            }, {
-                period: '2015',
-                iphone: 30,
-                ipad: 32,
-                itouch: 120
-            }, {
-                period: '2016',
-                iphone: 25,
-                ipad: 80,
-                itouch: 40
-            }, {
-                period: '2017',
-                iphone: 70,
-                ipad: 10,
-                itouch: 26
-            }
+        data: [{
+            period: '2011',
+            iphone: 10,
+            ipad: 0,
+            itouch: 0
+        }, {
+            period: '2012',
+            iphone: 35,
+            ipad: 65,
+            itouch: 5
+        }, {
+            period: '2013',
+            iphone: 25,
+            ipad: 30,
+            itouch: 65
+        }, {
+            period: '2014',
+            iphone: 80,
+            ipad: 12,
+            itouch: 7
+        }, {
+            period: '2015',
+            iphone: 30,
+            ipad: 32,
+            itouch: 120
+        }, {
+            period: '2016',
+            iphone: 25,
+            ipad: 80,
+            itouch: 40
+        }, {
+            period: '2017',
+            iphone: 70,
+            ipad: 10,
+            itouch: 26
+        }
 
 
         ],
@@ -173,9 +173,9 @@ function MorrisLineChart() {
         element: 'm_line_chart',
         resize: true,
         data: [{
-                y: '2014 Q1',
-                item1: 2356
-            },
+            y: '2014 Q1',
+            item1: 2356
+        },
             {
                 y: '2015 Q2',
                 item1: 2586
@@ -223,30 +223,32 @@ function MorrisLineChart() {
         hideHover: 'auto'
     });
 }
+
 // Morris donut chart
 function MorrisDonutChart() {
     Morris.Donut({
         element: 'm_donut_chart',
         data: [
-        {
-            label: "Online Sales",
-            value: 45,
+            {
+                label: "Online Sales",
+                value: 45,
 
-        }, {
-            label: "Store Sales",
-            value: 35
-        },{
-            label: "Email Sales",
-            value: 8
-        }, {
-            label: "Agent Sales",
-            value: 12
-        }],
+            }, {
+                label: "Store Sales",
+                value: 35
+            }, {
+                label: "Email Sales",
+                value: 8
+            }, {
+                label: "Agent Sales",
+                value: 12
+            }],
 
         resize: true,
         colors: ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8']
     });
 }
+
 // Morris bar chart
 function MorrisBarChart() {
     Morris.Bar({
@@ -296,4 +298,5 @@ function MorrisBarChart() {
         resize: true
     });
 }
+
 // Extra chart

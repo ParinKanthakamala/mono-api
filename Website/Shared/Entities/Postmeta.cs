@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Shared.Entities
+﻿namespace Shared.Entities
 {
-    public partial class Postmeta
+    public class Postmeta
     {
         public ulong MetaId { get; set; }
         public ulong PostId { get; set; }

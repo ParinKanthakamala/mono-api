@@ -2,7 +2,7 @@ $(function () {
     new Chart(document.getElementById("line_chart").getContext("2d"), getChartJs('line'));
     new Chart(document.getElementById("bar_chart").getContext("2d"), getChartJs('bar'));
     new Chart(document.getElementById("radar_chart").getContext("2d"), getChartJs('radar'));
-    new Chart(document.getElementById("pie_chart").getContext("2d"), getChartJs('pie'));    
+    new Chart(document.getElementById("pie_chart").getContext("2d"), getChartJs('pie'));
 });
 
 function getChartJs(type) {
@@ -23,7 +23,7 @@ function getChartJs(type) {
                     pointBorderWidth: 1
                 }, {
                     label: "My Second dataset",
-                    data: [40, 28, 50, 48, 63, 39, 41],                    
+                    data: [40, 28, 50, 48, 63, 39, 41],
                     borderColor: 'rgba(140,147,154, 0.2)',
                     backgroundColor: 'rgba(140,147,154, 0.2)',
                     pointBorderColor: 'rgba(140,147,154, 0)',
@@ -34,11 +34,10 @@ function getChartJs(type) {
             options: {
                 responsive: true,
                 legend: false,
-                
+
             }
         }
-    }
-    else if (type === 'bar') {
+    } else if (type === 'bar') {
         config = {
             type: 'bar',
             data: {
@@ -49,19 +48,18 @@ function getChartJs(type) {
                     backgroundColor: '#26c6da',
                     strokeColor: "rgba(255,118,118,0.1)",
                 }, {
-                        label: "My Second dataset",
-                        data: [10, 30, 80, 61, 26, 75, 40],
-                        backgroundColor: '#8a8a8b',
-                        strokeColor: "rgba(255,118,118,0.1)",
-                    }]
+                    label: "My Second dataset",
+                    data: [10, 30, 80, 61, 26, 75, 40],
+                    backgroundColor: '#8a8a8b',
+                    strokeColor: "rgba(255,118,118,0.1)",
+                }]
             },
             options: {
                 responsive: true,
                 legend: false
             }
         }
-    }
-    else if (type === 'radar') {
+    } else if (type === 'radar') {
         config = {
             type: 'radar',
             data: {
@@ -75,22 +73,21 @@ function getChartJs(type) {
                     pointBackgroundColor: 'rgba(241,95,121, 0.8)',
                     pointBorderWidth: 1
                 }, {
-                        label: "My Second dataset",
-                        data: [72, 48, 40, 19, 96, 27, 100],
-                        borderColor: 'rgba(140,147,154, 0.8)',
-                        backgroundColor: 'rgba(140,147,154, 0.5)',
-                        pointBorderColor: 'rgba(140,147,154, 0)',
-                        pointBackgroundColor: 'rgba(140,147,154, 0.8)',
-                        pointBorderWidth: 1
-                    }]
+                    label: "My Second dataset",
+                    data: [72, 48, 40, 19, 96, 27, 100],
+                    borderColor: 'rgba(140,147,154, 0.8)',
+                    backgroundColor: 'rgba(140,147,154, 0.5)',
+                    pointBorderColor: 'rgba(140,147,154, 0)',
+                    pointBackgroundColor: 'rgba(140,147,154, 0.8)',
+                    pointBorderWidth: 1
+                }]
             },
             options: {
                 responsive: true,
                 legend: false
             }
         }
-    }
-    else if (type === 'pie') {
+    } else if (type === 'pie') {
         config = {
             type: 'pie',
             data: {
@@ -117,6 +114,6 @@ function getChartJs(type) {
                 legend: false
             }
         }
-    }   
+    }
     return config;
 }

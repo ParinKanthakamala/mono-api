@@ -1,7 +1,6 @@
 using Gateway.Libraries.Common;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace ApiGateway.Core
 {
     public class MyControllerBase : ControllerBase

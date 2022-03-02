@@ -7,40 +7,36 @@ namespace Molecular.Utils
 {
     public static class AttributeHelpers
     {
-
         public static IEnumerable<Type> GetAttributeTypes<T>(this Assembly assembly) where T : Attribute
         {
             var types = assembly.GetTypes().Where(t => !t.IsNested);
             foreach (var type in types)
             {
                 var attribute = type.GetCustomAttribute<T>();
-                if (attribute != null)
-                {
-                    yield return type;
-                }
+                if (attribute != null) yield return type;
             }
         }
 
-        public static IEnumerable<(MethodInfo method, T attribute)> GetAttributeAndMethods<T>(this Type type) where T : Attribute
+        public static IEnumerable<(MethodInfo method, T attribute)> GetAttributeAndMethods<T>(this Type type)
+            where T : Attribute
         {
             foreach (var method in type.GetMethods())
             {
                 var attribute = method.GetCustomAttribute<T>();
-                if (attribute != null)
-                {
-                    yield return (method, attribute);
-                }
+                if (attribute != null) yield return (method, attribute);
             }
         }
 
-        public static IEnumerable<MethodInfo> GetAttributeMethods<T>(this Type type, Func<T, bool> predicate) where T : Attribute
+        public static IEnumerable<MethodInfo> GetAttributeMethods<T>(this Type type, Func<T, bool> predicate)
+            where T : Attribute
         {
             return type.GetMethods().Where(m => m.GetCustomAttributes<T>().Any(predicate));
         }
 
-        public static IEnumerable<MethodInfo> GetAttributeMethods<T>(this IEnumerable<Type> type, Func<T, bool> predicate) where T : Attribute
+        public static IEnumerable<MethodInfo> GetAttributeMethods<T>(this IEnumerable<Type> type,
+            Func<T, bool> predicate) where T : Attribute
         {
-            return type.SelectMany(t => t.GetAttributeMethods<T>(predicate));
+            return type.SelectMany(t => t.GetAttributeMethods(predicate));
         }
 
         public static IEnumerable<MethodInfo> GetAttributeMethods<T>(this Type type) where T : Attribute
@@ -67,6 +63,5 @@ namespace Molecular.Utils
         {
             return type.GetCustomAttribute<T>() != null;
         }
-
     }
 }

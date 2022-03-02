@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Shared.Entities
+﻿namespace Shared.Entities
 {
-    public partial class TermMeta
+    public class TermMeta
     {
         public ulong MetaId { get; set; }
         public ulong TermId { get; set; }

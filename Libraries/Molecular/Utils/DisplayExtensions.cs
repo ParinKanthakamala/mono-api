@@ -15,15 +15,8 @@ namespace Molecular.Utils
         public static string GetErrorMessage(this Exception exception)
         {
             if (exception.InnerException is null)
-            {
                 return exception.Message;
-            }
-            else
-            {
-                return GetErrorMessage(exception.InnerException);
-            }
-
+            return GetErrorMessage(exception.InnerException);
         }
     }
-
 }

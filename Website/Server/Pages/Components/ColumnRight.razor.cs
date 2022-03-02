@@ -6,7 +6,6 @@ namespace Server.Pages.Components
     {
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

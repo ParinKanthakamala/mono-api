@@ -9,12 +9,10 @@ namespace Server.Areas.Admin.Pages.Dashboard.widgets
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()
         {
-            
         }
     }
 }

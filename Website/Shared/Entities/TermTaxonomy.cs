@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Shared.Entities
+﻿namespace Shared.Entities
 {
-    public partial class TermTaxonomy
+    public class TermTaxonomy
     {
         public ulong TermTaxonomyId { get; set; }
         public ulong TermId { get; set; }

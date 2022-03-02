@@ -2,7 +2,7 @@ using System.Linq;
 using Shared.Entities;
 using Shared.Libraries;
 
-namespace Server.Library
+namespace Client.Library
 {
     public class Myself
     {

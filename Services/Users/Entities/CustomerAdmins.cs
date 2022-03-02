@@ -1,6 +1,6 @@
 ﻿namespace Users.Entities
 {
-    public partial class CustomerAdmins
+    public class CustomerAdmins
     {
         public int StaffId { get; set; }
         public int CustomerId { get; set; }

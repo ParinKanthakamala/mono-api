@@ -23,9 +23,9 @@ namespace Gateway.Libraries
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials =
                     new NetworkCredential(
-                        userName: "p.kanthakamala@gmail.com",
-                        password: "griktvtwi@WSS01",
-                        domain: "smtp.gmail.com"
+                        "p.kanthakamala@gmail.com",
+                        "griktvtwi@WSS01",
+                        "smtp.gmail.com"
                     );
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.EnableSsl = true;

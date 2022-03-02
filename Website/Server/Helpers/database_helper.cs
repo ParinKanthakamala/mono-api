@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
 
-namespace Server.Helpers
+namespace Client.Helpers
 {
     public static class database_helper
     {

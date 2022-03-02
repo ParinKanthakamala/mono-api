@@ -11,17 +11,17 @@ namespace Gateway.Libraries.RabbitMQ
 {
     public class RpcClient
     {
-        private ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper = new();
-        private List<string> correlations = new List<string>();
-        public RabbitOptions rabbitOptions { get; set; }
-
-        private static RpcClient _instance = null;
+        private static RpcClient _instance;
+        private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper = new();
+        private readonly List<string> correlations = new();
         private ConnectionFactory factory;
-        public static RpcClient rpc_client => _instance ??= new RpcClient();
 
         private RpcClient()
         {
         }
+
+        public RabbitOptions rabbitOptions { get; set; }
+        public static RpcClient rpc_client => _instance ??= new RpcClient();
 
         public string CallAsync(string message)
         {
@@ -33,7 +33,7 @@ namespace Gateway.Libraries.RabbitMQ
                 var consumer = new EventingBasicConsumer(channel);
                 var cancellationToken = new CancellationToken();
                 var correlationId = Guid.NewGuid().ToString();
-                this.correlations.Add(correlationId);
+                correlations.Add(correlationId);
                 consumer.Received += (model, ea) =>
                 {
                     Console.WriteLine("income message");
@@ -41,7 +41,8 @@ namespace Gateway.Libraries.RabbitMQ
                     {
                         return;
                     }
-                    else if (correlations.Contains(ea.BasicProperties.CorrelationId))
+
+                    if (correlations.Contains(ea.BasicProperties.CorrelationId))
                     {
                         var response = Encoding.UTF8.GetString(ea.Body.ToArray());
                         Console.WriteLine(response);
@@ -61,10 +62,10 @@ namespace Gateway.Libraries.RabbitMQ
                 _callbackMapper.TryAdd(correlationId, tcs);
 
                 channel.BasicPublish(
-                    exchange: this.rabbitOptions.Options.Exchange,
-                    routingKey: replyQueueName,
-                    basicProperties: props,
-                    body: messageBytes
+                    rabbitOptions.Options.Exchange,
+                    replyQueueName,
+                    props,
+                    messageBytes
                 );
 
                 channel.BasicConsume(
@@ -87,13 +88,13 @@ namespace Gateway.Libraries.RabbitMQ
         {
             this.rabbitOptions = rabbitOptions;
             Console.WriteLine(rabbitOptions.Connection.HostName);
-            this.factory = new ConnectionFactory()
+            factory = new ConnectionFactory
             {
                 HostName = rabbitOptions.Connection.HostName,
                 UserName = rabbitOptions.Connection.UserName,
                 Password = rabbitOptions.Connection.Password,
                 Port = rabbitOptions.Connection.Port,
-                VirtualHost = rabbitOptions.Connection.VHost,
+                VirtualHost = rabbitOptions.Connection.VHost
             };
             return this;
         }

@@ -50,7 +50,7 @@ namespace Shared.Helpers
         public static string current_url()
         {
             return ""; //
-                       //            return CI.config.site_url(CI.uri.uri_string());
+            //            return CI.config.site_url(CI.uri.uri_string());
         }
 
         /**
@@ -119,7 +119,8 @@ namespace Shared.Helpers
          * @param	mixed	any attributes
          * @return	string
          */
-        public static string anchor_popup(this object source, string uri = "", string title = "", bool attributes = false)
+        public static string anchor_popup(this object source, string uri = "", string title = "",
+            bool attributes = false)
         {
             //            title = (string) title;
             //            site_url = preg_match('#^(\w+:)?//#i', uri) ? uri : site_url(uri);
@@ -178,11 +179,7 @@ namespace Shared.Helpers
          */
         public static string mailto(this object source, string email, string title = "", string attributes = "")
         {
-
-            if (title == "")
-            {
-                title = email;
-            }
+            if (title == "") title = email;
 
             //            return "<a href='mailto:" + email + "'" + _stringify_attributes(attributes) + ">" + title + "</a>";
             return "";
@@ -200,12 +197,7 @@ namespace Shared.Helpers
          */
         public static string safe_mailto(this object source, string email, string title = "", string attributes = "")
         {
-
-
-            if (string.IsNullOrEmpty(title))
-            {
-                title = email;
-            }
+            if (string.IsNullOrEmpty(title)) title = email;
 
             //            x = str_split('<a href="mailto:', 1);
             //
@@ -376,29 +368,24 @@ namespace Shared.Helpers
 
         /**
          * Create URL Title
-         *
+         * 
          * Takes a "title" string as input and creates a
          * human-friendly URL string with a "separator" string
          * as the word separator.
-         *
+         * 
          * @todo	Remove old 'dash' and 'underscore' usage in 3.1+.
          * @param	string	str		Input string
          * @param	string	separator	Word separator
-         *			(usually '-' or '_')
+         * (usually '-' or '_')
          * @param	bool	lowercase	Whether to transform the output string to lowercase
          * @return	string
          */
         public static string url_title(this object source, string str, string separator = "-", bool lowercase = false)
         {
             if (separator == "dash")
-            {
                 separator = "-";
-            }
 
-            else if (separator == "underscore")
-            {
-                separator = "_";
-            }
+            else if (separator == "underscore") separator = "_";
 
             //            q_separator = preg_quote(separator, '#');
             //
@@ -426,14 +413,14 @@ namespace Shared.Helpers
 
         /**
          * Header Redirect
-         *
+         * 
          * Header redirect in two flavors
          * For very fine grained control over headers, you could use the Output
          * Library's set_header() function.
-         *
+         * 
          * @param	string	uri	URL
          * @param	string	method	Redirect method
-         *			'auto', 'location' or 'refresh'
+         * 'auto', 'location' or 'refresh'
          * @param	int	code	HTTP Response status code
          * @return	void
          */

@@ -8,7 +8,10 @@ namespace Molecular.Binders
     {
         public bool Optional => true;
 
-        public bool Match(Type type) => type == typeof(Parameters.Arguments);
+        public bool Match(Type type)
+        {
+            return type == typeof(Parameters.Arguments);
+        }
 
         public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
             out object result)

@@ -11,20 +11,24 @@ namespace Molecular.Binders
 {
     public class PocoBinder : IBinder
     {
-        public bool Optional => true;
-
-        private List<IBinder> binders;
+        private readonly List<IBinder> binders;
 
         public PocoBinder(List<IBinder> binders)
         {
             this.binders = binders;
         }
 
-        public bool Match(Type type) => type.HasAttribute<Bucket>();
+        public bool Optional => true;
 
-        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result)
+        public bool Match(Type type)
         {
-            Type type = param.Type;
+            return type.HasAttribute<Bucket>();
+        }
+
+        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
+            out object result)
+        {
+            var type = param.Type;
             // check for: parameterless constructor.
 
             result = Activator.CreateInstance(param.Type);
@@ -38,16 +42,13 @@ namespace Molecular.Binders
                 if (binder is null) continue;
                 var memberAsParam = member.AsRoutingParameter();
 
-                var status = binder.TryUse(arguments, memberAsParam, index, ref used, out object value);
+                var status = binder.TryUse(arguments, memberAsParam, index, ref used, out var value);
                 if (status is BindStatus.Failed) return status;
 
                 member.SetValue(result, value);
-                
             }
 
             return BindStatus.Success;
         }
-
     }
-
 }

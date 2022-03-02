@@ -6,7 +6,6 @@ namespace Client.Areas.Admin.Pages.Dashboard
     {
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

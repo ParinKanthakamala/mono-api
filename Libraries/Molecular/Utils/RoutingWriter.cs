@@ -9,20 +9,18 @@ using Molecular.Routing;
 
 namespace Molecular.Utils
 {
-
-
     public class RoutingWriter
     {
         private readonly Documentation.Documentation documentation;
 
         public RoutingWriter(Documentation.Documentation doc)
         {
-            this.documentation = doc;
+            documentation = doc;
         }
 
         public void WriteResult(RoutingResult result)
         {
-            switch(result.Status)
+            switch (result.Status)
             {
                 case RoutingStatus.Ok:
                     Console.WriteLine("The command was found and understood.");
@@ -36,10 +34,10 @@ namespace Molecular.Utils
                     }
                     else
                     {
-                        Console.WriteLine($"Invalid parameter(s). These are your options:");
+                        Console.WriteLine("Invalid parameter(s). These are your options:");
                         WriteCandidates(result.Candidates.Matching(RouteMatch.Default));
                     }
-                    
+
                     break;
 
                 case RoutingStatus.PartialCommand:
@@ -62,7 +60,6 @@ namespace Molecular.Utils
                     WriteCandidates(result.Candidates.Matching(RouteMatch.Default));
                     break;
             }
-           
         }
 
         public void WriteRoutes(IEnumerable<Route> routes)
@@ -75,14 +72,11 @@ namespace Molecular.Utils
                 var title = group.Key.Title ?? group.FirstOrDefault()?.Method.DeclaringType.Name ?? "Module";
                 Console.WriteLine($"{title}:");
 
-                foreach (var route in group)
-                {
-                    WriteRouteDescription(route);
-                }
+                foreach (var route in group) WriteRouteDescription(route);
                 Console.WriteLine();
             }
         }
-        
+
         public void WriteRouteHelp(Route route)
         {
             WriteWrouteCommand(route);
@@ -112,9 +106,7 @@ namespace Molecular.Utils
             }
 
             WriteRouteHelp(route);
-
         }
-
 
 
         private void WriteCandidates(IEnumerable<Route> routes)
@@ -125,12 +117,12 @@ namespace Molecular.Utils
         private void WriteWrouteCommand(Route route)
         {
             //string path = route.GetCommandPath();
-            Console.WriteLine($"Command:");
-        
-            string commands = string.Join(" ", route.Nodes).ToLower();
+            Console.WriteLine("Command:");
+
+            var commands = string.Join(" ", route.Nodes).ToLower();
             var parameters = ParametersAsText(route.Method);
 
-            string s = commands;
+            var s = commands;
             if (parameters.Length > 0) s += " " + parameters;
             Console.WriteLine($"  {s}");
         }
@@ -151,46 +143,30 @@ namespace Molecular.Utils
             string rep;
 
             if (type == typeof(Flag) || type == typeof(bool))
-            {
                 rep = $"--{name}";
-            }
             else if (type == typeof(Assignment))
-            {
                 rep = $"{name}=<value>";
-            }
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Flag<>))
-            {
                 rep = $"--{name} <value>";
-            }
             else if (type == typeof(Parameters.Arguments))
-            {
                 rep = $"<{name}>...";
-            }
             else if (type == typeof(string))
-            {
                 rep = $"<{name}>";
-            }
             else if (type.HasAttribute<Bucket>())
-            {
                 rep = "<flags>";
-            }
             else
-            {
                 rep = $"{name}";
-            }
             if (optional) rep = $"({rep})";
 
             return rep;
         }
 
 
-     
-
         private void WriteWrouteDescription(Route route)
         {
             if (route.Description is not null)
             {
-                Console.WriteLine($"\nDescription:");
+                Console.WriteLine("\nDescription:");
                 Console.WriteLine(route.Description);
             }
         }
@@ -200,20 +176,18 @@ namespace Molecular.Utils
             var parameters = route.GetRoutingParameters().ToList();
             if (parameters.Count > 0)
             {
-                Console.WriteLine($"\nParameters:");
+                Console.WriteLine("\nParameters:");
                 foreach (var parameter in route.GetRoutingParameters())
-                {
                     if (parameter.Type.HasAttribute<Bucket>())
                         WriteBucketParameters(parameter.Type);
-                    else 
+                    else
                         WriteRoutingParameter(parameter, doc);
-                }
             }
         }
 
         private void WriteRoutingParameter(Parameter parameter, MemberDoc memberdoc)
         {
-            string text = ParameterAsText(parameter);
+            var text = ParameterAsText(parameter);
             var paramdoc = memberdoc?.GetParamDoc(parameter.Name);
             WriteRoutingParameter(text, paramdoc);
         }
@@ -226,15 +200,14 @@ namespace Molecular.Utils
                 Console.WriteLine($"  {display}");
         }
 
-      
 
         private void WriteBucketParameters(Type type)
         {
             var members = type.GetFieldsAndProperties();
-            foreach(var member in members)
+            foreach (var member in members)
             {
                 var doc = documentation.GetMemberDoc(member);
-                string display = ParameterAsText(member.GetMemberType(), member.Name);
+                var display = ParameterAsText(member.GetMemberType(), member.Name);
                 WriteRoutingParameter(display, doc?.Text);
             }
         }
@@ -243,10 +216,9 @@ namespace Molecular.Utils
         {
             if (doc is not null)
             {
-                Console.WriteLine($"\nDocumentation:");
+                Console.WriteLine("\nDocumentation:");
                 Console.WriteLine($"{doc.Text}\n");
             }
-            
         }
 
         private void WriteRouteDescription(Route route)
@@ -263,22 +235,19 @@ namespace Molecular.Utils
             {
                 Console.WriteLine($"  {command,-15}");
                 Console.WriteLine($"  {"",-12}{text}");
-
             }
             else
             {
                 Console.WriteLine($"  {command,-15} {text}");
             }
         }
-        
+
         public static void WriteException(Exception e, bool stacktrace = false)
         {
-            string message = e.GetErrorMessage();
+            var message = e.GetErrorMessage();
             Console.Write($"Error: {message}");
 
             if (stacktrace) Console.WriteLine(e.StackTrace);
         }
-        
     }
-
 }

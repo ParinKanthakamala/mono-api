@@ -2,7 +2,7 @@
 
 namespace Users.Entities
 {
-    public partial class Staff
+    public class Staff
     {
         public int Staffid { get; set; }
         public string Email { get; set; }

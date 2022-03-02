@@ -1,8 +1,8 @@
 using BlazorContextMenu;
 using Blazored.Modal.Services;
 using Blazored.Toast.Services;
-using Shared.Core;
 using Microsoft.AspNetCore.Components;
+using Shared.Core;
 
 namespace Server.Pages.Components.NavigationItems
 {

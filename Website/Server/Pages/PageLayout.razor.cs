@@ -2,9 +2,8 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
-using Shared.Core;
 using Microsoft.AspNetCore.Components;
-using Tools.Label;
+using Shared.Core;
 
 namespace Server.Pages
 {

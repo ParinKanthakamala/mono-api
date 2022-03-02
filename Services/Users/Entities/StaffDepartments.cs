@@ -1,6 +1,6 @@
 ﻿namespace Users.Entities
 {
-    public partial class StaffDepartments
+    public class StaffDepartments
     {
         public int Staffdepartmentid { get; set; }
         public int Staffid { get; set; }

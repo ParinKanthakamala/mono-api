@@ -1,6 +1,6 @@
 using System.Dynamic;
-using Shared.Models;
 using Server.Areas.Admin.Core;
+using Shared.Models;
 
 namespace Server.Areas.Admin.Components.Utilities
 {
@@ -13,7 +13,6 @@ namespace Server.Areas.Admin.Components.Utilities
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

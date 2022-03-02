@@ -5,53 +5,48 @@ namespace Molecular.Parameters
 {
     public class Flag : IArgument
     {
-        public string Original { 
-            get 
-            {
-                string dash = Short ? "-" : "--";
-                return dash + Name;
-            } 
-        }
-        public bool Short { get; private set; }
-        public string Name { get; private set; }
-
-        public bool IsSet { get; private set; }
-
-        [Obsolete("Replaced by IsSet")]
-        public bool Set => IsSet;
-
-        public string Value { get => IsSet.ToString(); }
-
         public Flag(string value)
         {
-
-            this.Name = value.TrimStart('-');
-            this.IsSet = true;
-            this.Short = value.Length == 1;
+            Name = value.TrimStart('-');
+            IsSet = true;
+            Short = value.Length == 1;
         }
 
         public Flag(string name, bool set)
         {
-            this.Name = name;
-            this.IsSet = set;
-            this.Short = name.Length == 1;
+            Name = name;
+            IsSet = set;
+            Short = name.Length == 1;
         }
+
+        public bool Short { get; }
+        public string Name { get; }
+
+        public bool IsSet { get; }
+
+        [Obsolete("Replaced by IsSet")] public bool Set => IsSet;
+
+        public string Original
+        {
+            get
+            {
+                var dash = Short ? "-" : "--";
+                return dash + Name;
+            }
+        }
+
+        public string Value => IsSet.ToString();
 
         public bool Match(string name)
         {
             if (name is null) return false;
 
             if (Short) // short flag
-            {
-                return name.StartsWith(this.Name, StringComparison.OrdinalIgnoreCase);
-            }
-            else
-            {
-                return string.Compare(this.Name, name, ignoreCase: true) == 0;
-            }
+                return name.StartsWith(Name, StringComparison.OrdinalIgnoreCase);
+            return string.Compare(Name, name, true) == 0;
         }
 
-        public static implicit operator bool (Flag flag)
+        public static implicit operator bool(Flag flag)
         {
             return flag?.IsSet ?? false;
         }
@@ -59,15 +54,8 @@ namespace Molecular.Parameters
         public override string ToString()
         {
             if (Short)
-            {
                 return $"-{Name}";
-            }
-            else
-            {
-                return $"--{Name}";
-            }
+            return $"--{Name}";
         }
     }
-
-
 }

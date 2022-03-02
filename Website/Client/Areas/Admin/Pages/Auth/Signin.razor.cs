@@ -33,18 +33,19 @@ namespace Client.Areas.Admin.Pages.Auth
             {
                 // if (Email == "admin" && Password == "password")
                 // {
-                toastService.ShowToast(level: ToastLevel.Error, message: "hello", onClick: null);
+                toastService.ShowToast(ToastLevel.Error, "hello", onClick: null);
                 // if (model.Signin(Email, Password))
                 // toastService.ShowError("I'm an ERROR message");
                 // sharePoint["name"] = "John Doe";
                 Console.WriteLine("login success.");
-                NavManager.NavigateTo("/admin/dashboard"); 
+                NavManager.NavigateTo("/admin/dashboard");
                 // }
             }
             catch (Exception exception)
             {
-                toastService.ShowToast(level: ToastLevel.Error, message: exception.ToString());
+                toastService.ShowToast(ToastLevel.Error, exception.ToString());
             }
+
             return null;
         }
 

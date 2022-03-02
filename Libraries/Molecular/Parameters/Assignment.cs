@@ -1,21 +1,24 @@
 ﻿namespace Molecular.Parameters
 {
-    public class Assignment 
+    public class Assignment
     {
-        public string Key { get; private set; }
-        public string Value { get; private set; }
-        public bool Provided { get; private set; }
+        public static Assignment NotProvided = new() {Key = null, Value = null, Provided = false};
 
         public Assignment(string name, string value)
         {
-            this.Key = name;
-            this.Value = value;
+            Key = name;
+            Value = value;
 
             Provided = true;
         }
-        private Assignment() { } // to allow assignment construction
 
-        public static Assignment NotProvided = new Assignment { Key = null, Value = null, Provided = false };
+        private Assignment()
+        {
+        } // to allow assignment construction
+
+        public string Key { get; private set; }
+        public string Value { get; private set; }
+        public bool Provided { get; private set; }
 
         public static implicit operator bool(Assignment assignment)
         {
@@ -35,9 +38,7 @@
 
         public bool Match(string name)
         {
-            return string.Compare(this.Key, name, ignoreCase: true) == 0;
+            return string.Compare(Key, name, true) == 0;
         }
     }
-
-
 }

@@ -4,14 +4,14 @@ namespace Molecular.Parameters
 {
     public class Parameter
     {
-        public string Name;
-        public Type Type;
         public string AltName;
-        public bool Optional = false;
+        public string Name;
+        public bool Optional;
+        public Type Type;
 
         public override string ToString()
         {
-            string optional = Optional ? "(optional) " : "";
+            var optional = Optional ? "(optional) " : "";
             return $"{optional}{Type.Name} {Name}";
         }
 
@@ -26,6 +26,4 @@ namespace Molecular.Parameters
             };
         }
     }
-
-
 }

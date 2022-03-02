@@ -1,4 +1,4 @@
-namespace Docygen.Client.Library
+namespace Client.Library
 {
     public class Tools
     {

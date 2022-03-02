@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Shared.Entities
 {
-    public partial class Links
+    public class Links
     {
         public ulong LinkId { get; set; }
         public string LinkUrl { get; set; }

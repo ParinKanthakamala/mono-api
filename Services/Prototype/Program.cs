@@ -12,19 +12,19 @@ using RabbitMQ.Client.Events;
 
 namespace Prototype
 {
-    class Program
+    internal class Program
     {
         public static void Example()
         {
-            var factory = new ConnectionFactory() {HostName = "localhost"};
+            var factory = new ConnectionFactory {HostName = "localhost"};
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "connection", durable: false, exclusive: false, autoDelete: false,
-                    arguments: null);
+                channel.QueueDeclare("connection", false, false, false,
+                    null);
                 channel.BasicQos(0, 1, false);
                 var consumer = new EventingBasicConsumer(channel);
-                channel.BasicConsume(queue: "connection", autoAck: false, consumer: consumer);
+                channel.BasicConsume("connection", false, consumer);
                 Console.WriteLine(" [x] Awaiting RPC requests");
 
                 consumer.Received += (model, ea) =>
@@ -65,9 +65,9 @@ namespace Prototype
                     finally
                     {
                         var responseBytes = Encoding.UTF8.GetBytes(response);
-                        channel.BasicPublish(exchange: "", routingKey: props.ReplyTo, basicProperties: replyProps,
-                            body: responseBytes);
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        channel.BasicPublish("", props.ReplyTo, replyProps,
+                            responseBytes);
+                        channel.BasicAck(ea.DeliveryTag, false);
                     }
                 };
 
@@ -77,7 +77,7 @@ namespace Prototype
         }
 
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             // var server = new RpcServer(name: "connection", host: "localhost");
             // server.Start();

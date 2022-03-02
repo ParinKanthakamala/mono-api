@@ -9,13 +9,14 @@ namespace Prototype
     public class ServiceBaseLifeTime : ServiceBase, IHostLifetime
     {
         private readonly TaskCompletionSource<object> _delayStart;
-        private IApplicationLifetime ApplicationLifetime { get; }
 
         public ServiceBaseLifeTime(IApplicationLifetime applicationLifetime)
         {
             _delayStart = new TaskCompletionSource<object>();
             ApplicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
         }
+
+        private IApplicationLifetime ApplicationLifetime { get; }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {

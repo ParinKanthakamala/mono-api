@@ -1,4 +1,4 @@
-namespace Server.Helpers.Views
+namespace Client.Helpers.Views
 {
     public class render_datatable
     {

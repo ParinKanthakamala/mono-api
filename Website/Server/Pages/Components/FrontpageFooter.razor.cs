@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Shared.Libraries.Extensions;
 using Server.Core;
 using Server.Entities;
+using Shared.Libraries.Extensions;
 
 namespace Server.Pages.Components
 {
@@ -25,7 +25,6 @@ namespace Server.Pages.Components
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

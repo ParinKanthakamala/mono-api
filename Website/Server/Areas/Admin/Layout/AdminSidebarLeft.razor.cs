@@ -9,7 +9,6 @@ namespace Server.Areas.Admin.Layout
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

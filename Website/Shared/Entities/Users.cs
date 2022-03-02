@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Shared.Entities
 {
-    public partial class Users
+    public class Users
     {
         public int Id { get; set; }
         public string Login { get; set; }

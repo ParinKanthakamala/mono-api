@@ -7,12 +7,12 @@ namespace ApiGateway
     {
         public void LockFile(string lockPath)
         {
-            using (FileStream lockFile = new FileStream(
-                lockPath,
-                FileMode.OpenOrCreate,
-                FileAccess.ReadWrite,
-                FileShare.Delete
-            ))
+            using (var lockFile = new FileStream(
+                       lockPath,
+                       FileMode.OpenOrCreate,
+                       FileAccess.ReadWrite,
+                       FileShare.Delete
+                   ))
 
             {
                 // 1. Read lock information from file

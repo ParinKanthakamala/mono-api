@@ -11,14 +11,12 @@ namespace Molecular.Routing
 {
     public class Router
     {
-        public List<Route> Routes { get; }
         public Binder Binder;
-        public ArgumentParser Parser;
-        public RoutingWriter Writer;
-        private List<Type> Globals;
-        public bool DebugMode { get; set; }
+        private readonly List<Type> Globals;
         public Action<Router, Exception> HandleException;
+        public ArgumentParser Parser;
         public IServiceProvider services;
+        public RoutingWriter Writer;
 
         public Router(
             List<Route> routes,
@@ -29,33 +27,32 @@ namespace Molecular.Routing
             IEnumerable<Type> globals = null,
             Action<Router, Exception> exceptionhandler = null)
         {
-            this.Globals = globals?.ToList();
-            this.Routes = routes;
-            this.Binder = binder;
-            this.Parser = parser;
-            this.Writer = writer;
+            Globals = globals?.ToList();
+            Routes = routes;
+            Binder = binder;
+            Parser = parser;
+            Writer = writer;
             this.services = services;
             HandleException = exceptionhandler ?? DefaultExceptionHandler.Handle;
         }
 
+        public List<Route> Routes { get; }
+        public bool DebugMode { get; set; }
+
         public RoutingResult Handle(string[] args)
         {
-            Parameters.Arguments arguments = Parser.Parse(args);
+            var arguments = Parser.Parse(args);
             return Handle(arguments);
         }
 
         public RoutingResult Handle(Parameters.Arguments arguments)
         {
-            RoutingResult result = Bind(arguments);
+            var result = Bind(arguments);
 
             if (result.Ok)
-            {
                 Invoke(result);
-            }
             else
-            {
                 Writer.WriteResult(result);
-            }
 
             return result;
         }
@@ -80,10 +77,9 @@ namespace Molecular.Routing
         private Bind CreateCaptureBind(Parameters.Arguments arguments, Candidate candidate)
         {
             var args = arguments.WithoutCapture(candidate.Route.Capture);
-            if (Binder.TryCreateBind(candidate.Route, args, out Bind bind))
+            if (Binder.TryCreateBind(candidate.Route, args, out var bind))
                 return bind;
-            else
-                throw new Exception("Capture was invoked, but could not be matched");
+            throw new Exception("Capture was invoked, but could not be matched");
         }
 
 
@@ -91,32 +87,28 @@ namespace Molecular.Routing
         {
             Binder.Bind(Globals, arguments);
 
-            if (TryGetCaptureCandidate(arguments, out Candidate candidate))
+            if (TryGetCaptureCandidate(arguments, out var candidate))
             {
                 var bind = CreateCaptureBind(arguments, candidate);
                 return CreateResult(arguments, candidate, bind);
             }
-            else
-            {
-                var candidates = GetCandidates(arguments).ToList();
-                var routes = candidates.Matching(RouteMatch.Full, RouteMatch.Default, RouteMatch.Capture);
-                var binds = Binder.Bind(routes, arguments).ToList();
 
-                return CreateResult(arguments, candidates, binds);
-            }
+            var candidates = GetCandidates(arguments).ToList();
+            var routes = candidates.Matching(RouteMatch.Full, RouteMatch.Default, RouteMatch.Capture);
+            var binds = Binder.Bind(routes, arguments).ToList();
+
+            return CreateResult(arguments, candidates, binds);
         }
 
 
         public bool TryGetCaptureCandidate(Parameters.Arguments arguments, out Candidate candidate)
         {
             foreach (var route in Routes.Where(r => r.Capture is not null))
-            {
                 if (route.Capture.Match(arguments))
                 {
                     candidate = new Candidate(RouteMatch.Capture, route);
                     return true;
                 }
-            }
 
             candidate = null;
             return false;
@@ -132,8 +124,8 @@ namespace Molecular.Routing
         private static RoutingResult CreateResult(Parameters.Arguments arguments, List<Candidate> candidates,
             List<Bind> bindings)
         {
-            (int partial, int full) = RouteMatcher.Tally(candidates);
-            int binds = bindings.Count;
+            (var partial, var full) = candidates.Tally();
+            var binds = bindings.Count;
             var status = RouteMatcher.MapRoutingStatus(binds, partial, full);
 
             return new RoutingResult(arguments, status, bindings, candidates);
@@ -145,7 +137,7 @@ namespace Molecular.Routing
             {
                 var match = RouteMatcher.Match(route, arguments);
                 if (match == RouteMatch.Not) continue;
-                else yield return new Candidate(match, route);
+                yield return new Candidate(match, route);
             }
         }
     }

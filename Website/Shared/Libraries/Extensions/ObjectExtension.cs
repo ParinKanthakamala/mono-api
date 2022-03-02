@@ -30,10 +30,7 @@ namespace Shared.Libraries.Extensions
         public static bool Remove(this object source, object name)
         {
             var temp = source;
-            if (temp is ExpandoObject)
-            {
-                source = ((IDictionary<object, object>) temp).ContainsKey(name);
-            }
+            if (temp is ExpandoObject) source = ((IDictionary<object, object>) temp).ContainsKey(name);
 
             // return source.GetType().GetProperty(name) != null;
             return false;

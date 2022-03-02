@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Shared.Entities
 {
-    public partial class MyContext : DbContext
+    public class MyContext : DbContext
     {
         public MyContext()
         {
@@ -32,8 +31,10 @@ namespace Shared.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=localhost;user=root;password=password;database=wordpress;convert zero datetime=True;treattinyasboolean=True", x => x.ServerVersion("5.7.32-mysql"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http: //go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySql(
+                    "server=localhost;user=root;password=password;database=wordpress;convert zero datetime=True;treattinyasboolean=True",
+                    x => x.ServerVersion("5.7.32-mysql"));
             }
         }
 
@@ -92,7 +93,7 @@ namespace Shared.Entities
                 entity.HasIndex(e => e.CommentPostId)
                     .HasName("comment_post_ID");
 
-                entity.HasIndex(e => new { e.CommentApproved, e.CommentDateGmt })
+                entity.HasIndex(e => new {e.CommentApproved, e.CommentDateGmt})
                     .HasName("comment_approved_date_gmt");
 
                 entity.Property(e => e.CommentId)
@@ -368,7 +369,7 @@ namespace Shared.Entities
                 entity.HasIndex(e => e.PostParent)
                     .HasName("post_parent");
 
-                entity.HasIndex(e => new { e.PostType, e.PostStatus, e.PostDate, e.Id })
+                entity.HasIndex(e => new {e.PostType, e.PostStatus, e.PostDate, e.Id})
                     .HasName("type_status_date");
 
                 entity.Property(e => e.Id)
@@ -554,7 +555,7 @@ namespace Shared.Entities
 
             modelBuilder.Entity<TermRelationships>(entity =>
             {
-                entity.HasKey(e => new { e.ObjectId, e.TermTaxonomyId })
+                entity.HasKey(e => new {e.ObjectId, e.TermTaxonomyId})
                     .HasName("PRIMARY");
 
                 entity.ToTable("term_relationships");
@@ -582,7 +583,7 @@ namespace Shared.Entities
                 entity.HasIndex(e => e.Taxonomy)
                     .HasName("taxonomy");
 
-                entity.HasIndex(e => new { e.TermId, e.Taxonomy })
+                entity.HasIndex(e => new {e.TermId, e.Taxonomy})
                     .HasName("term_id_taxonomy")
                     .IsUnique();
 
@@ -791,6 +792,9 @@ namespace Shared.Entities
             OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        private void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

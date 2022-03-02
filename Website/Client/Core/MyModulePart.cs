@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Shared.Core;
 
@@ -24,11 +22,11 @@ namespace Client.Core
         {
             if (string.IsNullOrEmpty(Page))
                 Page = "common/hoome";
-            var layout_id = 0;
+            // var layout_id = 0;
 
-            if (Page == "product/category" && !string.IsNullOrEmpty(this.path))
+            if (Page == "product/category" && !string.IsNullOrEmpty(path))
             {
-                var path = this.path.Split('_').ToList();
+                // var path = this.path.Split('_').ToList();
                 // layout_id = model_catalog_category.getCategoryLayoutId(path.Last());
             }
             else if (Page == "product/product" && !string.IsNullOrEmpty(product_id))
@@ -61,7 +59,7 @@ namespace Client.Core
                 //         modules.Add("extension/module/" + part[0] + JsonConvert.SerializeObject(setting_info));
                 // });
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 // db.Debug.Add(new Debug
                 // {

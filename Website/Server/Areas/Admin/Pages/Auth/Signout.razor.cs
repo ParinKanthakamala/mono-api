@@ -6,12 +6,10 @@ namespace Server.Areas.Admin.Pages.Auth
     {
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()
         {
-            
         }
     }
 }

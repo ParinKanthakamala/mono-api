@@ -1,5 +1,5 @@
-using Shared.Core;
 using Microsoft.AspNetCore.Components;
+using Shared.Core;
 
 namespace Server.Pages.Components
 {
@@ -13,7 +13,6 @@ namespace Server.Pages.Components
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

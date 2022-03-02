@@ -13,19 +13,14 @@ namespace Molecular.Utils
         {
             try
             {
-                result = Enum.Parse(type, value, ignoreCase: true);
+                result = Enum.Parse(type, value, true);
                 return true;
-
             }
             catch
             {
                 result = null;
                 return false;
             }
-
         }
     }
-
-    
-
 }

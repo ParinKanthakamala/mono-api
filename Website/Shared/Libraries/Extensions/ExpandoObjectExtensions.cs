@@ -12,8 +12,8 @@ namespace Shared.Libraries.Extensions
         public static T Get<T>(this ExpandoObject source, string key)
         {
             foreach (var output in from PropertyDescriptor desc in TypeDescriptor.GetProperties(source)
-                where desc.Name == key
-                select desc.GetValue(source))
+                     where desc.Name == key
+                     select desc.GetValue(source))
                 return (T) Convert.ChangeType(output, typeof(T), CultureInfo.InvariantCulture);
 
             return default;
@@ -36,13 +36,11 @@ namespace Shared.Libraries.Extensions
             ((IDictionary<string, object>) source).Remove(key);
         }
 
-        
-     
 
         public static string GetString(this ExpandoObject source, string key, string @default = "")
         {
             foreach (var desc in TypeDescriptor.GetProperties(source).Cast<PropertyDescriptor>()
-                .Where(desc => desc.Name == key))
+                         .Where(desc => desc.Name == key))
                 return Convert.ToString(desc.GetValue(source));
 
             return @default;

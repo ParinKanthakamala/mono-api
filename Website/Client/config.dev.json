@@ -1,0 +1,59 @@
+{
+  "apps": [
+    {
+      "name": "api-connection[dev]",
+      "script": "yarn",
+      "args": "start",
+      "watch": [
+        "src"
+      ],
+      "interpreter": "bash",
+      "env": {
+        "ENV": "dev"
+      }
+    }
+  ],
+  "http": {
+    "url": "http://localhost",
+    "port": 80
+  },
+  "email": {
+    "host": "smtp-mail.outlook.com",
+    "secureConnection": false,
+    "port": 587,
+    "auth": {
+      "user": "digidocs@siamraj.com",
+      "pass": "Si@m9300"
+    },
+    "tls": {
+      "ciphers": "SSLv3"
+    }
+  },
+  "database": {
+    "driver": "mysql",
+    "connection": {
+      "host": "159.138.247.244",
+      "port": 3306,
+      "user": "root",
+      "password": "password",
+      "database": "api-connection"
+    }
+  },
+  "secret": {
+    "jwt": "oMKS7F9fOFNnIgKYPekW"
+  },
+  "rabbitmq": {
+    "name": "api-connection",
+    "exchange": "dev",
+    "ssl": true,
+    "account": "xtzqztjn",
+    "password": "URBCuxJ2jGJrgH2s1xnE7x4Vnjh1WERe",
+    "host": "baboon.rmq.cloudamqp.com/xtzqztjn",
+    "port": 5672,
+    "timeout": 3000,
+    "option": {
+      "heartbeat": 60,
+      "handshake_timeout": 1000
+    }
+  }
+}

@@ -5,20 +5,21 @@ using Molecular.Utils;
 namespace Molecular.Modules
 {
     /// <summary>
-    /// This is the default help module, that is in included in your routing system when you use
-    /// RouteBuilder.AddHelp()
+    ///     This is the default help module, that is in included in your routing system when you use
+    ///     RouteBuilder.AddHelp()
     /// </summary>
     [Module("Help")]
     public class HelpModule
     {
-        private Router router;
+        private readonly Router router;
 
         public HelpModule(Router router)
         {
             this.router = router;
         }
 
-        [Command("help"), Help("Provides this help list or detailed help about a command")]
+        [Command("help")]
+        [Help("Provides this help list or detailed help about a command")]
         public void Help(Parameters.Arguments args = null)
         {
             if (args is null || args.Count == 0)
@@ -32,7 +33,8 @@ namespace Molecular.Modules
             }
         }
 
-        [Command, Capture("?", "--help", "-?", "-h")]
+        [Command]
+        [Capture("?", "--help", "-?", "-h")]
         public void CaptureHelp(Parameters.Arguments args = null)
         {
             if (args is null || args.Count == 0)
@@ -45,9 +47,5 @@ namespace Molecular.Modules
                 router.Writer.WriteRouteHelp(result);
             }
         }
-
     }
-
-
-
 }

@@ -54,7 +54,7 @@ namespace Molecular.Builders
 
         public static RouterBuilder AddBinders(this RouterBuilder builder, IEnumerable<IBinder> binders)
         {
-            foreach(var binder in binders) builder.AddBinder(binder);
+            foreach (var binder in binders) builder.AddBinder(binder);
             return builder;
         }
 
@@ -78,9 +78,5 @@ namespace Molecular.Builders
 
             return binders;
         }
-
     }
-
-
-
 }

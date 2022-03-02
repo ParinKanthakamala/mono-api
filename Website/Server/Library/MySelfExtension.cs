@@ -1,6 +1,6 @@
 using Shared.Entities;
 
-namespace Server.Library
+namespace Client.Library
 {
     public static class MySelfExtension
     {

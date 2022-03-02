@@ -1,46 +1,47 @@
-﻿$(function() {
+﻿$(function () {
     "use strict";
     MorrisArea();
 });
+
 function MorrisArea() {
     Morris.Area({
         element: 'm_area_chart',
         data: [{
-                period: '2011',
-                Earnings: 45,
-                Sales: 75,
-                
-            }, {
-                period: '2012',
-                Earnings: 130,
-                Sales: 110,
-                
-            }, {
-                period: '2013',
-                Earnings: 80,
-                Sales: 60,
-            
-            }, {
-                period: '2014',
-                Earnings: 78,
-                Sales: 205,
-            
-            }, {
-                period: '2015',
-                Earnings: 180,
-                Sales: 124,
-                
-            }, {
-                period: '2016',
-                Earnings: 105,
-                Sales: 100,
-            
-            },
+            period: '2011',
+            Earnings: 45,
+            Sales: 75,
+
+        }, {
+            period: '2012',
+            Earnings: 130,
+            Sales: 110,
+
+        }, {
+            period: '2013',
+            Earnings: 80,
+            Sales: 60,
+
+        }, {
+            period: '2014',
+            Earnings: 78,
+            Sales: 205,
+
+        }, {
+            period: '2015',
+            Earnings: 180,
+            Sales: 124,
+
+        }, {
+            period: '2016',
+            Earnings: 105,
+            Sales: 100,
+
+        },
             {
                 period: '2017',
                 Earnings: 210,
                 Sales: 180,
-            
+
             }
         ],
         xkey: 'period',
@@ -55,7 +56,7 @@ function MorrisArea() {
         hideHover: 'auto',
         lineColors: ['#50b94d', '#f96332'],
         resize: true,
-        axes:'',   
+        axes: '',
     });
 }
 
@@ -75,14 +76,14 @@ $(function () {
                 this.g.lineWidth = this.lineWidth;
 
                 this.o.cursor
-                    && (sat = eat - 0.3)
-                    && (eat = eat + 0.3);
+                && (sat = eat - 0.3)
+                && (eat = eat + 0.3);
 
                 if (this.o.displayPrevious) {
                     ea = this.startAngle + this.angle(this.value);
                     this.o.cursor
-                        && (sa = ea - 0.3)
-                        && (ea = ea + 0.3);
+                    && (sa = ea - 0.3)
+                    && (ea = ea + 0.3);
                     this.g.beginPath();
                     this.g.strokeStyle = this.previousColor;
                     this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);

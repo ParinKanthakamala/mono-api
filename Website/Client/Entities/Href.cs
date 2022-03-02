@@ -13,7 +13,7 @@ namespace Client.Entities
 
         public static Href Create(string href, string text)
         {
-            return new(href, text);
+            return new Href(href, text);
         }
     }
 }

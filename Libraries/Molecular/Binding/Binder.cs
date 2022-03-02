@@ -9,9 +9,9 @@ using Molecular.Utils;
 
 namespace Molecular.Binding
 {
-    public class Binder 
+    public class Binder
     {
-        private List<IBinder> binders;
+        private readonly List<IBinder> binders;
 
         public Binder(IEnumerable<IBinder> binders)
         {
@@ -24,10 +24,7 @@ namespace Molecular.Binding
             foreach (var route in routes)
             {
                 var args = arguments.WithoutCommands(route);
-                if (TryCreateBind(route, args, out var bind))
-                {
-                    yield return bind;
-                }
+                if (TryCreateBind(route, args, out var bind)) yield return bind;
             }
         }
 
@@ -35,13 +32,10 @@ namespace Molecular.Binding
         {
             if (types is null) return;
 
-            foreach(var type in types)
-            {
-                Bind(type, arguments);
-            }
+            foreach (var type in types) Bind(type, arguments);
         }
 
-        
+
         public void Bind(Type type, Parameters.Arguments arguments)
         {
             if (type is null) return;
@@ -49,7 +43,6 @@ namespace Molecular.Binding
             var globals = new List<IArgument>();
 
             foreach (var arg in arguments)
-            {
                 if (arg is Flag f && type.GetProperty(typeof(bool), f.Name) is PropertyInfo pb)
                 {
                     pb.SetValue(null, true);
@@ -60,8 +53,6 @@ namespace Molecular.Binding
                     ps.SetValue(null, s.Value);
                     globals.Add(arg);
                 }
-                
-            }
 
             foreach (var a in globals) arguments.Remove(a);
         }
@@ -73,54 +64,43 @@ namespace Molecular.Binding
                 bind = new Bind(route, values);
                 return true;
             }
-            else
-            {
-                bind = null;
-                return false;
-            }
+
+            bind = null;
+            return false;
         }
-      
+
         public bool TryBindParameters(Route route, Parameters.Arguments arguments, out object[] values)
         {
-            Parameters.Parameters parameters = route.Method.GetRoutingParameters();
+            var parameters = route.Method.GetRoutingParameters();
             return TryBindParameters(parameters, arguments, out values);
         }
 
         // Note that parameters here refer to the parameters of a C# method, and that arguments refer to the values
         // from the command line that will set those paremeters.
-        private bool TryBindParameters(Parameters.Parameters parameters, Parameters.Arguments arguments, out object[] values)
+        private bool TryBindParameters(Parameters.Parameters parameters, Parameters.Arguments arguments,
+            out object[] values)
         {
             values = new object[parameters.Count];
 
             //int offset = arguments.Commands;
-            int index = 0; // index of parameters
-            int used = 0; // arguments used;
+            var index = 0; // index of parameters
+            var used = 0; // arguments used;
 
             foreach (var param in parameters)
             {
                 var binder = binders.FindMatch(param.Type);
                 if (binder is null) return false;
 
-                var status = binder.TryUse(arguments, param, index, ref used, out object value);
+                var status = binder.TryUse(arguments, param, index, ref used, out var value);
                 if (status == BindStatus.Success)
-                {
                     values[index++] = value;
-                }
-                else if (status == BindStatus.NotFound & (binder.Optional | param.Optional))
-                {
+                else if ((status == BindStatus.NotFound) & (binder.Optional | param.Optional))
                     values[index++] = value;
-                }
                 else // BindStatus.Failed | or NotFound non optional param.
-                {
                     return false;
-                }
             }
-            return (arguments.Count == used);
+
+            return arguments.Count == used;
         }
-
     }
-
-
 }
-
-

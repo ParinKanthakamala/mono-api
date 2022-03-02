@@ -1,3 +1,4 @@
+using System;
 using Server.Areas.Admin.Core;
 
 namespace Server.Areas.Admin.Components.Utilities
@@ -6,12 +7,12 @@ namespace Server.Areas.Admin.Components.Utilities
     {
         public override void OnUpdate()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override void OnInitialized()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

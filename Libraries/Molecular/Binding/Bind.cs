@@ -6,13 +6,13 @@ namespace Molecular.Binding
 {
     public class Bind
     {
-        public Route Route;
         public object[] Parameters;
-         
+        public Route Route;
+
         public Bind(Route endpoint, object[] parameters)
         {
-            this.Route = endpoint;
-            this.Parameters = parameters;
+            Route = endpoint;
+            Parameters = parameters;
         }
 
         private static string ParameterString(object arg)
@@ -33,7 +33,5 @@ namespace Molecular.Binding
 
             return $"{Route.Method.Name}({paramlist})";
         }
-
     }
-
 }

@@ -22,7 +22,7 @@ namespace Gateway.Libraries.Common
 
         private static string GetPath()
         {
-            var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             var development_file = Directory.GetCurrentDirectory() + "/appsettings.Development.json";
             var appsettings_file = Directory.GetCurrentDirectory() + "/appsettings.json";

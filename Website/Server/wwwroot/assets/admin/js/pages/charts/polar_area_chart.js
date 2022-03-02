@@ -1,4 +1,4 @@
-var randomScalingFactor = function() {
+var randomScalingFactor = function () {
     return Math.round(Math.random() * 100);
 };
 
@@ -53,7 +53,7 @@ var config = {
     }
 };
 
-window.onload = function() {
+window.onload = function () {
     var ctx = document.getElementById("chart-area");
     window.myPolarArea = Chart.PolarArea(ctx, config);
 };

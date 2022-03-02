@@ -28,7 +28,7 @@ namespace Shared.Helpers.Extensions
 
         public static HashSet<T> FindAll<T>(this HashSet<T> collection, Func<T, bool> predicate)
         {
-            return new(collection.Where(predicate));
+            return new HashSet<T>(collection.Where(predicate));
         }
     }
 }

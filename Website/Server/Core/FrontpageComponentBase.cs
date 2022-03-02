@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Shared.Core;
 using Server.Entities;
+using Shared.Core;
 
 namespace Server.Core
 {

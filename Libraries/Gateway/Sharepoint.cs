@@ -6,8 +6,16 @@ namespace Gateway
 {
     public class Sharepoint
     {
-        private static Sharepoint instance = null;
+        private static Sharepoint instance;
+
+        public Dictionary<string, dynamic> Queues = new();
         public IBasicProperties replyProps;
+
+
+        private Sharepoint()
+        {
+        }
+
         public DataMessage message { get; set; }
 
 
@@ -17,12 +25,5 @@ namespace Gateway
         }
 
         public RpcServer server { get; set; }
-
-        public Dictionary<string, dynamic> Queues = new Dictionary<string, dynamic>();
-
-
-        private Sharepoint()
-        {
-        }
     }
 }

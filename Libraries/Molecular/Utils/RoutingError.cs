@@ -5,8 +5,7 @@ namespace Molecular.Utils
 {
     public class RoutingError
     {
-        public string Message;
         public IList<Route> Candidates;
+        public string Message;
     }
-
 }

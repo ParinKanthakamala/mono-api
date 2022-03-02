@@ -12,27 +12,19 @@ namespace ApiGateway.Core.Extensions
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (var ip in host.AddressList)
-            {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
                     return ip.ToString();
-                }
-            }
 
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
 
         public static bool IsValidJson(this string source)
         {
-            if (string.IsNullOrWhiteSpace(source))
-            {
-                return false;
-            }
+            if (string.IsNullOrWhiteSpace(source)) return false;
 
             source = source.Trim();
-            if ((source.StartsWith("{") && source.EndsWith("}")) || //For object
-                (source.StartsWith("[") && source.EndsWith("]"))) //For array
-            {
+            if (source.StartsWith("{") && source.EndsWith("}") || //For object
+                source.StartsWith("[") && source.EndsWith("]")) //For array
                 try
                 {
                     var obj = JToken.Parse(source);
@@ -49,11 +41,8 @@ namespace ApiGateway.Core.Extensions
                     Console.WriteLine(ex.ToString());
                     return false;
                 }
-            }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
     }
 }

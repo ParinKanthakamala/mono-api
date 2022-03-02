@@ -217,10 +217,12 @@
     .chat-app {
         margin: 0
     }
+
     .chat-app .chat-list {
         height: 650px;
         overflow-x: auto
     }
+
     .chat-app .chat-history {
         height: 490px;
         overflow-x: auto
@@ -231,10 +233,12 @@
     .chat-app {
         margin: 0
     }
+
     .chat-app .chat-list {
         height: 520px;
         overflow-x: auto
     }
+
     .chat-app .chat-history {
         height: 360px;
         overflow-x: auto

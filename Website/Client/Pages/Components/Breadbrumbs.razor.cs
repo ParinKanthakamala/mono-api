@@ -11,7 +11,6 @@ namespace Client.Pages.Components
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()

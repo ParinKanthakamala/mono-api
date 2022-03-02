@@ -2,5 +2,7 @@
 
 namespace Molecular.Attributes
 {
-    public class Bucket: Attribute { }
+    public class Bucket : Attribute
+    {
+    }
 }

@@ -9,7 +9,6 @@ namespace Users
     public class ServiceBaseLifeTime : ServiceBase, IHostLifetime
     {
         private readonly TaskCompletionSource<object> _delayStart;
-        private IApplicationLifetime ApplicationLifetime { get; }
 
         public ServiceBaseLifeTime(IApplicationLifetime
             applicationLifetime)
@@ -18,6 +17,8 @@ namespace Users
             ApplicationLifetime = applicationLifetime ?? throw new
                 ArgumentNullException(nameof(applicationLifetime));
         }
+
+        private IApplicationLifetime ApplicationLifetime { get; }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {

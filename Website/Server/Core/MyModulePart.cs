@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Shared.Core;
 using Microsoft.AspNetCore.Components;
+using Shared.Core;
 
 namespace Server.Core
 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Molecular.Routing
 {
@@ -6,22 +7,21 @@ namespace Molecular.Routing
     {
         public static RouteMatch Match(Route route, Parameters.Arguments arguments)
         {
-            int index = 0;
-            int count = route.Nodes.Count;
+            var index = 0;
+            var count = route.Nodes.Count;
 
             while (index < count)
-            {
-                if (arguments.TryGetCommand(index, out string value))
+                if (arguments.TryGetCommand(index, out var value))
                 {
                     if (route.Nodes[index].Matches(value))
-                    {
                         index++;
-                    }
                     else break;
-
                 }
-                else break;
-            }
+                else
+                {
+                    break;
+                }
+
             return MatchType(count, index);
         }
 
@@ -35,33 +35,26 @@ namespace Molecular.Routing
 
         public static RoutingStatus MapRoutingStatus(int binds, int partial, int full)
         {
-            if (binds == 1)
-            {
-                return RoutingStatus.Ok;
-            }
-            else if (binds == 0)
+            if (binds == 1) return RoutingStatus.Ok;
+
+            if (binds == 0)
             {
                 if (full > 0) return RoutingStatus.InvalidParameters;
                 if (partial > 0) return RoutingStatus.PartialCommand;
                 //if (def > 0) return RoutingStatus.InvalidDefault;
                 return RoutingStatus.UnknownCommand;
             }
-            else // if (binds.Count > 1)
-            {
-                return RoutingStatus.AmbigousParameters;
-            }
 
-            throw new System.Exception("Invalid status");
+            return RoutingStatus.AmbigousParameters;
+
+            throw new Exception("Invalid status");
         }
 
         public static (int partial, int full) Tally(this IEnumerable<Candidate> candidates)
         {
-            int partial = candidates.Count(RouteMatch.Partial);
-            int full = candidates.Count(RouteMatch.Full);
+            var partial = candidates.Count(RouteMatch.Partial);
+            var full = candidates.Count(RouteMatch.Full);
             return (partial, full);
         }
-
     }
 }
-
-

@@ -24,7 +24,7 @@ namespace Tools.Label
             SetLanguage(CultureInfo.CurrentCulture, true);
         }
 
-        public string this[object key, object keyValues] => Keys[(string)key, keyValues];
+        public string this[object key, object keyValues] => Keys[(string) key, keyValues];
 
 
         public Keys Keys { get; private set; }

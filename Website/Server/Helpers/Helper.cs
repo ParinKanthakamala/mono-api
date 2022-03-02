@@ -1,7 +1,7 @@
-using Server.Library;
+using Client.Library;
 using Shared.Entities;
 
-namespace Server.Helpers
+namespace Client.Helpers
 {
     public class Helper
     {

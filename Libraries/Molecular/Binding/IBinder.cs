@@ -7,7 +7,7 @@ namespace Molecular.Binding
     {
         Success,
         Failed,
-        NotFound, 
+        NotFound
     }
 
     public interface IBinder
@@ -16,5 +16,4 @@ namespace Molecular.Binding
         bool Match(Type type);
         BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result);
     }
-
 }

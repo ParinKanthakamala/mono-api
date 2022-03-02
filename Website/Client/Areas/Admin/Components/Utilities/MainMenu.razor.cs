@@ -10,12 +10,10 @@ namespace Client.Areas.Admin.Components.Utilities
 
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()
         {
-            
         }
     }
 }

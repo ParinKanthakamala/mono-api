@@ -1,6 +1,6 @@
 ﻿namespace Users.Entities
 {
-    public partial class UserMeta
+    public class UserMeta
     {
         public ulong UmetaId { get; set; }
         public ulong StaffId { get; set; }

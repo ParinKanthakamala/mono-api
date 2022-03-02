@@ -1,13 +1,15 @@
 ﻿@layout PageLayout
 @page "/"
-@inject NavigationManager NavManager
+@inherits IndexRazor
+
+test
 <div id="common-home" class="container">
     <div class="row">
-        <ColumnLeft />
+        <ColumnLeft></ColumnLeft>
         <div id="content" class="this.className">
-            <ContentTop />
-            <ContentBottom />
+            <ContentTop></ContentTop>
+            <ContentBottom></ContentBottom>
         </div>
-        <ColumnRight />
+        <ColumnRight></ColumnRight>
     </div>
-</div> 
+</div>

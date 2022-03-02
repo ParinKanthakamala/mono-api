@@ -4,8 +4,8 @@ namespace Gateway.Controllers
 {
     public class MyControllerBase
     {
-        public Sharepoint sharepoint = Sharepoint.sharepoint;
         public DataMessage message = Sharepoint.sharepoint.message;
+        public Sharepoint sharepoint = Sharepoint.sharepoint;
 
         public string Result(object sender)
         {

@@ -3,13 +3,12 @@ using Append.Blazor.Notifications;
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using Blazored.Toast;
+using Custom404Page.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Server.Services;
-using Tools.Label;
 
 namespace Server
 {

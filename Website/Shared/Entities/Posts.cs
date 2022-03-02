@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Shared.Entities
 {
-    public partial class Posts
+    public class Posts
     {
         public ulong Id { get; set; }
         public ulong PostAuthor { get; set; }

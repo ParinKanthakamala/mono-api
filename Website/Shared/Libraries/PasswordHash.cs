@@ -15,7 +15,7 @@ namespace Shared.Libraries
         public const int PBKDF2_INDEX = 3;
 
         /// <summary>
-        /// Creates a salted PBKDF2 hash of the password.
+        ///     Creates a salted PBKDF2 hash of the password.
         /// </summary>
         /// <param name="password">The password to hash.</param>
         /// <returns>The hash of the password.</returns>
@@ -34,7 +34,7 @@ namespace Shared.Libraries
         }
 
         /// <summary>
-        /// Validates a password given a hash of the correct one.
+        ///     Validates a password given a hash of the correct one.
         /// </summary>
         /// <param name="password">The password to check.</param>
         /// <param name="goodHash">A hash of the correct password.</param>
@@ -44,7 +44,7 @@ namespace Shared.Libraries
             // Extract the parameters from the hash
             char[] delimiter = {':'};
             var split = goodHash.Split(delimiter);
-            var iterations = Int32.Parse(split[ITERATION_INDEX]);
+            var iterations = int.Parse(split[ITERATION_INDEX]);
             var salt = Convert.FromBase64String(split[SALT_INDEX]);
             var hash = Convert.FromBase64String(split[PBKDF2_INDEX]);
 
@@ -53,9 +53,9 @@ namespace Shared.Libraries
         }
 
         /// <summary>
-        /// Compares two byte arrays in length-constant time. This comparison
-        /// method is used so that password hashes cannot be extracted from
-        /// on-line systems using a timing attack and then attacked off-line.
+        ///     Compares two byte arrays in length-constant time. This comparison
+        ///     method is used so that password hashes cannot be extracted from
+        ///     on-line systems using a timing attack and then attacked off-line.
         /// </summary>
         /// <param name="a">The first byte array.</param>
         /// <param name="b">The second byte array.</param>
@@ -69,7 +69,7 @@ namespace Shared.Libraries
         }
 
         /// <summary>
-        /// Computes the PBKDF2-SHA1 hash of a password.
+        ///     Computes the PBKDF2-SHA1 hash of a password.
         /// </summary>
         /// <param name="password">The password to hash.</param>
         /// <param name="salt">The salt.</param>

@@ -17,7 +17,7 @@ namespace Molecular.Routing
         public static List<Node> CloneAndAppend(this List<Node> nodes, Node tail)
         {
             if (tail is null) return nodes;
-           
+
             var clone = nodes.Clone();
             clone.Add(tail);
             return clone;
@@ -28,7 +28,7 @@ namespace Molecular.Routing
             var command = method.GetCustomAttribute<Command>();
             if (command is null) return null;
 
-            var names = command.IsGeneric ? new string[] { method.Name } : command.Names;
+            var names = command.IsGeneric ? new[] {method.Name} : command.Names;
             var node = new Node(names);
             return node;
         }
@@ -38,7 +38,7 @@ namespace Molecular.Routing
             var command = type.GetCustomAttribute<Command>();
             if (command is null) return null;
 
-            var names = command.IsGeneric ? new string[] { type.Name } : command.Names;
+            var names = command.IsGeneric ? new[] {type.Name} : command.Names;
             var node = new Node(names);
             return node;
         }
@@ -65,6 +65,5 @@ namespace Molecular.Routing
 
         //    parent.Add(node);
         //}
-
     }
 }

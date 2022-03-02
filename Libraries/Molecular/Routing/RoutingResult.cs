@@ -6,20 +6,21 @@ namespace Molecular.Routing
 {
     public class RoutingResult
     {
-        public RoutingStatus Status;
         public Parameters.Arguments Arguments;
-        public List<Candidate> Candidates; //where the commands match, but not necessarily the parameters
         public List<Bind> Binds;
-        public object? Value { get; set; }
+        public List<Candidate> Candidates; //where the commands match, but not necessarily the parameters
+        public RoutingStatus Status;
 
         public RoutingResult(Parameters.Arguments arguments, RoutingStatus status, List<Bind> binds,
             List<Candidate> candidates)
         {
-            this.Arguments = arguments;
-            this.Candidates = candidates;
-            this.Binds = binds;
-            this.Status = status;
+            Arguments = arguments;
+            Candidates = candidates;
+            Binds = binds;
+            Status = status;
         }
+
+        public object? Value { get; set; }
 
         public bool Ok => Status == RoutingStatus.Ok;
 
@@ -33,15 +34,10 @@ namespace Molecular.Routing
 
         public override string ToString()
         {
-            string tally = $"Binds: {BindCount}, Candidates: {Candidates?.Count ?? 0})";
+            var tally = $"Binds: {BindCount}, Candidates: {Candidates?.Count ?? 0})";
             if (Ok)
-            {
                 return $"Ok. {tally}";
-            }
-            else
-            {
-                return $"Failed. {tally}";
-            }
+            return $"Failed. {tally}";
         }
     }
 }

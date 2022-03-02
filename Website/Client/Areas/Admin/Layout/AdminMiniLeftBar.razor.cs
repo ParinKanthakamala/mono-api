@@ -56,7 +56,6 @@ namespace Client.Areas.Admin.Layout
 
         protected void MyNotification()
         {
-            
             var result = Modal.Show<NotificationList>("My Notification");
         }
 

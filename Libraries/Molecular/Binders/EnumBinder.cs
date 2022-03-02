@@ -9,9 +9,13 @@ namespace Molecular.Binders
     {
         public bool Optional => false;
 
-        public bool Match(Type type) => type.IsEnum;
+        public bool Match(Type type)
+        {
+            return type.IsEnum;
+        }
 
-        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result)
+        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
+            out object result)
         {
             if (arguments.TryGetEnum(index, param, out var value))
             {
@@ -19,12 +23,9 @@ namespace Molecular.Binders
                 result = value;
                 return BindStatus.Success;
             }
-            else
-            {
-                result = null;
-                return BindStatus.Failed;
-            }
+
+            result = null;
+            return BindStatus.Failed;
         }
     }
-
 }

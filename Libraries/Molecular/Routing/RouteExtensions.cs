@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Molecular.Arguments;
@@ -29,7 +28,7 @@ namespace Molecular.Routing
                 Name = info.Name.ToLower(),
                 Type = info.ParameterType,
                 AltName = info.GetCustomAttribute<Alt>()?.Name,
-                Optional = info.IsOptionalParameter(),
+                Optional = info.IsOptionalParameter()
             };
         }
 
@@ -46,9 +45,9 @@ namespace Molecular.Routing
 
         public static bool IsOptionalParameter(this ParameterInfo parameter)
         {
-            bool hasAttr = parameter.HasAttribute<Optional>();
-            bool maybenull = parameter.IsNullable();
-            bool hasdefault = parameter.IsOptional;
+            var hasAttr = parameter.HasAttribute<Optional>();
+            var maybenull = parameter.IsNullable();
+            var hasdefault = parameter.IsOptional;
 
             return hasAttr || maybenull || hasdefault;
         }
@@ -80,35 +79,23 @@ namespace Molecular.Routing
 
         public static string AsText(this Parameter parameter)
         {
-            Type type = parameter.Type;
-            string name = parameter.Name;
+            var type = parameter.Type;
+            var name = parameter.Name;
 
             string rep;
 
             if (type == typeof(Flag) || type == typeof(bool))
-            {
                 rep = $"--{name}";
-            }
             else if (type == typeof(Assignment))
-            {
                 rep = $"{name}=<value>";
-            }
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Flag<>))
-            {
                 rep = $"--{name} <value>";
-            }
             else if (type == typeof(Parameters.Arguments))
-            {
                 rep = $"<{name}>...";
-            }
             else if (type == typeof(string))
-            {
                 rep = $"<{name}>";
-            }
             else
-            {
                 rep = $"{name}";
-            }
 
             if (parameter.Optional) rep = $"({rep})";
 

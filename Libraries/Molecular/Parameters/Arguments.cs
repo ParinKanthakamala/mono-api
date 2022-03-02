@@ -14,9 +14,10 @@ namespace Molecular.Parameters
 
         public Arguments(IEnumerable<IArgument> arguments)
         {
-            
-            this.AddRange(arguments);
+            AddRange(arguments);
         }
+
+        public string Text => string.Join(" ", this);
 
 //        public Arguments(IEnumerable<IArgument> arguments)
 //        {
@@ -24,7 +25,7 @@ namespace Molecular.Parameters
 //            this.AddRange(arguments);
 //        }
 
-        public IList<T> Match<T>(string name) where T: IArgument
+        public IList<T> Match<T>(string name) where T : IArgument
         {
             var oftype = this.OfType<T>();
             var matches = oftype.Where(a => a.Match(name)).ToList();
@@ -37,34 +38,29 @@ namespace Molecular.Parameters
             var matches = oftype.Where(a => a.Match(parameter)).ToList();
             return matches;
         }
-         
-        public bool TryGetCommand(int index, out string result) 
+
+        public bool TryGetCommand(int index, out string result)
         {
-            if (index < this.Count)
+            if (index < Count)
             {
                 result = this[index].Original;
                 return true;
             }
-            else
-            {
-                
-                result = null;
-                return false;
-            }
+
+            result = null;
+            return false;
         }
 
-        public bool TryGet<T>(int index, out T result) where T: IArgument
+        public bool TryGet<T>(int index, out T result) where T : IArgument
         {
             if (index < Count && this[index] is T item)
             {
                 result = item;
                 return true;
             }
+
             result = default;
             return false;
         }
-
-        public string Text => string.Join(" ", this);
     }
-
 }

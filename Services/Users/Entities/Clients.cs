@@ -2,7 +2,7 @@
 
 namespace Users.Entities
 {
-    public partial class Clients
+    public class Clients
     {
         public int Userid { get; set; }
         public string Company { get; set; }

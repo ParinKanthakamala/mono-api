@@ -7,12 +7,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace Users
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var asService = !(Debugger.IsAttached || args.ToList().Contains("--console"));
             Console.WriteLine("asService : " + asService);
+            asService = false;
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {

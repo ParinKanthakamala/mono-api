@@ -9,11 +9,15 @@ namespace Molecular.Binders
     {
         public bool Optional => true;
 
-        public bool Match(Type type) => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Flag<>);
-    
-        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result)
+        public bool Match(Type type)
         {
-            Type innertype = param.Type.GetGenericArguments()[0];
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Flag<>);
+        }
+
+        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
+            out object result)
+        {
+            var innertype = param.Type.GetGenericArguments()[0];
 
             if (arguments.TryGet(param, out Flag flag))
             {
@@ -26,21 +30,16 @@ namespace Molecular.Binders
                         result = value;
                         return BindStatus.Success;
                     }
-                } 
+                }
 
                 // we do not increment, because it's not a valid parameter.
                 // used++;
                 result = FlagActivator.CreateUnsetValueFlag(innertype, param.Name);
                 return BindStatus.Failed;
             }
-            else
-            {
-                result = FlagActivator.CreateUnsetValueFlag(innertype, param.Name);
-                return BindStatus.NotFound;
-            }
+
+            result = FlagActivator.CreateUnsetValueFlag(innertype, param.Name);
+            return BindStatus.NotFound;
         }
-
-       
     }
-
 }

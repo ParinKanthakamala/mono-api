@@ -1,6 +1,6 @@
 ﻿namespace Users.Entities
 {
-    public partial class ContactPermissions
+    public class ContactPermissions
     {
         public int Id { get; set; }
         public int PermissionId { get; set; }

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace Server.Library
+namespace Client.Library
 {
     public class TypeMergerPolicy
     {

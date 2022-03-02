@@ -5,16 +5,16 @@ namespace Gateway
 {
     public class DataMessage
     {
-        public string User;
-        public Method Method;
-        public string Message = "";
-        public string From = "api-gateway";
-        public string To;
-        public string Route;
-        public string Host;
-        public string Type;
         public dynamic Body = new ExpandoObject();
+        public string From = "api-gateway";
+        public string Host;
+        public string Message = "";
+        public Method Method;
         public dynamic Query = new ExpandoObject();
+        public string Route;
+        public string To;
         public string Token = "";
+        public string Type;
+        public string User;
     }
 }

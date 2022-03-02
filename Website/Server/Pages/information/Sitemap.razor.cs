@@ -8,7 +8,6 @@ namespace Server.Pages.information
         public string className = "col-sm-12";
 
 
-
         public override void OnUpdate()
         {
             throw new NotImplementedException();

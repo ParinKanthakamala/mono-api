@@ -2,7 +2,7 @@
 
 namespace Users.Entities
 {
-    public partial class UserAutoLogin
+    public class UserAutoLogin
     {
         public string KeyId { get; set; }
         public int UserId { get; set; }

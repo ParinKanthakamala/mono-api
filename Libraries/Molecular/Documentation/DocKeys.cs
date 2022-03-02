@@ -14,19 +14,17 @@ namespace Molecular.Documentation
             builder.Append(".");
 
             var l = type.Name.IndexOf('`');
-            var name = (l > 0) ? type.Name.Substring(0, l) : type.Name;
+            var name = l > 0 ? type.Name.Substring(0, l) : type.Name;
             builder.Append(name);
-            
+
             var generics = type.GenericTypeArguments;
             if (generics.Length > 0)
             {
                 builder.Append("{");
-                foreach (var arg in generics)
-                {
-                    builder.Append(arg.FullName); // this will fail on recursive generic types
-                }
+                foreach (var arg in generics) builder.Append(arg.FullName); // this will fail on recursive generic types
                 builder.Append("}");
             }
+
             return builder.ToString();
         }
 
@@ -35,18 +33,18 @@ namespace Molecular.Documentation
             var builder = new StringBuilder();
             builder.Append("M:");
 
-            string typename = GetTypeName(method);//.FullName.Replace("+", ".");
+            var typename = GetTypeName(method); //.FullName.Replace("+", ".");
             builder.Append(typename);
 
             builder.Append(".");
 
-            
+
             builder.Append(method.Name);
             var parameters = method.GetParameters();
             if (parameters.Length > 0)
             {
                 builder.Append("(");
-                bool first = true;
+                var first = true;
                 foreach (var param in method.GetParameters())
                 {
                     if (!first) builder.Append(",");
@@ -54,6 +52,7 @@ namespace Molecular.Documentation
                     first = false;
                     builder.Append(paramkey);
                 }
+
                 builder.Append(")");
             }
 
@@ -68,9 +67,9 @@ namespace Molecular.Documentation
         public static string BuildMemberKey(MemberInfo member)
         {
             var builder = new StringBuilder();
-            string c = member is PropertyInfo p ? "P" : "F"; // not exhoustive yet!
+            var c = member is PropertyInfo p ? "P" : "F"; // not exhoustive yet!
             builder.Append($"{c}:");
-            string typename = GetTypeName(member);
+            var typename = GetTypeName(member);
             builder.Append(typename);
             builder.Append(".");
             builder.Append(member.Name);
@@ -79,7 +78,7 @@ namespace Molecular.Documentation
 
         public static string ConsiseTrim(string input)
         {
-            string result = Regex.Replace(input, " {2,}", " ").Replace("\n ", "\n").Trim('\n', ' ');
+            var result = Regex.Replace(input, " {2,}", " ").Replace("\n ", "\n").Trim('\n', ' ');
             //string result = input.Trim('\n');
             return result;
         }

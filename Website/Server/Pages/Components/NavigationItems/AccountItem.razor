@@ -1,6 +1,6 @@
 @inherits AccountItemRazor
 <ContextMenu Id="myMenu">
-    @if (!logged) 
+    @if (!logged)
     {
         <Item OnClick='@LoginClick'>Login</Item>
         <Item OnClick="@RegisterClick">Register</Item>

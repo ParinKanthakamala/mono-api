@@ -58,7 +58,7 @@ namespace Shared.Libraries
         private string hex2bin(string hex)
         {
             hex = hex.ToLower();
-            Dictionary<char, string> hexCharacterToBinary = new Dictionary<char, string>()
+            var hexCharacterToBinary = new Dictionary<char, string>
             {
                 {'0', "0000"}, {'1', "0001"}, {'2', "0010"}, {'3', "0011"},
                 {'4', "0100"}, {'5', "0101"}, {'6', "0110"}, {'7', "0111"},

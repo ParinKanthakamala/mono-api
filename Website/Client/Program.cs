@@ -1,17 +1,13 @@
 using System;
 using System.Net.Http;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Text;
 using Append.Blazor.Notifications;
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Tools.Label;
 
 namespace Client
@@ -25,10 +21,9 @@ namespace Client
 
             builder.Services.AddScoped(
                 sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)});
-            
+
             /// info : my custom
             builder.Services.AddBlazorContextMenu();
-
             // builder.Services.AddScoped<LeftPanelService>();
             builder.Services.AddLanguageContainer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly());
             builder.Services.AddBlazoredLocalStorage();

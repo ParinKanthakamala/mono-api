@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Shared.Entities
+﻿namespace Shared.Entities
 {
-    public partial class Options
+    public class Options
     {
         public uint Id { get; set; }
         public string Name { get; set; }

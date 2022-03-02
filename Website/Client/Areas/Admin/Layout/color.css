@@ -68,7 +68,7 @@
     color: #afafaf
 }
 
-.theme-black .checkbox input[type="checkbox"]:checked+label::after {
+.theme-black .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #313740;
     background: #313740;
     color: white
@@ -101,8 +101,8 @@
     background: #313740 !important
 }
 
-.theme-black .menu-container ul>li>ul>li a:hover,
-.theme-black .menu-container ul.normal-sub>li a:hover {
+.theme-black .menu-container ul > li > ul > li a:hover,
+.theme-black .menu-container ul.normal-sub > li a:hover {
     background: #313740
 }
 
@@ -112,8 +112,8 @@
 }
 
 .theme-black .form-control:focus,
-.theme-black .form-control:focus+.input-group-addon,
-.theme-black .form-control:focus~.input-group-addon,
+.theme-black .form-control:focus + .input-group-addon,
+.theme-black .form-control:focus ~ .input-group-addon,
 .theme-black .input-group-focus .input-group-addon {
     border-color: #313740;
     background: #fff
@@ -186,7 +186,7 @@
     color: #ac68cc
 }
 
-.theme-purple .checkbox input[type="checkbox"]:checked+label::after {
+.theme-purple .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #ac68cc;
     background: #ac68cc;
     color: white
@@ -216,8 +216,8 @@
     background: #ac68cc !important
 }
 
-.theme-purple .menu-container ul>li>ul>li a:hover,
-.theme-purple .menu-container ul.normal-sub>li a:hover {
+.theme-purple .menu-container ul > li > ul > li a:hover,
+.theme-purple .menu-container ul.normal-sub > li a:hover {
     background: #ac68cc
 }
 
@@ -227,8 +227,8 @@
 }
 
 .theme-purple .form-control:focus,
-.theme-purple .form-control:focus+.input-group-addon,
-.theme-purple .form-control:focus~.input-group-addon,
+.theme-purple .form-control:focus + .input-group-addon,
+.theme-purple .form-control:focus ~ .input-group-addon,
 .theme-purple .input-group-focus .input-group-addon {
     border-color: #ac68cc;
     background: #fff
@@ -301,7 +301,7 @@
     color: #3eacff
 }
 
-.theme-blue .checkbox input[type="checkbox"]:checked+label::after {
+.theme-blue .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #3eacff;
     background: #3eacff;
     color: white
@@ -331,8 +331,8 @@
     background: #3eacff !important
 }
 
-.theme-blue .menu-container ul>li>ul>li a:hover,
-.theme-blue .menu-container ul.normal-sub>li a:hover {
+.theme-blue .menu-container ul > li > ul > li a:hover,
+.theme-blue .menu-container ul.normal-sub > li a:hover {
     background: #3eacff
 }
 
@@ -342,8 +342,8 @@
 }
 
 .theme-blue .form-control:focus,
-.theme-blue .form-control:focus+.input-group-addon,
-.theme-blue .form-control:focus~.input-group-addon,
+.theme-blue .form-control:focus + .input-group-addon,
+.theme-blue .form-control:focus ~ .input-group-addon,
 .theme-blue .input-group-focus .input-group-addon {
     border-color: #3eacff;
     background: #fff
@@ -416,7 +416,7 @@
     color: #49c5b6
 }
 
-.theme-cyan .checkbox input[type="checkbox"]:checked+label::after {
+.theme-cyan .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #49c5b6;
     background: #49c5b6;
     color: white
@@ -446,8 +446,8 @@
     background: #49c5b6 !important
 }
 
-.theme-cyan .menu-container ul>li>ul>li a:hover,
-.theme-cyan .menu-container ul.normal-sub>li a:hover {
+.theme-cyan .menu-container ul > li > ul > li a:hover,
+.theme-cyan .menu-container ul.normal-sub > li a:hover {
     background: #49c5b6
 }
 
@@ -457,8 +457,8 @@
 }
 
 .theme-cyan .form-control:focus,
-.theme-cyan .form-control:focus+.input-group-addon,
-.theme-cyan .form-control:focus~.input-group-addon,
+.theme-cyan .form-control:focus + .input-group-addon,
+.theme-cyan .form-control:focus ~ .input-group-addon,
 .theme-cyan .input-group-focus .input-group-addon {
     border-color: #49c5b6;
     background: #fff
@@ -531,7 +531,7 @@
     color: #50d38a
 }
 
-.theme-green .checkbox input[type="checkbox"]:checked+label::after {
+.theme-green .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #50d38a;
     background: #50d38a;
     color: white
@@ -561,8 +561,8 @@
     background: #50d38a !important
 }
 
-.theme-green .menu-container ul>li>ul>li a:hover,
-.theme-green .menu-container ul.normal-sub>li a:hover {
+.theme-green .menu-container ul > li > ul > li a:hover,
+.theme-green .menu-container ul.normal-sub > li a:hover {
     background: #50d38a
 }
 
@@ -572,8 +572,8 @@
 }
 
 .theme-green .form-control:focus,
-.theme-green .form-control:focus+.input-group-addon,
-.theme-green .form-control:focus~.input-group-addon,
+.theme-green .form-control:focus + .input-group-addon,
+.theme-green .form-control:focus ~ .input-group-addon,
 .theme-green .input-group-focus .input-group-addon {
     border-color: #50d38a;
     background: #fff
@@ -650,7 +650,7 @@
     color: #ffce4b
 }
 
-.theme-orange .checkbox input[type="checkbox"]:checked+label::after {
+.theme-orange .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #ffce4b;
     background: #ffce4b;
     color: white
@@ -680,8 +680,8 @@
     background: #ffce4b !important
 }
 
-.theme-orange .menu-container ul>li>ul>li a:hover,
-.theme-orange .menu-container ul.normal-sub>li a:hover {
+.theme-orange .menu-container ul > li > ul > li a:hover,
+.theme-orange .menu-container ul.normal-sub > li a:hover {
     background: #ffce4b
 }
 
@@ -691,8 +691,8 @@
 }
 
 .theme-orange .form-control:focus,
-.theme-orange .form-control:focus+.input-group-addon,
-.theme-orange .form-control:focus~.input-group-addon,
+.theme-orange .form-control:focus + .input-group-addon,
+.theme-orange .form-control:focus ~ .input-group-addon,
 .theme-orange .input-group-focus .input-group-addon {
     border-color: #ffce4b;
     background: #fff
@@ -752,7 +752,7 @@
     color: #f38f9b
 }
 
-.theme-blush .checkbox input[type="checkbox"]:checked+label::after {
+.theme-blush .checkbox input[type="checkbox"]:checked + label::after {
     border-color: #f38f9b;
     background: #f38f9b;
     color: white
@@ -782,8 +782,8 @@
     background: #f38f9b !important
 }
 
-.theme-blush .menu-container ul>li>ul>li a:hover,
-.theme-blush .menu-container ul.normal-sub>li a:hover {
+.theme-blush .menu-container ul > li > ul > li a:hover,
+.theme-blush .menu-container ul.normal-sub > li a:hover {
     background: #f38f9b
 }
 
@@ -793,8 +793,8 @@
 }
 
 .theme-blush .form-control:focus,
-.theme-blush .form-control:focus+.input-group-addon,
-.theme-blush .form-control:focus~.input-group-addon,
+.theme-blush .form-control:focus + .input-group-addon,
+.theme-blush .form-control:focus ~ .input-group-addon,
 .theme-blush .input-group-focus .input-group-addon {
     border-color: #f38f9b;
     background: #fff

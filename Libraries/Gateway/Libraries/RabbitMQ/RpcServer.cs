@@ -15,12 +15,26 @@ namespace Gateway.Libraries.RabbitMQ
     {
         private readonly string host;
         private readonly string name;
+        private BasicDeliverEventArgs args;
+        private IModel channel;
+        private IConnection connection;
         private EventingBasicConsumer consumer;
         private ConnectionFactory factory;
-        private IConnection connection;
-        private IModel channel;
-        private BasicDeliverEventArgs args;
-        private Sharepoint sharepoint = Sharepoint.sharepoint;
+        private readonly Sharepoint sharepoint = Sharepoint.sharepoint;
+
+        public RpcServer(
+            string name = "test",
+            string host = "localhost",
+            string account = "guest",
+            string password = "guest"
+        )
+        {
+            // this.host = "amqp://" + account + ":" + password + "@" + host;
+            this.host = host;
+            this.name = name;
+            sharepoint.server = this;
+        }
+
         private IBasicProperties props { get; set; }
         public IBasicProperties replyProps { get; set; }
 
@@ -29,9 +43,9 @@ namespace Gateway.Libraries.RabbitMQ
             Console.WriteLine(" [x] Get message");
             var response = string.Empty;
             var body = ea.Body.ToArray();
-            this.props = ea.BasicProperties;
-            this.replyProps = this.channel.CreateBasicProperties();
-            this.replyProps.CorrelationId = props.CorrelationId;
+            props = ea.BasicProperties;
+            replyProps = channel.CreateBasicProperties();
+            replyProps.CorrelationId = props.CorrelationId;
             Console.WriteLine("message from : " + props.CorrelationId);
 
             try
@@ -41,7 +55,7 @@ namespace Gateway.Libraries.RabbitMQ
                 var json = JsonConvert.DeserializeObject<DataMessage>(message);
                 json.From = props.ReplyTo;
                 var parts = json.Route.Split('/').ToList();
-                var result = (RoutingResult) Routing.Handle(parts.ToArray());
+                var result = Routing.Handle(parts.ToArray());
                 if (!result.Ok) return;
                 // Console.WriteLine("result is : ");
                 // Console.WriteLine(result.Value);
@@ -54,10 +68,7 @@ namespace Gateway.Libraries.RabbitMQ
             }
             finally
             {
-                if (response != null)
-                {
-                    this.Send(props.CorrelationId, response);
-                }
+                if (response != null) Send(props.CorrelationId, response);
             }
         }
 
@@ -96,15 +107,15 @@ namespace Gateway.Libraries.RabbitMQ
                 var responseBytes = Encoding.UTF8.GetBytes(message);
                 // this.channel.BasicPublish(exchange, to, this.replyProps, responseBytes);
 
-                this.channel.BasicPublish(
-                    exchange: exchange,
-                    routingKey: to,
-                    basicProperties: this.props,
-                    body: responseBytes
+                channel.BasicPublish(
+                    exchange,
+                    to,
+                    props,
+                    responseBytes
                 );
-                this.channel.BasicAck(
-                    deliveryTag: args.DeliveryTag,
-                    multiple: false
+                channel.BasicAck(
+                    args.DeliveryTag,
+                    false
                 );
             }
             catch (Exception ex)
@@ -118,38 +129,25 @@ namespace Gateway.Libraries.RabbitMQ
         )
         {
             Console.WriteLine(host);
-            factory = new ConnectionFactory() {HostName = host};
+            factory = new ConnectionFactory {HostName = host};
 
-            this.connection = factory.CreateConnection();
-            this.channel = connection.CreateModel();
+            connection = factory.CreateConnection();
+            channel = connection.CreateModel();
             var appsettings = this.appsettings();
             var options = appsettings.RabbitOptions.Options;
-            this.channel.QueueDeclare(
-                queue: name,
-                durable: options.Durable,
-                exclusive: options.Exclusive,
-                autoDelete: options.AutoDelete,
-                arguments: null
+            channel.QueueDeclare(
+                name,
+                options.Durable,
+                options.Exclusive,
+                options.AutoDelete,
+                null
             );
             // this.channel.BasicQos(0, 1, false);
-            this.channel.BasicQos(options.PrefetchSize, options.PrefetchCount, options.Global);
-            this.consumer = new EventingBasicConsumer(channel);
-            this.channel.BasicConsume(queue: name, autoAck: false, consumer: this.consumer);
+            channel.BasicQos(options.PrefetchSize, options.PrefetchCount, options.Global);
+            consumer = new EventingBasicConsumer(channel);
+            channel.BasicConsume(name, false, consumer);
             Console.WriteLine(" [x] Awaiting RPC requests");
             consumer.Received += OnMessage;
-        }
-
-        public RpcServer(
-            string name = "test",
-            string host = "localhost",
-            string account = "guest",
-            string password = "guest"
-        )
-        {
-            // this.host = "amqp://" + account + ":" + password + "@" + host;
-            this.host = host;
-            this.name = name;
-            sharepoint.server = this;
         }
     }
 }

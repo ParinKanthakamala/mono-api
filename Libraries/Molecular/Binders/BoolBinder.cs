@@ -9,9 +9,13 @@ namespace Molecular.Binders
     {
         public bool Optional => true;
 
-        public bool Match(Type type) => type == typeof(bool);
+        public bool Match(Type type)
+        {
+            return type == typeof(bool);
+        }
 
-        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used, out object result)
+        public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
+            out object result)
         {
             if (arguments.TryGet(param, out Flag _))
             {
@@ -19,12 +23,9 @@ namespace Molecular.Binders
                 result = true;
                 return BindStatus.Success;
             }
-            else
-            {
-                result = false;
-                return BindStatus.NotFound;
-            }
+
+            result = false;
+            return BindStatus.NotFound;
         }
     }
-
 }

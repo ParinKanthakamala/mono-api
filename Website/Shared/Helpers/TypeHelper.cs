@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Shared.Helpers.Extensions;
 using Shared.Attributes;
 using Shared.Converters;
 using Shared.DbConfiguration.Mapping;
+using Shared.Helpers.Extensions;
 
 namespace Shared.Helpers
 {

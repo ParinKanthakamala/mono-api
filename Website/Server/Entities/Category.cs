@@ -17,7 +17,7 @@ namespace Server.Entities
 
         public static Category Create(string href, string name)
         {
-            return new(href, name);
+            return new Category(href, name);
         }
     }
 }

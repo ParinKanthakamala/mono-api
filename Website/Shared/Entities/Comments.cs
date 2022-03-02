@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Shared.Entities
 {
-    public partial class Comments
+    public class Comments
     {
         public ulong CommentId { get; set; }
         public ulong CommentPostId { get; set; }

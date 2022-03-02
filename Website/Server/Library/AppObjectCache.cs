@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Server.Helpers;
+using Client.Helpers;
 
-namespace Server.Library
+namespace Client.Library
 {
     public class AppObjectCache
     {

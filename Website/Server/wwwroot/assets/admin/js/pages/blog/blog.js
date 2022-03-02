@@ -1,11 +1,11 @@
 ﻿$(function () {
-    "use strict";    
+    "use strict";
     initCounters();
     getMorris('line', 'line_chart');
 });
 
 function getMorris(type, element) {
-    
+
     if (type === 'line') {
         Morris.Line({
             element: element,
@@ -17,14 +17,14 @@ function getMorris(type, element) {
                     Technology: 501,
                     Lifestyle: 410,
                     Sports: 400
-                },{
+                }, {
                     period: '2013',
                     WebDesign: 340,
                     Photography: 201,
                     Technology: 150,
                     Lifestyle: 214,
                     Sports: 250
-                },{
+                }, {
                     period: '2014',
                     WebDesign: 458,
                     Photography: 450,
@@ -70,98 +70,99 @@ function getMorris(type, element) {
         });
     }
 }
+
 //===============================================================================
-$(function() {
-	"use strict";
-	var mapData = {
+$(function () {
+    "use strict";
+    var mapData = {
         "IN": 2000000,
         "AU": 760,
         "US": 298,
-        "JP": 198,								
+        "JP": 198,
         "GB": 120,
         "FR": 157,
         "CA": 1024,
         "SA": 89,
-	};
-	
-	if( $('#world-map-markers').length > 0 ){
-		$('#world-map-markers').vectorMap(
-		{
-			map: 'world_mill_en',
-			backgroundColor: 'transparent',
-			borderColor: '#fff',
-			borderOpacity: 0.25,
-			borderWidth: 0,
-            color: '#e6e6e6',
-            
-			regionStyle : {
-				initial : {
-				    fill : '#f4f4f4'
-				}
-			},
+    };
 
-			markerStyle: {
-			    initial: {
-                    r: 5,
-                    'fill': '#fff',
-                    'fill-opacity':1,
-                    'stroke': '#000',
-                    'stroke-width' : 1,
-                    'stroke-opacity': 0.4
+    if ($('#world-map-markers').length > 0) {
+        $('#world-map-markers').vectorMap(
+            {
+                map: 'world_mill_en',
+                backgroundColor: 'transparent',
+                borderColor: '#fff',
+                borderOpacity: 0.25,
+                borderWidth: 0,
+                color: '#e6e6e6',
+
+                regionStyle: {
+                    initial: {
+                        fill: '#f4f4f4'
+                    }
                 },
-			},
-		   
-			markers : [{
-				latLng : [21.00, 78.00],
-				name : 'INDIA : 350'			  
-			  },{
-				latLng : [-33.00, 151.00],
-				name : 'Australia : 250'				
-			  },{
-				latLng : [36.77, -119.41],
-				name : 'USA : 250'			  
-			  },{
-				latLng : [35.65, 139.83],
-				name : 'Japan : 250'			  
-			  },{
-				latLng : [51.50, -0.11],
-				name : 'United Kingdom  : 250'			  
-			  },{
-				latLng : [48.86, 2.34],
-				name : 'France : 120'			  
-			  },{
-				latLng : [49.24, -123.11],
-				name : 'Canada : 120'			  
-			  },{
-				latLng : [25.20, 55.27],
-				name : 'UAE : 250'			  
-			  }],
 
-			series: {
-				regions: [{
-					values: {
-                        "IN": '#60bafd',
-                        "AU": '#50d38a',
-                        "US": '#49c5b6',
-                        "JP": '#eabb5b',
-                        "GB": '#ff758e',
-                        "FR": '#37bf8d',
-                        "CA": '#6b7381',
-						"SA": '#667add',						
-					},
-					attribute: 'fill'
-				}]
-            },
-            
-			hoverOpacity: null,
-			normalizeFunction: 'linear',
-			zoomOnScroll: false,
-			scaleColors: ['#000000', '#000000'],
-			selectedColor: '#000000',
-			selectedRegions: [],
-			enableZoom: false,
-			hoverColor: '#fff',
-		});
-	}
-	
+                markerStyle: {
+                    initial: {
+                        r: 5,
+                        'fill': '#fff',
+                        'fill-opacity': 1,
+                        'stroke': '#000',
+                        'stroke-width': 1,
+                        'stroke-opacity': 0.4
+                    },
+                },
+
+                markers: [{
+                    latLng: [21.00, 78.00],
+                    name: 'INDIA : 350'
+                }, {
+                    latLng: [-33.00, 151.00],
+                    name: 'Australia : 250'
+                }, {
+                    latLng: [36.77, -119.41],
+                    name: 'USA : 250'
+                }, {
+                    latLng: [35.65, 139.83],
+                    name: 'Japan : 250'
+                }, {
+                    latLng: [51.50, -0.11],
+                    name: 'United Kingdom  : 250'
+                }, {
+                    latLng: [48.86, 2.34],
+                    name: 'France : 120'
+                }, {
+                    latLng: [49.24, -123.11],
+                    name: 'Canada : 120'
+                }, {
+                    latLng: [25.20, 55.27],
+                    name: 'UAE : 250'
+                }],
+
+                series: {
+                    regions: [{
+                        values: {
+                            "IN": '#60bafd',
+                            "AU": '#50d38a',
+                            "US": '#49c5b6',
+                            "JP": '#eabb5b',
+                            "GB": '#ff758e',
+                            "FR": '#37bf8d',
+                            "CA": '#6b7381',
+                            "SA": '#667add',
+                        },
+                        attribute: 'fill'
+                    }]
+                },
+
+                hoverOpacity: null,
+                normalizeFunction: 'linear',
+                zoomOnScroll: false,
+                scaleColors: ['#000000', '#000000'],
+                selectedColor: '#000000',
+                selectedRegions: [],
+                enableZoom: false,
+                hoverColor: '#fff',
+            });
+    }
+
 });

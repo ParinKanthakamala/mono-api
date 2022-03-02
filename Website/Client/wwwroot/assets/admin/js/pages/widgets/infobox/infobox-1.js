@@ -41,7 +41,7 @@ function initCharts() {
         highlightSpotColor: '#fff'
     });
 
-    $('#linecustom1').sparkline('html',{
+    $('#linecustom1').sparkline('html', {
         height: '35px',
         width: '100%',
         lineColor: '#e5d1e4',
@@ -52,7 +52,7 @@ function initCharts() {
         spotRadius: 1
     });
 
-    $('#linecustom2').sparkline('html',{
+    $('#linecustom2').sparkline('html', {
         height: '35px',
         width: '100%',
         lineColor: '#c9e3f4',
@@ -63,7 +63,7 @@ function initCharts() {
         spotRadius: 1
     });
 
-    $('#linecustom3').sparkline('html',{	
+    $('#linecustom3').sparkline('html', {
         height: '35px',
         width: '100%',
         lineColor: '#efded3',

@@ -13,7 +13,7 @@ namespace Shared.Libraries.HubManager
 
         public DataSummary ToSummary()
         {
-            return new()
+            return new DataSummary
             {
                 Id = Id,
                 Title = Title,

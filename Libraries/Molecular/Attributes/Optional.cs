@@ -2,5 +2,7 @@
 
 namespace Molecular.Attributes
 {
-    public class Optional : Attribute { }
+    public class Optional : Attribute
+    {
+    }
 }

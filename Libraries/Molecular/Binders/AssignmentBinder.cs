@@ -9,22 +9,23 @@ namespace Molecular.Binders
     {
         public bool Optional => true;
 
-        public bool Match(Type type) => type == typeof(Assignment);
+        public bool Match(Type type)
+        {
+            return type == typeof(Assignment);
+        }
 
         public BindStatus TryUse(Parameters.Arguments arguments, Parameter param, int index, ref int used,
             out object result)
         {
-            if (arguments.TryGetAssignment(param.Name, out Assignment assignment))
+            if (arguments.TryGetAssignment(param.Name, out var assignment))
             {
                 used++;
                 result = assignment;
                 return BindStatus.Success;
             }
-            else
-            {
-                result = Assignment.NotProvided;
-                return BindStatus.NotFound;
-            }
+
+            result = Assignment.NotProvided;
+            return BindStatus.NotFound;
         }
     }
 }

@@ -6,12 +6,10 @@ namespace Client.Areas.Admin.Pages.Contact
     {
         public override void OnUpdate()
         {
-            
         }
 
         protected override void OnInitialized()
         {
-            
         }
     }
 }

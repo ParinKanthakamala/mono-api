@@ -28,6 +28,7 @@ namespace Shared.Libraries
                 catch
                 {
                 }
+
             update_sassion = false;
         }
 

@@ -7,9 +7,6 @@
         InvalidParameters,
         InvalidDefault,
         PartialCommand,
-        AmbigousParameters,
+        AmbigousParameters
     }
-
 }
-
-

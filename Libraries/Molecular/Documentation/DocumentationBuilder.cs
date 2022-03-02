@@ -8,10 +8,9 @@ using System.Xml.XPath;
 
 namespace Molecular.Documentation
 {
-
     public class DocumentationBuilder
     {
-        Documentation documentation = new();
+        private readonly Documentation documentation = new();
 
         public DocumentationBuilder Add(Assembly assembly)
         {
@@ -19,11 +18,9 @@ namespace Molecular.Documentation
             if (xdoc is not null)
             {
                 var items = ReadMembersDocumentation(xdoc);
-                foreach(var item in items)
-                {
-                    this.documentation.Add(item);
-                }
+                foreach (var item in items) documentation.Add(item);
             }
+
             return this;
         }
 
@@ -34,25 +31,23 @@ namespace Molecular.Documentation
 
         private static string GetDirectoryPath(Assembly assembly)
         {
-            string codeBase = assembly.CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
+            var codeBase = assembly.CodeBase;
+            var uri = new UriBuilder(codeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
             return Path.GetDirectoryName(path);
         }
 
         public static XDocument ReadXmlDocumentation(Assembly assembly)
         {
-            string directoryPath = GetDirectoryPath(assembly);
-            string xmlFilePath = Path.Combine(directoryPath, assembly.GetName().Name + ".xml");
+            var directoryPath = GetDirectoryPath(assembly);
+            var xmlFilePath = Path.Combine(directoryPath, assembly.GetName().Name + ".xml");
             if (File.Exists(xmlFilePath))
-            {
                 return ReadXmlDocumentation(File.ReadAllText(xmlFilePath));
-            }
-            else return null;
+            return null;
         }
 
         public static XDocument ReadXmlDocumentation(string content)
-        { 
+        {
             using var reader = new StringReader(content);
             var document = XDocument.Load(reader);
             return document;
@@ -70,16 +65,16 @@ namespace Molecular.Documentation
                 doc.Text = DocKeys.ConsiseTrim(membernode?.Element("summary")?.Value);
 
                 var paramnodes = membernode?.Elements("param");
-                
+
                 foreach (var paramnode in paramnodes)
                 {
                     var name = paramnode.Attribute("name")?.Value;
                     var summary = paramnode?.Value?.Trim();
                     doc.Params.Add(name, summary);
                 }
+
                 yield return doc;
             }
         }
-
     }
 }

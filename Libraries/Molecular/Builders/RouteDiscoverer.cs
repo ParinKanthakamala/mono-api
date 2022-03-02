@@ -11,10 +11,10 @@ namespace Molecular.Builders
 {
     public class RouteDiscoverer
     {
-        List<Route> routes = new();
-        List<Node> start = new();
         public HashSet<Assembly> Assemblies = new();
-        HashSet<Type> modules = new();
+        private readonly HashSet<Type> modules = new();
+        private readonly List<Route> routes = new();
+        private readonly List<Node> start = new();
 
         public RouteDiscoverer AddModules(Assembly assembly)
         {
@@ -50,13 +50,11 @@ namespace Molecular.Builders
         {
             var types = assembly.GetTypes().Where(t => t.HasAttribute<Global>());
             foreach (var type in types)
-            {
                 if (type is object)
                 {
                     if (!type.IsStatic()) throw new ArgumentException("A global settings class must be static");
                     yield return type;
                 }
-            }
         }
 
         private void DiscoverRoutes(IEnumerable<Type> types)
@@ -109,9 +107,5 @@ namespace Molecular.Builders
             var route = new Route(module, clone, method, help, hidden, capture, isdefault);
             routes.Add(route);
         }
-      
     }
-
-
-
 }

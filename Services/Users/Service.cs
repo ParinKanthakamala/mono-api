@@ -12,6 +12,11 @@ namespace Users
     {
         public Sharepoint sharepoint = Sharepoint.sharepoint;
 
+        public void Dispose()
+        {
+            Console.WriteLine("Service.Dispose");
+        }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             var text = $"{DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss")}, Testing write." + Environment.NewLine;
@@ -31,11 +36,6 @@ namespace Users
             Console.WriteLine($"[{nameof(Service)}] has been stopped.....");
             Thread.Sleep(1000);
             return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            Console.WriteLine("Service.Dispose");
         }
     }
 }

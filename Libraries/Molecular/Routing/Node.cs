@@ -9,20 +9,19 @@ namespace Molecular.Routing
 
         public Node(IEnumerable<string> names)
         {
-            this.Names = names.ToArray();
+            Names = names.ToArray();
         }
 
         public Node(string name)
         {
-            this.Names = new string[] { name };
+            Names = new[] {name};
         }
 
         public bool Matches(string name)
         {
-            for (int i = 0; i < Names.Length; i++)
-            {
-                if (string.Compare(Names[i], name, ignoreCase: true) == 0) return true; 
-            }
+            for (var i = 0; i < Names.Length; i++)
+                if (string.Compare(Names[i], name, true) == 0)
+                    return true;
             return false;
         }
 
