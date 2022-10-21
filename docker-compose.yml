@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management-alpine
+    tty: true
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - ./node_module:/app/node_modules
+    #    restart: 'unless-stopped'
+    networks:
+      - backend
+    links:
+      - mariadb
+    depends_on:
+      - mariadb
+
+  nvim:
+    container_name: nvim
+    image: mashmb/nvim:dev
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+    volumes:
+      - .:/opt/app/
+  mariadb:
+    command: '--init-file /opt/data/migration.sql'
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - TZ=Asia/Bangkok
+    image: mariadb:latest
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mariadb:/opt/data
+      - ./mariadb/data/:/var/lib/mysql
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local

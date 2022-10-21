@@ -11,7 +11,7 @@ WORKDIR /app
 #COPY . .
 #WORKDIR /src/.
 #RUN dotnet build "ApiGateway.csproj" -c Release -o /app/build
-
+RUN dotnet tool install -g dotnet-ef --version 3.1.1
 #FROM build AS publish
 #RUN dotnet publish "ApiGateway.csproj" -c Release -o /app/publish
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ApiGateway.Core;
 using ApiGateway.Core.Extensions;
@@ -19,42 +19,49 @@ namespace ApiGateway.Controllers
         public IActionResult MakeGet()
         {
             return Make(Method.GET);
+            //return Ok();
         }
 
         [HttpPost("{*url}")]
         public IActionResult MakePost(DataMessage data)
         {
             return Make(Method.POST, data);
+            //return Ok();
         }
 
         [HttpDelete("{*url}")]
         public IActionResult MakeDelete(DataMessage data)
         {
             return Make(Method.DELETE, data);
+            //return Ok();
         }
 
         [HttpPatch("{*url}")]
         public IActionResult MakePatch(DataMessage data)
         {
             return Make(Method.PATCH, data);
+            //return Ok();
         }
 
         [HttpPut("{*url}")]
         public IActionResult MakePut(DataMessage data)
         {
             return Make(Method.PUT, data);
+            //return Ok();
         }
 
         [HttpHead("{*url}")]
-        public IActionResult MakeHead()
+        public IActionResult MakeHead(DataMessage data)
         {
-            return Ok();
+            return Make(Method.HEAD, data);
+            //return Ok();
         }
 
         [HttpOptions("{*url}")]
         public IActionResult MakeOptions(DataMessage data)
         {
             return Make(Method.OPTIONS, data);
+            //return Ok();
         }
 
         private string MakeRoute(string route)
@@ -107,8 +114,8 @@ namespace ApiGateway.Controllers
                 sender.Message = ex.Message;
             }
 
-            // return Content(JsonConvert.SerializeObject(sender));
-            return Ok();
+            return Content(JsonConvert.SerializeObject(sender));
+            //return Ok();
         }
     }
 }
