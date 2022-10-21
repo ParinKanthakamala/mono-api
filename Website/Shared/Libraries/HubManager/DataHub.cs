@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
+ 
 
 namespace Shared.Libraries.HubManager
 {
-    public class DataHub : Hub<IDataHub>
+    public class DataHub   
     {
         // No need to implement here the methods defined by ISurveyHub, their purpose is simply
         // to provide a strongly typed interface.
@@ -14,17 +14,17 @@ namespace Shared.Libraries.HubManager
         // These 2 methods will be called from the client
         public async Task Join(Guid surveyId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, surveyId.ToString());
+            // await Groups.AddToGroupAsync(Context.ConnectionId, surveyId.ToString());
         }
 
         public async Task Data(Guid surveyId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, surveyId.ToString());
+            // await Groups.AddToGroupAsync(Context.ConnectionId, surveyId.ToString());
         }
 
         public async Task Leave(Guid surveyId)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, surveyId.ToString());
+            // await Groups.RemoveFromGroupAsync(Context.ConnectionId, surveyId.ToString());
         }
     }
 }

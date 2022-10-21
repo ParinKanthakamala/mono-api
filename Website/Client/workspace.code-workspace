@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.DS_Store": true,
+			"**/bin/": true,
+			"**/obj/": true,
+			"**/.vs/": true,
+		},
+		"workbench.colorCustomizations": {
+			"terminal.foreground": "#00FD61",
+			"terminal.background": "#383737",
+			"activityBar.background": "#033604",
+			"titleBar.activeBackground": "#044C06",
+			"titleBar.activeForeground": "#F0FEF0"
+		}
+	},
+}

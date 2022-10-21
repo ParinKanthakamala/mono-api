@@ -1,0 +1,55 @@
+@using System.ComponentModel.DataAnnotations
+@using Blazored.Modal
+@using Blazored.Modal.Services
+<div class="simple-form">
+    <EditForm Model="_form" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator/>
+
+        <div class="form-group">
+            <label for="message">Email</label>
+            <InputText @bind-Value="_form.Email" class="form-control" placeholder="Email"/>
+            <ValidationMessage For="@(() => _form.Email)"/>
+        </div>
+        <div class="form-group">
+            <label for="message">Password</label>
+            <InputText @bind-Value="_form.Password" class="form-control" placeholder="Password"/>
+            <ValidationMessage For="@(() => _form.Password)"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+    </EditForm>
+</div>
+
+
+@code {
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; }
+
+    readonly Form _form = new();
+
+    protected override void OnInitialized()
+    {
+        BlazoredModal.SetTitle("Login Message");
+    }
+
+    async Task SubmitForm()
+    {
+        await BlazoredModal.CloseAsync(ModalResult.Ok(_form.Email));
+    }
+
+    async Task Cancel()
+    {
+        await BlazoredModal.CancelAsync();
+    }
+
+    public class Form
+    {
+        [Required(ErrorMessage = "Please enter a message")]
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+    }
+
+}

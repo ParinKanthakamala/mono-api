@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Append.Blazor.Notifications;
+﻿using Append.Blazor.Notifications;
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using Blazored.Toast;
@@ -29,7 +28,7 @@ namespace Server
             services.AddBlazorContextMenu();
 
             // services.AddScoped<LeftPanelService>();
-            services.AddLanguageContainer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly());
+            // services.AddLanguageContainer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly());
             services.AddBlazoredLocalStorage();
             services.AddNotifications(); // maxx : system notification
             services.AddBlazoredModal(); // maxx : float modal

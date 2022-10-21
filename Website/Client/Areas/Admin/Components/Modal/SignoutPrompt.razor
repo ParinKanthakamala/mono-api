@@ -1,4 +1,6 @@
-﻿@inject IModalService ModalService
+﻿@using Blazored.Modal.Services
+@using Blazored.Modal
+@inject IModalService ModalService
 
 <div>
     <p>Are you sure you want to signout the system?</p>
@@ -18,7 +20,6 @@
     async Task Yes()
     {
         NavigationManager.NavigateTo("admin/auth/signin");
-
         await BlazoredModal.CloseAsync();
     }
 
