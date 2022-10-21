@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -17,9 +17,9 @@ namespace ApiGateway.Models
         {
             if (this.CanCronRun())
             {
-                this.hooks().DoAction("before_cron_run", manually);
+                hooks().DoAction("before_cron_run", manually);
                 this.update_option("last_cron_run", DateTime.Now.ToString(""));
-                if (manually == true)
+                if (manually)
                 {
                     this.manually = true;
                     this.log_activity("Cron Invoked Manually");
@@ -39,7 +39,7 @@ namespace ApiGateway.Models
                 this.auto_import_imap_tickets();
                 this.check_leads_email_integration();
                 this.delete_activity_log();
-                this.hooks().DoAction("after_cron_run", manually);
+                hooks().DoAction("after_cron_run", manually);
                 this.lockHandle();
             }
         }
@@ -55,7 +55,6 @@ namespace ApiGateway.Models
             {
                 return;
             }
-
         }
 
         public void ContractsExpirationCheck()
@@ -72,7 +71,6 @@ namespace ApiGateway.Models
             {
                 return;
             }
-
         }
 
         public void RecurringTasks()
@@ -93,14 +91,14 @@ namespace ApiGateway.Models
 
             var recurring_expenses = new List<Expenses>();
             var _renewals_ids_data = new List<string>();
-            int total_renewed = 0;
+            var total_renewed = 0;
             foreach (var expense in recurring_expenses)
             {
             }
 
             var send_recurring_expenses_email = true;
-            this.hooks().ApplyFilters("send_recurring_system_expenses_email", send_recurring_expenses_email);
-            if (total_renewed > 0 && send_recurring_expenses_email == true)
+            hooks().ApplyFilters("send_recurring_system_expenses_email", send_recurring_expenses_email);
+            if (total_renewed > 0 && send_recurring_expenses_email)
             {
             }
         }
@@ -137,7 +135,6 @@ namespace ApiGateway.Models
             {
                 return;
             }
-
         }
 
         public void Proposals()
@@ -154,7 +151,6 @@ namespace ApiGateway.Models
             {
                 return;
             }
-
         }
 
         private void EstimateExpiration()
@@ -170,7 +166,6 @@ namespace ApiGateway.Models
             {
                 return;
             }
-
         }
 
         public bool check_leads_email_integration()
@@ -200,7 +195,8 @@ namespace ApiGateway.Models
         {
         }
 
-        private void _check_lead_email_integration_attachments(string email, int lead_id, ref object imap, bool task_id = false)
+        private void _check_lead_email_integration_attachments(string email, int lead_id, ref object imap,
+            bool task_id = false)
         {
         }
 

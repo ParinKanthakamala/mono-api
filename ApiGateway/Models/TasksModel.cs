@@ -1,15 +1,14 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
-using JamfahCrm.Library.Services.Utilities;
+using ApiGateway.Library.Helpers;
+using ApiGateway.Library.Services.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Core;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
+using static ApiGateway.System.Language;
 
 namespace ApiGateway.Models
 {
@@ -30,18 +29,17 @@ namespace ApiGateway.Models
                         .OrderBy(table => table.DueDate)
                         .ToList();
             }
-
         }
 
         public List<dynamic> GetStatuses()
         {
-            List<dynamic> statuses = new List<dynamic>()
+            var statuses = new List<dynamic>()
             {
                 new
                 {
                     id = STATUS_NOT_STARTED,
                     color = "#989898",
-                    name = this.label("task_status_1"),
+                    name = label("task_status_1"),
                     order = 1,
                     filter_default = true,
                 },
@@ -49,7 +47,7 @@ namespace ApiGateway.Models
                 {
                     id = STATUS_IN_PROGRESS,
                     color = "#03A9F4",
-                    name = this.label("task_status_4"),
+                    name = label("task_status_4"),
                     order = 2,
                     filter_default = true,
                 },
@@ -57,7 +55,7 @@ namespace ApiGateway.Models
                 {
                     id = STATUS_TESTING,
                     color = "#2d2d2d",
-                    name = this.label("task_status_3"),
+                    name = label("task_status_3"),
                     order = 3,
                     filter_default = true,
                 },
@@ -65,7 +63,7 @@ namespace ApiGateway.Models
                 {
                     id = STATUS_AWAITING_FEEDBACK,
                     color = "#adca65",
-                    name = this.label("task_status_2"),
+                    name = label("task_status_2"),
                     order = 4,
                     filter_default = true,
                 },
@@ -73,27 +71,27 @@ namespace ApiGateway.Models
                 {
                     id = STATUS_COMPLETE,
                     color = "#84c529",
-                    name = this.label("task_status_5"),
+                    name = label("task_status_5"),
                     order = 100,
                     filter_default = false,
                 }
             };
 
-            this.hooks().ApplyFilters("before_get_task_statuses", statuses);
+            hooks().ApplyFilters("before_get_task_statuses", statuses);
             return statuses;
         }
 
         public Tasks Get(int id, dynamic where = default(ExpandoObject))
         {
             var db = new DBContext();
-            bool is_admin = this.is_admin();
+            var is_admin = this.is_admin();
             var task = db.Tasks.SingleOrDefault(table => table.TaskId == id);
 
             if (task != null)
             {
             }
 
-            this.hooks().ApplyFilters("get_task", task);
+            hooks().ApplyFilters("get_task", task);
             return task;
         }
 
@@ -102,7 +100,8 @@ namespace ApiGateway.Models
             return null;
         }
 
-        public int DoKanbanQuery(string status, string search = "", int page = 1, bool count = false, dynamic where = default(ExpandoObject))
+        public int DoKanbanQuery(string status, string search = "", int page = 1, bool count = false,
+            dynamic where = default(ExpandoObject))
         {
             if (!Permission.CanView("tasks"))
             {
@@ -122,7 +121,7 @@ namespace ApiGateway.Models
         public bool IsTaskBilled(int id)
         {
             var db = new DBContext();
-            var total = db.Tasks.Where(table => table.TaskId == id && table.Billed == true).ToList().Count;
+            var total = db.Tasks.Where(table => table.TaskId == id && table.Billed).ToList().Count;
             return (total > 0 ? true : false);
         }
 
@@ -151,9 +150,7 @@ namespace ApiGateway.Models
         public void CopyTaskAssignees(int from_task, int to_task)
         {
             var assignees = this.GetTaskAssignees(from_task);
-            assignees.ForEach((assignee) =>
-            {
-            });
+            assignees.ForEach((assignee) => { });
         }
 
         public void copy_task_checklist_items(int from_task, int to_task)
@@ -192,7 +189,7 @@ namespace ApiGateway.Models
 
         public bool Update(int id, dynamic data, bool clientRequest = false)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             return (affectedRows > 0);
         }
 
@@ -262,7 +259,7 @@ namespace ApiGateway.Models
             {
             }
 
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
             }
@@ -272,7 +269,7 @@ namespace ApiGateway.Models
 
         public bool add_task_followers(TaskFollowers data)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;
@@ -303,7 +300,7 @@ namespace ApiGateway.Models
                 assignData.AssignedFrom = this.get_staff_user_id();
             }
 
-            int assigneeId = 0;
+            var assigneeId = 0;
             if (assigneeId > 0)
             {
                 var task = new Tasks();
@@ -317,13 +314,12 @@ namespace ApiGateway.Models
             if (where != default(ExpandoObject))
             {
             }
-
         }
 
         public dynamic remove_task_attachment(int id)
         {
-            int comment_removed = 0;
-            bool deleted = false;
+            var comment_removed = 0;
+            var deleted = false;
             var attachment = new Files();
             if (attachment != null)
             {
@@ -337,7 +333,6 @@ namespace ApiGateway.Models
                     deleted = true;
                     this.log_activity("Task Attachment Deleted [TaskID: " + attachment.RelId + "]");
                 }
-
             }
 
             if (deleted)
@@ -346,7 +341,8 @@ namespace ApiGateway.Models
                 {
                     using (var db = new DBContext())
                     {
-                        var total_comment_files = db.Files.Where(table => table.TaskCommentId == attachment.TaskCommentId).ToList().Count;
+                        var total_comment_files = db.Files
+                            .Where(table => table.TaskCommentId == attachment.TaskCommentId).ToList().Count;
                         if (total_comment_files == 0)
                         {
                             var comment = new TaskComments();
@@ -363,13 +359,13 @@ namespace ApiGateway.Models
                         }
                     }
                 }
-
             }
 
-            return new { success = deleted, comment_removed = comment_removed };
+            return new {success = deleted, comment_removed = comment_removed};
         }
 
-        public bool AddAttachmentToDatabase(int rel_id, string attachment, bool external = false, bool notification = true)
+        public bool AddAttachmentToDatabase(int rel_id, string attachment, bool external = false,
+            bool notification = true)
         {
             var misc_model = new MiscModel();
             var file_id = misc_model.AddAttachmentToDatabase(rel_id, "task", attachment, external);
@@ -381,7 +377,7 @@ namespace ApiGateway.Models
                 {
                 }
 
-                if (notification == true)
+                if (notification)
                 {
                     var description = "not_task_new_attachment";
                     this._SendTaskResponsibleUsersNotification(description, rel_id, 0, "task_new_attachment_to_staff");
@@ -390,7 +386,7 @@ namespace ApiGateway.Models
 
                 var task_attachment_as_comment = true;
 
-                this.hooks().ApplyFilters("add_task_attachment_as_comment", task_attachment_as_comment);
+                hooks().ApplyFilters("add_task_attachment_as_comment", task_attachment_as_comment);
                 if (task_attachment_as_comment)
                 {
                     var file = misc_model.GetFile(file_id);
@@ -407,12 +403,12 @@ namespace ApiGateway.Models
             using (var db = new DBContext())
             {
                 return db.TaskFollowers
-                    .Select(table => new { table.TaskFollowerId, table.UserId })
+                    .Select(table => new {table.TaskFollowerId, table.UserId})
                     .Join(
                         db.Users,
                         taskfollowers => taskfollowers.UserId,
                         users => users.UserId,
-                        (taskfollowers, users) => new { taskfollowers, users })
+                        (taskfollowers, users) => new {taskfollowers, users})
                     .ToList();
             }
         }
@@ -520,7 +516,8 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return (db.TaskComments.Where(table => table.StaffId == user_id && table.TaskId == task_id).ToList().Count > 0);
+                return (db.TaskComments.Where(table => table.StaffId == user_id && table.TaskId == task_id).ToList()
+                    .Count > 0);
             }
         }
 
@@ -528,7 +525,8 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return (db.TaskFollowers.Where(table => table.UserId == user_id && table.TaskId == task_id).ToList().Count > 0);
+                return (db.TaskFollowers.Where(table => table.UserId == user_id && table.TaskId == task_id).ToList()
+                    .Count > 0);
             }
         }
 
@@ -536,7 +534,8 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return db.TaskAssigned.Where(table => table.UserId == user_id && table.TaskId == task_id).ToList().Count > 0;
+                return db.TaskAssigned.Where(table => table.UserId == user_id && table.TaskId == task_id).ToList()
+                    .Count > 0;
             }
         }
 
@@ -544,7 +543,10 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return db.Tasks.Where(table => table.TaskId == task_id && table.AddedFrom == user_id && table.IsAddedFromContact == false).ToList().Count > 0;
+                return db.Tasks.Where(table =>
+                        table.TaskId == task_id && table.AddedFrom == user_id && table.IsAddedFromContact == false)
+                    .ToList()
+                    .Count > 0;
             }
         }
 
@@ -581,7 +583,7 @@ namespace ApiGateway.Models
                 staff_id = this.get_staff_user_id();
             }
 
-            TasksTimers timer = this.GetLastTimer(task_id, staff_id);
+            var timer = this.GetLastTimer(task_id, staff_id);
             if (timer != null)
             {
                 return null;
@@ -656,8 +658,8 @@ namespace ApiGateway.Models
 
         public bool CanStaffAccessTask(int staff_id, int task_id)
         {
-            bool retVal = false;
-            List<Users> staffCanAccessTasks = this.GetStaffMembersThatCanAccessTask(task_id);
+            var retVal = false;
+            var staffCanAccessTasks = this.GetStaffMembersThatCanAccessTask(task_id);
             foreach (var staff in staffCanAccessTasks)
             {
                 if (staff.UserId == staff_id)

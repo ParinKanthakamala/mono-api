@@ -1,7 +1,7 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using System;
+﻿using System;
 using System.Dynamic;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -21,16 +21,16 @@ namespace ApiGateway.Models
         {
             data.DateCreated = DateTime.Now;
             data.CustomerId = customer_id;
-            data.ShareInProjects = data.ShareInProjects == true ? true : false;
+            data.ShareInProjects = data.ShareInProjects ? true : false;
             return 0;
         }
 
         public bool Update(int id, Vault data)
         {
-            Vault vault = this.Get(id);
-            string last_updated_from = data.LastUpdatedFrom;
+            var vault = this.Get(id);
+            var last_updated_from = data.LastUpdatedFrom;
             data.ShareInProjects = data.ShareInProjects;
-            int affected = 0;
+            var affected = 0;
 
             if (affected > 0)
             {
@@ -46,8 +46,8 @@ namespace ApiGateway.Models
 
         public bool Delete(int id)
         {
-            Vault vault = this.Get(id);
-            int affected = 0;
+            var vault = this.Get(id);
+            var affected = 0;
 
             if (affected > 0)
             {

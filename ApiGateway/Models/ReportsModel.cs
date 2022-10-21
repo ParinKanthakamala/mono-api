@@ -1,8 +1,8 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {

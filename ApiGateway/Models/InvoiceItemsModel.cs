@@ -1,8 +1,8 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -24,8 +24,6 @@ namespace ApiGateway.Models
         public void Edit(dynamic data)
         {
             int itemid = data.item_id;
-
-
         }
 
         public void search(string q)
@@ -34,12 +32,12 @@ namespace ApiGateway.Models
 
         public bool Delete(int id)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
                 this.log_activity("Invoice Item Deleted [ID: " + id + "]");
-                this.hooks().DoAction("item_deleted", id);
+                hooks().DoAction("item_deleted", id);
 
                 return true;
             }
@@ -54,14 +52,14 @@ namespace ApiGateway.Models
 
         public int AddGroup(ItemsGroups data)
         {
-            int insert_id = 0;
+            var insert_id = 0;
             this.log_activity("Items Group Created [Name: " + data.Name + "]");
             return insert_id;
         }
 
         public bool EditGroup(int id, dynamic data)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;

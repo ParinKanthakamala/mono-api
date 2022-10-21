@@ -1,10 +1,10 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -48,7 +48,7 @@ namespace ApiGateway.Models
                 ShowOnPdf = data.ShowOnPdf,
                 SelectedByDefault = data.SelectedByDefault
             };
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;
@@ -80,10 +80,10 @@ namespace ApiGateway.Models
         {
             if (this.gateways == null)
             {
-                this.hooks().DoAction("before_get_payment_gateways");
+                hooks().DoAction("before_get_payment_gateways");
 
                 this.gateways = this.payment_gateways;
-                this.hooks().ApplyFilters("app_payment_gateways", this.payment_gateways);
+                hooks().ApplyFilters("app_payment_gateways", this.payment_gateways);
             }
 
             var modes = new List<dynamic>();
@@ -97,7 +97,7 @@ namespace ApiGateway.Models
 
         public bool change_payment_mode_status(int id, string status)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Payment Mode Status Changed [ModeID: " + id + " Status(Active/Inactive): " + status +
@@ -111,10 +111,11 @@ namespace ApiGateway.Models
 
         public bool change_payment_mode_show_to_client_status(int id, string status)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
-                this.log_activity("Payment Mode Show to Client Changed [ModeID: " + id + " Status(Active/Inactive): " + status + "]");
+                this.log_activity("Payment Mode Show to Client Changed [ModeID: " + id + " Status(Active/Inactive): " +
+                                  status + "]");
                 return true;
             }
 
@@ -126,13 +127,11 @@ namespace ApiGateway.Models
             if (gateway.GetType() == typeof(string))
             {
                 gateway = Convert.ToString(gateway).ToLower();
-
             }
             else
             {
                 var className = gateway;
             }
-
         }
 
         public PaymentModesModel() : base()

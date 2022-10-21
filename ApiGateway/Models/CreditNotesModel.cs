@@ -1,14 +1,12 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Core;
-using WiseSystem.Libraries.Services;
-
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
+using static ApiGateway.System.Language;
 namespace ApiGateway.Models
 {
     public class CreditNotesModel : MyModel
@@ -33,7 +31,7 @@ namespace ApiGateway.Models
                 {
                     id = 1,
                     color = "#03a9f4",
-                    name = this.label("credit_note_status_open"),
+                    name = label("credit_note_status_open"),
                     order = 1,
                     filter_default = true,
                 },
@@ -41,7 +39,7 @@ namespace ApiGateway.Models
                 {
                     id = 2,
                     color = "#84c529",
-                    name = this.label("credit_note_status_closed"),
+                    name = label("credit_note_status_closed"),
                     order = 2,
                     filter_default = true,
                 },
@@ -49,12 +47,12 @@ namespace ApiGateway.Models
                 {
                     id = 3,
                     color = "#777",
-                    name = this.label("credit_note_status_void"),
+                    name = label("credit_note_status_void"),
                     order = 3,
                     filter_default = false,
                 }
             };
-            this.hooks().ApplyFilters("before_get_credit_notes_statuses", output);
+            hooks().ApplyFilters("before_get_credit_notes_statuses", output);
             return output;
         }
 
@@ -67,9 +65,9 @@ namespace ApiGateway.Models
             var clients_model = new ClientsModel();
             var credit_note = this.Get(id);
             int number = this.format_credit_note_number(credit_note.CreditNoteId);
-            bool sent = false;
+            var sent = false;
 
-            if (manually == true)
+            if (manually)
             {
                 var contacts = clients_model
                     .GetContacts(credit_note.ClientId, new { active = 1, credit_note_emails = 1 });
@@ -80,7 +78,7 @@ namespace ApiGateway.Models
 
             if (sent == false) return false;
 
-            this.hooks().DoAction("credit_note_sent", id);
+            hooks().DoAction("credit_note_sent", id);
 
             return true;
         }
@@ -104,14 +102,14 @@ namespace ApiGateway.Models
         {
             var misc_model = new MiscModel();
             var attachment = misc_model.GetFile(id);
-            bool deleted = false;
+            var deleted = false;
             if (attachment != default(Files))
             {
                 if (string.IsNullOrEmpty(attachment.External))
                 {
                 }
 
-                int affected_rows = 0;
+                var affected_rows = 0;
                 if (affected_rows > 0)
                 {
                     deleted = true;
@@ -129,14 +127,14 @@ namespace ApiGateway.Models
 
         public bool Delete(int id, bool simple_delete = false)
         {
-            this.hooks().DoAction("before_credit_note_deleted", id);
-            int affected_rows = 0;
+            hooks().DoAction("before_credit_note_deleted", id);
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
                 var current_credit_note_number = Convert.ToInt32(this.get_option<string>("next_credit_note_number"));
 
-                this.hooks().DoAction("after_credit_note_deleted", id);
+                hooks().DoAction("after_credit_note_deleted", id);
 
                 return true;
             }
@@ -146,7 +144,7 @@ namespace ApiGateway.Models
 
         public bool Mark(int id, string status)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             return affected_rows > 0 ? true : false;
         }
 
@@ -179,12 +177,12 @@ namespace ApiGateway.Models
 
             data.Note = data.Note.Trim();
 
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 this.UpdateCreditNoteStatus(id);
 
-                this.hooks().DoAction("credit_note_refund_created", new { data = data, credit_note_id = id });
+                hooks().DoAction("credit_note_refund_created", new { data = data, credit_note_id = id });
             }
 
             return insert_id;
@@ -205,12 +203,12 @@ namespace ApiGateway.Models
 
         public bool DeleteRefund(int refund_id, int credit_note_id)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
                 this.UpdateCreditNoteStatus(credit_note_id);
-                this.hooks().DoAction("credit_note_refund_deleted",
+                hooks().DoAction("credit_note_refund_deleted",
                     new { refund_id = refund_id, credit_note_id = credit_note_id });
 
                 return true;
@@ -275,7 +273,7 @@ namespace ApiGateway.Models
             {
             }
 
-            decimal available_total = credit_amount;
+            var available_total = credit_amount;
             return available_total;
         }
 

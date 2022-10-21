@@ -1,10 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Apps;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -19,7 +18,7 @@ namespace ApiGateway.Models
             }
 
             data.Permissions = Newtonsoft.Json.JsonConvert.SerializeObject(permissions);
-            int insert_id = 0;
+            var insert_id = 0;
 
             if (insert_id > 0)
             {
@@ -31,7 +30,7 @@ namespace ApiGateway.Models
 
         public bool Update(int id, dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             dynamic permissions = new ExpandoObject();
             if (data.ContainsKey("Permission"))
             {
@@ -44,19 +43,19 @@ namespace ApiGateway.Models
             }
 
             data.Permissions = Newtonsoft.Json.JsonConvert.SerializeObject(permissions);
-            bool update_staff_permissions = false;
+            var update_staff_permissions = false;
             if (data.Contains("update_staff_permissions"))
             {
                 update_staff_permissions = true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 affectedRows++;
             }
 
-            if (update_staff_permissions == true)
+            if (update_staff_permissions)
             {
                 using (var db = new DBContext())
                 {
@@ -94,8 +93,8 @@ namespace ApiGateway.Models
                     roleObject.Permissions = !string.IsNullOrEmpty(roleObject.Permissions)
                         ? Newtonsoft.Json.JsonConvert.SerializeObject(roleObject.Permissions)
                         : null;
-                    this.app_object_cache().Add("role-" + id, roleObject);
-                    return new List<Roles> { roleObject };
+                    // app_object_cache().Add("role-" + id, roleObject);
+                    return new List<Roles> {roleObject};
                 }
 
                 return db.Roles.ToList();
@@ -109,7 +108,7 @@ namespace ApiGateway.Models
             using (var db = new DBContext())
             {
                 db.Roles.Remove(db.Roles.SingleOrDefault(table => table.RoleId == id));
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
                 if (affected_rows > 0)
                 {
                     affected_rows++;

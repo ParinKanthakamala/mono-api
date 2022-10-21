@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Apps;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.AppObjectCache;
 
 namespace ApiGateway.Models
 {
@@ -16,38 +16,39 @@ namespace ApiGateway.Models
                 using (var db = new DBContext())
                 {
                     var currency = db.Currencies.Where(table => table.CurrencyId == id).ToList();
-                    this.app_object_cache().set("currency-" + currency.First().Name, currency);
+                    app_object_cache().set("currency-" + currency.First().Name, currency);
                     return currency;
                 }
             }
 
-            var currencies = this.app_object_cache().get("currencies-data");
+            var currencies = app_object_cache().get("currencies-data");
             using (var db = new DBContext())
             {
                 if (currencies != null)
                 {
                     currencies = db.Currencies.ToList();
-                    this.app_object_cache().Add("currencies-data", currencies);
+                    app_object_cache().add("currencies-data", currencies);
                 }
             }
 
-            return (List<Currencies>)currencies;
+            return (List<Currencies>) currencies;
         }
 
         public List<Currencies> GetByName(string name)
         {
-            var currency = (Currencies)this.app_object_cache().get("currency-" + name);
+            var currency = app_object_cache().get("currency-" + name);
             if (currency != null)
             {
                 using (var db = new DBContext())
                 {
                     var temp = db.Currencies.Where(table => table.Name == name).ToList();
-                    this.app_object_cache().Add("currency-" + name, currency);
+                    app_object_cache().add("currency-" + name, currency);
                     return temp;
                 }
             }
 
-            return new List<Currencies>() { currency };
+            // return new List<object>() {currency};
+            return null;
         }
 
         public bool Add(Currencies data)
@@ -56,7 +57,7 @@ namespace ApiGateway.Models
             {
                 data.Name = data.Name.ToUpper();
                 db.Currencies.Add(data);
-                int insert_id = data.CurrencyId;
+                var insert_id = data.CurrencyId;
                 if (insert_id > 0)
                 {
                     this.log_activity("New Currency Added [ID: " + data.Name + "]");
@@ -74,7 +75,7 @@ namespace ApiGateway.Models
                 data.Name = data.Name.ToUpper();
                 db.Currencies.FindAsync(data.CurrencyId);
                 db.Currencies.Update(data);
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
 
                 if (affected_rows > 0)
                 {
@@ -89,7 +90,7 @@ namespace ApiGateway.Models
         public bool Delete(int id)
         {
             var currency = this.Get(id).First();
-            if (currency.IsDefault == true)
+            if (currency.IsDefault)
             {
                 return true;
             }
@@ -97,7 +98,7 @@ namespace ApiGateway.Models
             using (var db = new DBContext())
             {
                 db.Currencies.Remove(db.Currencies.Single(table => table.CurrencyId == id));
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
 
                 db.SaveChanges();
                 if (affected_rows > 0)
@@ -115,7 +116,7 @@ namespace ApiGateway.Models
         {
             var @base = this.GetBaseCurrency();
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             using (var db = new DBContext())
             {
                 var currency = db.Currencies.SingleOrDefault(table => table.CurrencyId == id);
@@ -144,7 +145,7 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return db.Currencies.FirstOrDefault(table => table.IsDefault == true);
+                return db.Currencies.FirstOrDefault(table => table.IsDefault);
             }
         }
 
@@ -155,7 +156,7 @@ namespace ApiGateway.Models
                 id = this.GetBaseCurrency().CurrencyId;
             }
 
-            var currencies = (List<Currencies>)this.app_object_cache().get("currencies-data");
+            var currencies = (List<Currencies>) app_object_cache().get("currencies-data");
             if (currencies != null)
             {
                 foreach (var currency in currencies)

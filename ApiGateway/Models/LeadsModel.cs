@@ -1,15 +1,12 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Apps;
-using JamfahCrm.Library.Helpers;
-using JamfahCrm.Library.Services.Utilities;
+using ApiGateway.Library.Helpers;
+using ApiGateway.Library.Services.Utilities;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using JamfahCrm.Library.Helpers.Staff;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Helpers;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library.Helpers.Staff;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -59,10 +56,10 @@ namespace ApiGateway.Models
                     Link = "#leadid=" + lead_id,
                     AdditionalData =
                         Newtonsoft.Json.JsonConvert.SerializeObject(!integration
-                            ? new List<string>() { name }
+                            ? new List<string>() {name}
                             : new List<string>() { })
                 };
-                if (integration != false)
+                if (integration)
                 {
                     notification_data.FromCompany = 1;
                 }
@@ -71,15 +68,16 @@ namespace ApiGateway.Models
                 {
                     this.pusher_trigger_notification(assigned);
                 }
+
                 var not_additional_data = new List<string>()
                 {
                     this.get_staff_fullname(),
-                    "<a href='" + this.admin_url("profile / " + assigned) + "' target='_blank'>" + this.get_staff_fullname(assigned) + "</a>"
+                    "<a href='" + this.admin_url("profile / " + assigned) + "' target='_blank'>" +
+                    this.get_staff_fullname(assigned) + "</a>"
                 };
-                if (integration == true)
+                if (integration)
                 {
                 }
-
             }
 
             return false;
@@ -89,7 +87,7 @@ namespace ApiGateway.Models
         {
             object current_status_id = 0;
             var current_lead_data = this.Get(id).FirstOrDefault();
-            var current_status = (LeadsStatus)this.get_status(current_lead_data.Status);
+            var current_status = (LeadsStatus) this.get_status(current_lead_data.Status);
             if (current_status != null)
             {
                 current_status_id = current_status.LeadsStatusId;
@@ -109,7 +107,7 @@ namespace ApiGateway.Models
                 current_status_id = 0;
             }
 
-            int affectedRows = 0;
+            var affectedRows = 0;
             return (affectedRows > 0);
         }
 
@@ -136,7 +134,7 @@ namespace ApiGateway.Models
         public bool unmark_as_junk(int id)
         {
             var last_lead_status = new LeadsStatus();
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.LogLeadActivity(id, "not_lead_activity_unmarked_junk");
@@ -163,21 +161,20 @@ namespace ApiGateway.Models
         public bool delete_lead_attachment(int id)
         {
             var attachment = this.get_lead_attachments(0, id + "").FirstOrDefault();
-            bool deleted = false;
+            var deleted = false;
             if (attachment != null)
             {
                 if (string.IsNullOrEmpty(attachment.External))
                 {
                 }
 
-                int affected_rows = 0;
+                var affected_rows = 0;
 
                 if (affected_rows > 0)
                 {
                     deleted = true;
                     this.log_activity("Lead Attachment Deleted [ID: " + attachment.RelId + "]");
                 }
-
             }
 
             return deleted;
@@ -207,12 +204,13 @@ namespace ApiGateway.Models
         public bool delete_source(int id)
         {
             var current = this.get_source(id);
-            if (this.is_reference_in_table("source", "leads", id) || this.is_reference_in_table("lead_source", "leads_email_integration", id))
+            if (this.is_reference_in_table("source", "leads", id) ||
+                this.is_reference_in_table("lead_source", "leads_email_integration", id))
             {
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 if (this.get_option<int>("leads_default_source") == id)
@@ -229,12 +227,12 @@ namespace ApiGateway.Models
 
         public object get_status(int id = 0, dynamic where = default(ExpandoObject))
         {
-            var statuses = this.app_object_cache().get("leads-all-statuses");
-            if (statuses == null)
-            {
-            }
-
-            return statuses;
+            // var statuses = app_object_cache().get("leads-all-statuses");
+            // if (statuses == null)
+            // {
+            // }
+            return null;
+            // return statuses;
         }
 
         public int add_status(LeadsStatus data)
@@ -242,7 +240,7 @@ namespace ApiGateway.Models
             if (data.Color == null)
             {
                 data.Color = "#757575";
-                this.hooks().ApplyFilters("default_lead_status_color", data.Color);
+                hooks().ApplyFilters("default_lead_status_color", data.Color);
             }
 
             using (var db = new DBContext())
@@ -256,7 +254,7 @@ namespace ApiGateway.Models
                 db.SaveChanges();
             }
 
-            int insert_id = data.LeadsStatusId;
+            var insert_id = data.LeadsStatusId;
             if (insert_id > 0)
             {
                 this.log_activity("New Leads Status Added [StatusID: " + insert_id + ", Name: " + data.Name + "]");
@@ -274,12 +272,13 @@ namespace ApiGateway.Models
         public bool delete_status(int id)
         {
             var current = this.get_status(id);
-            if (this.is_reference_in_table("status", "leads", id) || this.is_reference_in_table("lead_status", "leads_email_integration", id))
+            if (this.is_reference_in_table("status", "leads", id) ||
+                this.is_reference_in_table("lead_status", "leads_email_integration", id))
             {
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 if (this.get_option<int>("leads_default_status") == id)
@@ -319,7 +318,7 @@ namespace ApiGateway.Models
         {
             var lead_activity_log = new LeadActivityLog()
             {
-                Date = SharePoint.Now,
+                // Date = SharePoint.Now,
                 Description = description,
                 LeadId = id,
                 UserId = this.get_staff_user_id(),
@@ -349,7 +348,8 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return db.LeadIntegrationEmails.Where(table => table.LeadId == id).OrderBy(table => new { table.DateAdded }).ToList();
+                return db.LeadIntegrationEmails.Where(table => table.LeadId == id)
+                    .OrderBy(table => new {table.DateAdded}).ToList();
             }
         }
 
@@ -364,9 +364,7 @@ namespace ApiGateway.Models
 
         public void update_status_order(params LeadsStatus[] datas)
         {
-            datas.ToList().ForEach((data) =>
-            {
-            });
+            datas.ToList().ForEach((data) => { });
         }
 
         public WebToLead get_form(dynamic where)
@@ -375,7 +373,6 @@ namespace ApiGateway.Models
             {
                 return db.WebToLead.FirstOrDefault();
             }
-
         }
 
         public int add_form(WebToLead data)
@@ -386,7 +383,7 @@ namespace ApiGateway.Models
         public bool update_form(int id, WebToLead data)
         {
             data = this._do_lead_web_to_form_responsibles(data);
-            data.SuccessSubmitMsg = data.SuccessSubmitMsg.nl2br();
+            // data.SuccessSubmitMsg = data.SuccessSubmitMsg.nl2br();
             return false;
         }
 
@@ -396,7 +393,7 @@ namespace ApiGateway.Models
             {
                 var entry = db.WebToLead.FirstOrDefault(table => table.WebToLeadId == id);
                 db.Remove(entry);
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
                 if (affected_rows > 0)
                 {
                     this.log_activity("Lead Form Deleted [" + id + "]");

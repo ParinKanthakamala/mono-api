@@ -1,15 +1,15 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
-using JamfahCrm.Library.Helpers.Staff;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Core.Compat;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library;
+using ApiGateway.Library.Helpers.Staff;
+using static ApiGateway.Core.MyHooks;
+
 
 namespace ApiGateway.Models
 {
@@ -22,7 +22,7 @@ namespace ApiGateway.Models
                 return false;
             }
 
-            this.hooks().DoAction("before_delete_user_member", new { id = id, transfer_data_to = transfer_data_to });
+            hooks().DoAction("before_delete_user_member", new {id = id, transfer_data_to = transfer_data_to});
             var name = this.get_staff_fullname(id);
             var transferred_to = this.get_staff_fullname(transfer_data_to);
 
@@ -73,11 +73,11 @@ namespace ApiGateway.Models
 
             data.Admin = this.is_admin() ? 1 : 0;
 
-            bool send_welcome_email = true;
+            var send_welcome_email = true;
             var original_password = data.Password;
 
             data.Password = PasswordHandler.CreatePasswordHash(data.Password);
-            data.DateCreated = SharePoint.Now;
+            // data.DateCreated = SharePoint.Now;
 
             var user_id = 0;
 
@@ -90,13 +90,14 @@ namespace ApiGateway.Models
                     slug = "unknown-" + user_id;
                 }
 
-                if (send_welcome_email == true)
+                if (send_welcome_email)
                 {
                 }
 
-                this.log_activity("New Staff Member Added [ID: " + user_id + ", " + data.Firstname + " " + data.Lastname + "]");
+                this.log_activity("New Staff Member Added [ID: " + user_id + ", " + data.Firstname + " " +
+                                  data.Lastname + "]");
 
-                List<Announcements> announcements = new List<Announcements>();
+                var announcements = new List<Announcements>();
                 announcements.ForEach((announcement) =>
                 {
                     var newdata = new DismissedAnnouncements()
@@ -112,7 +113,7 @@ namespace ApiGateway.Models
                     }
                 });
 
-                this.hooks().DoAction("user_member_created", user_id);
+                hooks().DoAction("user_member_created", user_id);
 
                 return user_id;
             }
@@ -122,7 +123,7 @@ namespace ApiGateway.Models
 
         public bool Update(Users data, int id)
         {
-            this.hooks().ApplyFilters("before_update_user_member", data);
+            hooks().ApplyFilters("before_update_user_member", data);
 
             if (this.is_admin())
             {
@@ -141,11 +142,12 @@ namespace ApiGateway.Models
                 data.Admin = 0;
             }
 
-            int affectedRows = 0;
+            var affectedRows = 0;
             if (affectedRows > 0)
             {
-                this.hooks().DoAction("user_member_updated", id);
-                this.log_activity("Staff Member Updated [ID: " + id + ", " + data.Firstname + " " + data.Lastname + "]");
+                hooks().DoAction("user_member_updated", id);
+                this.log_activity("Staff Member Updated [ID: " + id + ", " + data.Firstname + " " + data.Lastname +
+                                  "]");
 
                 return true;
             }
@@ -167,7 +169,6 @@ namespace ApiGateway.Models
                     {
                         continue;
                     }
-
                 }
             }
 
@@ -176,7 +177,7 @@ namespace ApiGateway.Models
 
         public bool update_profile(Users data)
         {
-            this.hooks().ApplyFilters("before_user_update_profile", data);
+            hooks().ApplyFilters("before_user_update_profile", data);
 
             if (string.IsNullOrEmpty(data.Password))
             {
@@ -185,10 +186,10 @@ namespace ApiGateway.Models
             else
             {
                 data.Password = PasswordHandler.CreatePasswordHash(data.Password);
-                data.LastPasswordChange = SharePoint.Now;
+                // data.LastPasswordChange = SharePoint.Now;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             using (var db = new DBContext())
             {
                 db
@@ -200,7 +201,7 @@ namespace ApiGateway.Models
 
             if (affected_rows > 0)
             {
-                this.hooks().DoAction("user_member_profile_updated", data);
+                hooks().DoAction("user_member_profile_updated", data);
                 this.log_activity("Staff Profile Updated [Staff: " + this.get_staff_fullname(data.UserId) + "]");
                 return true;
             }
@@ -210,14 +211,14 @@ namespace ApiGateway.Models
 
         public bool ChangePassword(Users data)
         {
-            this.hooks().ApplyFilters("before_user_change_password", data);
+            hooks().ApplyFilters("before_user_change_password", data);
             var member = this.Get(data.UserId);
             if (member.Active == 0)
             {
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             using (var db = new DBContext())
             {
                 db
@@ -243,7 +244,7 @@ namespace ApiGateway.Models
 
         public void change_user_status(int id, int status)
         {
-            this.hooks().ApplyFilters("before_user_status_change", status);
+            hooks().ApplyFilters("before_user_status_change", status);
 
             var user = this.Get(id);
             using (var db = new DBContext())

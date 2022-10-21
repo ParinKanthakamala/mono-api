@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using ApiGateway.Core;
 using ApiGateway.Entities;
-
+using ApiGateway.Library.Helpers;
+using static ApiGateway.Core.MyHooks;
+using static ApiGateway.System.Url;
+using static ApiGateway.System.Language;
 
 namespace ApiGateway.Models
 {
@@ -13,7 +16,7 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                int id = db.Articles.Where(table => table.Slug == slug).ToList().FirstOrDefault().ArticleId;
+                var id = db.Articles.Where(table => table.Slug == slug).ToList().FirstOrDefault().ArticleId;
                 return this.Get(id);
             }
         }
@@ -25,17 +28,17 @@ namespace ApiGateway.Models
 
         public List<Articles> get_related_articles(int current_id, bool customers = true)
         {
-            int total_related_articles = 5;
-            this.hooks().ApplyFilters("total_related_articles", total_related_articles);
+            var total_related_articles = 5;
+            hooks().ApplyFilters("total_related_articles", total_related_articles);
             using (var db = new DBContext())
             {
-                Articles article = db.Articles.SingleOrDefault(table => table.ArticleId == current_id);
+                var article = db.Articles.SingleOrDefault(table => table.ArticleId == current_id);
 
                 return db.Articles.Where(table =>
                         table.ArticleGroup != article.ArticleGroup
                         || table.ArticleId == current_id
                         || table.Active == 0
-                        || table.StaffArticle != ((customers == true) ? 1 : 0)
+                        || table.StaffArticle != (customers ? 1 : 0)
                     )
                     .Take(total_related_articles)
                     .ToList();
@@ -46,7 +49,7 @@ namespace ApiGateway.Models
         {
             data.DateCreated = DateTime.Now;
 
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 this.log_activity("New Article Added [ArticleID: " + insert_id + " GroupID: " + data.ArticleGroup +
@@ -58,7 +61,7 @@ namespace ApiGateway.Models
 
         public bool UpdateArticle(Articles data)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Article Updated [ArticleID: " + data.ArticleId + "]");
@@ -71,7 +74,7 @@ namespace ApiGateway.Models
 
         public bool UpdateKanban(dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
 
             foreach (var o in data.order)
             {
@@ -97,7 +100,7 @@ namespace ApiGateway.Models
 
         public bool DeleteArticle(int id)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
@@ -126,7 +129,7 @@ namespace ApiGateway.Models
                 data.GroupSlug += "-" + (slug_total + 1);
             }
 
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 this.log_activity("New Article Group Added [GroupID: " + insert_id + "]");
@@ -169,13 +172,13 @@ namespace ApiGateway.Models
 
         public bool delete_group(int? id)
         {
-            ArticleGroups current = this.GetArticleGroupById(id);
+            var current = this.GetArticleGroupById(id);
             if (this.is_reference_in_table("ArticleGroup", "Articles", id))
             {
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
@@ -188,7 +191,7 @@ namespace ApiGateway.Models
 
         public dynamic AddArticleAnswer(Articles article)
         {
-            string ip = this.input.ip_address();
+            string ip = input().ip_address();
             using (var db = new DBContext())
             {
                 var answer = db
@@ -207,20 +210,20 @@ namespace ApiGateway.Models
                         return new
                         {
                             success = false,
-                            message = this.label("clients_article_only_1_vote_today"),
+                            message = label("clients_article_only_1_vote_today"),
                         };
                     }
                 }
             }
 
 
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 return new
                 {
                     success = true,
-                    message = this.label("clients_article_voted_thanks_for_feedback")
+                    message = label("clients_article_voted_thanks_for_feedback")
                 };
             }
 

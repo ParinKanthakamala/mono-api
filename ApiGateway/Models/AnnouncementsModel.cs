@@ -2,6 +2,9 @@
 using System.Linq;
 using ApiGateway.Core;
 using ApiGateway.Entities;
+using ApiGateway.Library.Helpers;
+using ApiGateway.Library.Helpers.Staff;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -22,19 +25,12 @@ namespace ApiGateway.Models
             var staff = !this.is_client_logged_in();
             var userid = this.is_client_logged_in() ? this.get_client_user_id() : this.get_staff_user_id();
 
-            if (staff)
-            {
-            }
-            else
-            {
-            }
-
             return 0;
         }
 
         public int Add(Announcements data)
         {
-            data.DateAdded = SharePoint.Now;
+            // data.DateAdded = SharePoint.Now;
             data.ShowName = data.ShowName;
             data.ShowToStaff = data.ShowToStaff;
             data.ShowToUsers = data.ShowToUsers;
@@ -42,14 +38,14 @@ namespace ApiGateway.Models
             data.Name = this.get_staff_fullname(this.get_staff_user_id());
             data.UserId = this.get_staff_user_id() + "";
 
-            this.hooks().ApplyFilters("before_announcement_added", data);
+            hooks().ApplyFilters("before_announcement_added", data);
             using (var db = new DBContext())
             {
                 db.Announcements.Add(data);
                 db.SaveChanges();
             }
 
-            this.hooks().DoAction("announcement_created", data.AnnouncementId);
+            hooks().DoAction("announcement_created", data.AnnouncementId);
             this.log_activity("New Announcement Added [" + data.Name + "]");
 
             return data.AnnouncementId;
@@ -57,7 +53,7 @@ namespace ApiGateway.Models
 
         public bool Update(Announcements data)
         {
-            this.hooks().ApplyFilters("before_announcement_updated", data);
+            hooks().ApplyFilters("before_announcement_updated", data);
             using (var db = new DBContext())
             {
                 var announcement = db.Announcements.Find(data.AnnouncementId);
@@ -67,10 +63,10 @@ namespace ApiGateway.Models
                 }
 
                 db.Entry(announcement).CurrentValues.SetValues(data);
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
                 if (affected_rows > 0)
                 {
-                    this.hooks().DoAction("announcement_updated", data);
+                    hooks().DoAction("announcement_updated", data);
                     this.log_activity("Announcement Updated [" + data.Name + "]");
                     return true;
                 }
@@ -81,7 +77,7 @@ namespace ApiGateway.Models
 
         public bool Delete(int id)
         {
-            this.hooks().DoAction("before_delete_announcement", new {id});
+            hooks().DoAction("before_delete_announcement", new {id});
             using (var db = new DBContext())
             {
                 var announcement = db.Announcements.SingleOrDefault(table => table.AnnouncementId == id);
@@ -104,7 +100,7 @@ namespace ApiGateway.Models
                     }
                 }
 
-                this.hooks().DoAction("announcement_deleted", id);
+                hooks().DoAction("announcement_deleted", id);
                 this.log_activity("Announcement Deleted [" + id + "]");
 
                 return true;

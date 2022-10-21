@@ -1,7 +1,7 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -15,7 +15,7 @@ namespace ApiGateway.Models
         public int Add(dynamic data, string type)
         {
             data["rel_type"] = type;
-            int insert_id = 0;
+            var insert_id = 0;
 
             return insert_id > 0 ? insert_id : 0;
         }
@@ -27,7 +27,7 @@ namespace ApiGateway.Models
 
         public bool Delete(int id, string type)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Spam Filter Deleted");

@@ -1,10 +1,10 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -40,10 +40,10 @@ namespace ApiGateway.Models
                 db.SaveChangesAsync();
             }
 
-            this.hooks().ApplyFilters("before_department_added", data);
+            hooks().ApplyFilters("before_department_added", data);
             if (data.DepartmentId > 0)
             {
-                this.hooks().DoAction("after_department_added", data.CalendarId);
+                hooks().DoAction("after_department_added", data.CalendarId);
                 this.log_activity("New Department Added [" + data.Name + ", ID: " + data.CalendarId + "]");
             }
 
@@ -64,8 +64,8 @@ namespace ApiGateway.Models
                 db.SaveChangesAsync();
             }
 
-            this.hooks().ApplyFilters("before_department_updated", data);
-            int affected_rows = 0;
+            hooks().ApplyFilters("before_department_updated", data);
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;
@@ -82,8 +82,8 @@ namespace ApiGateway.Models
                 return true;
             }
 
-            this.hooks().DoAction("before_delete_department", id);
-            int affected_rows = 0;
+            hooks().DoAction("before_delete_department", id);
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Department Deleted [ID: " + id + "]");

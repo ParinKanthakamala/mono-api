@@ -1,11 +1,10 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JamfahCrm.Library.Helpers.Staff;
-using WiseSystem.Libraries.Helpers;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library.Helpers.Staff;
 
 namespace ApiGateway.Models
 {
@@ -21,7 +20,7 @@ namespace ApiGateway.Models
 
         public bool pin_post(int id)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             return (affected_rows > 0);
         }
 
@@ -76,16 +75,16 @@ namespace ApiGateway.Models
         public int Add(NewsfeedPosts data)
         {
             data.DateCreated = DateTime.Now;
-            data.Content = data.Content.nl2br();
+            // data.Content = data.Content.nl2br();
             data.Creator = this.get_staff_user_id();
-            int post_id = 0;
+            var post_id = 0;
             var staff = new List<Users>();
             using (var db = new DBContext())
             {
                 db.NewsfeedPosts.Add(data);
                 db.SaveChanges();
                 post_id = data.NewsfeedPostsId;
-                staff = db.Users.Where(table => table.Active == table.IsNotStaff == true).ToList();
+                staff = db.Users.Where(table => table.Active == table.IsNotStaff).ToList();
             }
 
             var notified_users = new List<object>();
@@ -94,10 +93,10 @@ namespace ApiGateway.Models
                 try
                 {
                     var staff_deparments = this.departments_model.GetStaffDepartments(member.UserId);
-                    List<string> visibility = data.Visibility.Split(':').ToList<string>();
+                    var visibility = data.Visibility.Split(':').ToList<string>();
                     if (visibility[0].ToLower() != "all")
                     {
-                        for (int i = 0; i < visibility.Count; i++)
+                        for (var i = 0; i < visibility.Count; i++)
                         {
                         }
                     }
@@ -116,7 +115,7 @@ namespace ApiGateway.Models
                         }
                     }
                 }
-                catch 
+                catch
                 {
                 }
             }
@@ -131,7 +130,7 @@ namespace ApiGateway.Models
                 return true;
             }
 
-            int likeid = 0;
+            var likeid = 0;
             if (likeid > 0)
             {
                 var post = this.get_post(id);
@@ -185,14 +184,14 @@ namespace ApiGateway.Models
         {
             data.DateAdded = DateTime.Now;
             data.UserId = this.get_staff_user_id();
-            data.Content = data.Content.nl2br();
+            // data.Content = data.Content.nl2br();
             using (var db = new DBContext())
             {
                 db.NewsfeedPostComments.Add(data);
                 db.SaveChanges();
             }
 
-            int insert_id = data.NewsfeedPostCommentId;
+            var insert_id = data.NewsfeedPostCommentId;
             if (insert_id > 0)
             {
                 var post = this.get_post(data.NewsfeedPostCommentId);
@@ -237,10 +236,10 @@ namespace ApiGateway.Models
                 CommentId = id,
                 PostId = post_id
             };
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
-                var comment = (NewsfeedPostComments)this.GetComment(id);
+                var comment = (NewsfeedPostComments) this.GetComment(id);
                 if (comment.UserId != this.get_staff_user_id())
                 {
                     var notified =
@@ -270,7 +269,7 @@ namespace ApiGateway.Models
 
         public bool remove_post_comment(int id, int post_id)
         {
-            int total_rows = 0;
+            var total_rows = 0;
             using (var db = new DBContext())
             {
                 total_rows = db.NewsfeedPostComments
@@ -282,7 +281,7 @@ namespace ApiGateway.Models
 
             if (total_rows > 0)
             {
-                int affected_rows = 0;
+                var affected_rows = 0;
                 if (affected_rows > 0)
                 {
                     return true;
@@ -296,7 +295,7 @@ namespace ApiGateway.Models
 
         public bool delete_post(int post_id)
         {
-            int total_rows = 0;
+            var total_rows = 0;
             using (var db = new DBContext())
             {
                 total_rows =
@@ -307,7 +306,7 @@ namespace ApiGateway.Models
 
             if (total_rows > 0 || this.is_admin())
             {
-                int affected_rows = 0;
+                var affected_rows = 0;
                 if (affected_rows > 0)
                 {
                     return true;

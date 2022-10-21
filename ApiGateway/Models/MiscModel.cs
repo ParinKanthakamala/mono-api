@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Dynamic;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -13,11 +13,12 @@ namespace ApiGateway.Models
 
         public int GetNotificationsLimit()
         {
-            this.hooks().ApplyFilters("notifications_limit", this.notifications_limit);
+            hooks().ApplyFilters("notifications_limit", this.notifications_limit);
             return this.notifications_limit;
         }
 
-        public string GetTaxesDropdownTemplate(string name, string taxname, string type = "", int item_id = 0, bool is_edit = false, bool manual = false)
+        public string GetTaxesDropdownTemplate(string name, string taxname, string type = "", int item_id = 0,
+            bool is_edit = false, bool manual = false)
         {
             return null;
         }
@@ -49,14 +50,14 @@ namespace ApiGateway.Models
 
         public dynamic GetNotes(int rel_id, string rel_type)
         {
-            List<Notes> notes = new List<Notes>();
+            var notes = new List<Notes>();
 
             var output = new
             {
                 rel_id = rel_id,
                 rel_type = rel_type
             };
-            this.hooks().ApplyFilters("get_notes", new { notes = notes, output = output });
+            hooks().ApplyFilters("get_notes", new {notes = notes, output = output});
             return output;
         }
 
@@ -67,9 +68,9 @@ namespace ApiGateway.Models
 
         public bool EditNote(int id, Notes data)
         {
-            this.hooks().DoAction("before_update_note", new { data = data, id = id });
+            hooks().DoAction("before_update_note", new {data = data, id = id});
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;
@@ -85,16 +86,16 @@ namespace ApiGateway.Models
 
         public bool DeleteNote(int note_id)
         {
-            this.hooks().DoAction("before_delete_note", note_id);
+            hooks().DoAction("before_delete_note", note_id);
 
-            Notes note = new Notes();
+            var note = new Notes();
 
             if (note.AddedFrom != this.get_staff_user_id() && !this.is_admin())
             {
                 return false;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
@@ -119,23 +120,22 @@ namespace ApiGateway.Models
 
         public List<object> GetGoogleCalendarIds()
         {
-            bool is_admin = this.is_admin();
+            var is_admin = this.is_admin();
             return null;
         }
 
         public void GetUserNotifications(bool read = false)
         {
             read = read == false ? false : true;
-            int total = this.notifications_limit;
-            int staff_id = this.get_staff_user_id();
+            var total = this.notifications_limit;
+            var staff_id = this.get_staff_user_id();
 
             total = total > 30 ? 30 : total;
-
         }
 
         public bool SetNotificationsRead()
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
@@ -159,7 +159,7 @@ namespace ApiGateway.Models
 
         public bool DismissAnnouncement(int id, int staff = 1)
         {
-            int user_id = (staff == 1) ? this.get_contact_user_id() : this.get_staff_user_id();
+            var user_id = (staff == 1) ? this.get_contact_user_id() : this.get_staff_user_id();
 
             var data = new DismissedAnnouncements();
             data.AnnouncementId = id;
@@ -172,7 +172,7 @@ namespace ApiGateway.Models
         public dynamic PerformSearch(string q)
         {
             q = q.Trim();
-            bool is_admin = this.is_admin();
+            var is_admin = this.is_admin();
             return null;
         }
 

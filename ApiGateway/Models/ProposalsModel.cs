@@ -1,13 +1,11 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Helpers;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -37,7 +35,7 @@ namespace ApiGateway.Models
 
         public int Add(Proposals data)
         {
-            data.Address = data.Address.Trim().nl2br();
+            // data.Address = data.Address.Trim().nl2br();
             data.DateCreated = DateTime.Now;
             data.AddedFrom = this.get_staff_user_id();
             if (string.IsNullOrEmpty(data.RelType))
@@ -56,8 +54,8 @@ namespace ApiGateway.Models
                 data.Content = "{proposal_items}";
             }
 
-            var hook = new { Data = data, Items = items };
-            this.hooks().ApplyFilters("before_create_proposal", hook);
+            var hook = new {Data = data, Items = items};
+            hooks().ApplyFilters("before_create_proposal", hook);
 
             var insert_id = 0;
 
@@ -70,7 +68,7 @@ namespace ApiGateway.Models
 
         public bool Update(int id, Proposals data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
 
             var current_proposal = this.Get(id).First();
 
@@ -90,7 +88,7 @@ namespace ApiGateway.Models
 
             if (affectedRows > 0)
             {
-                this.hooks().DoAction("after_proposal_updated", id);
+                hooks().DoAction("after_proposal_updated", id);
 
                 return true;
             }
@@ -131,20 +129,19 @@ namespace ApiGateway.Models
         public bool DeleteAttachment(int id)
         {
             var attachment = this.GetAttachments(0, id).FirstOrDefault();
-            bool deleted = false;
+            var deleted = false;
             if (attachment != null)
             {
                 if (string.IsNullOrEmpty(attachment.External))
                 {
                 }
 
-                int affected_rows = 0;
+                var affected_rows = 0;
                 if (affected_rows > 0)
                 {
                     deleted = true;
                     this.log_activity("Proposal Attachment Deleted [ID: " + attachment.RelType + "]");
                 }
-
             }
 
             return deleted;
@@ -157,14 +154,14 @@ namespace ApiGateway.Models
                 client = false;
             }
 
-            data.DateAdded = SharePoint.Now;
+            // data.DateAdded = SharePoint.Now;
             if (client == false)
             {
                 data.UserId = this.get_staff_user_id();
             }
 
-            data.Content = data.Content.nl2br();
-            int insert_id = 0;
+            // data.Content = data.Content.nl2br();
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 var proposal = this.Get(data.ProposalId).First();
@@ -182,7 +179,7 @@ namespace ApiGateway.Models
 
         public bool EditComment(int id, dynamic data)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             return (affected_rows > 0);
         }
 
@@ -200,7 +197,7 @@ namespace ApiGateway.Models
         {
             var comment = this.GetComment(id);
 
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
@@ -237,12 +234,12 @@ namespace ApiGateway.Models
         {
             var original_proposal = this.Get(id).First();
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
-                if (client == true)
+                if (client)
                 {
-                    bool revert = false;
+                    var revert = false;
                     var message = "";
                     if (status == 2)
                     {
@@ -257,7 +254,7 @@ namespace ApiGateway.Models
                         revert = true;
                     }
 
-                    if (revert == true)
+                    if (revert)
                     {
                         return false;
                     }
@@ -267,7 +264,8 @@ namespace ApiGateway.Models
                     {
                         staff_proposal = db.Users.Where(
                                 table =>
-                                    table.UserId == original_proposal.AddedFrom || table.UserId == original_proposal.Assigned)
+                                    table.UserId == original_proposal.AddedFrom ||
+                                    table.UserId == original_proposal.Assigned)
                             .ToList();
                     }
 
@@ -289,18 +287,23 @@ namespace ApiGateway.Models
 
                     if (status == 3)
                     {
-                        staff_proposal.ForEach((member) => { this.send_mail_template("proposal_accepted_to_staff", original_proposal.Email, member.Email); });
+                        staff_proposal.ForEach((member) =>
+                        {
+                            this.send_mail_template("proposal_accepted_to_staff", original_proposal.Email,
+                                member.Email);
+                        });
                         this.send_mail_template("proposal_accepted_to_customer", original_proposal.Email);
-                        this.hooks().DoAction("proposal_accepted", id);
+                        hooks().DoAction("proposal_accepted", id);
                     }
                     else
                     {
                         foreach (var member in staff_proposal)
                         {
-                            this.send_mail_template("proposal_declined_to_staff", original_proposal.Email, member.Email);
+                            this.send_mail_template("proposal_declined_to_staff", original_proposal.Email,
+                                member.Email);
                         }
 
-                        this.hooks().DoAction("proposal_declined", id);
+                        hooks().DoAction("proposal_declined", id);
                     }
                 }
                 else
@@ -318,7 +321,7 @@ namespace ApiGateway.Models
             this.ClearSignature(id);
             var proposal = this.Get(id);
             var tasks_model = new TasksModel();
-            int affected_rows = 0;
+            var affected_rows = 0;
             using (var db = new DBContext())
             {
                 db.Remove(proposal);
@@ -329,7 +332,7 @@ namespace ApiGateway.Models
             {
                 using (var db = new DBContext())
                 {
-                    List<Tasks> tasks = db.Tasks.Where(table => table.RelType == "proposal" && table.RelId == id).ToList();
+                    var tasks = db.Tasks.Where(table => table.RelType == "proposal" && table.RelId == id).ToList();
                     tasks.ForEach((task) => { tasks_model.DeleteTask(task.TaskId); });
 
                     var attachments = this.GetAttachments(id);
@@ -359,7 +362,8 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                int total_rows = db.Proposals.Where(table => table.ProposalId == id && table.Status == 6).ToList().Count;
+                var total_rows = db.Proposals.Where(table => table.ProposalId == id && table.Status == 6).ToList()
+                    .Count;
 
                 if (total_rows > 0)
                 {
@@ -375,8 +379,8 @@ namespace ApiGateway.Models
 
         public ProposalsModel() : base()
         {
-            this.statuses = new List<int>() { 6, 4, 1, 5, 2, 3 };
-            this.hooks().ApplyFilters("before_set_proposal_statuses", this.statuses);
+            this.statuses = new List<int>() {6, 4, 1, 5, 2, 3};
+            hooks().ApplyFilters("before_set_proposal_statuses", this.statuses);
         }
     }
 

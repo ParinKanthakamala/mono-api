@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -17,7 +17,8 @@ namespace ApiGateway.Models
                 db.SaveChanges();
                 if (data.CustomersGroupId > 0)
                 {
-                    this.log_activity("New Customer Group Created [ID : " + data.CustomersGroupId + ", Name : " + data.Name + "]");
+                    this.log_activity("New Customer Group Created [ID : " + data.CustomersGroupId + ", Name : " +
+                                      data.Name + "]");
                     return data.CustomersGroupId;
                 }
             }
@@ -45,7 +46,8 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                return db.CustomersGroups.Where(table => table.CustomersGroupId == id).OrderBy(table => table.Name).ToList();
+                return db.CustomersGroups.Where(table => table.CustomersGroupId == id).OrderBy(table => table.Name)
+                    .ToList();
             }
         }
 
@@ -53,8 +55,9 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                int affected = 0;
-                var entry = db.CustomersGroups.FirstOrDefault(table => table.CustomersGroupId == customerGroups.CustomersGroupId);
+                var affected = 0;
+                var entry = db.CustomersGroups.FirstOrDefault(table =>
+                    table.CustomersGroupId == customerGroups.CustomersGroupId);
                 db.Entry(entry).CurrentValues.SetValues(customerGroups);
                 affected = db.SaveChanges();
                 return (affected > 0);
@@ -69,10 +72,10 @@ namespace ApiGateway.Models
                 if (entry != null)
                 {
                     db.Remove(entry);
-                    int affected = db.SaveChanges();
+                    var affected = db.SaveChanges();
                     if (affected > 0)
                     {
-                        this.hooks().DoAction("customer_group_deleted", id);
+                        hooks().DoAction("customer_group_deleted", id);
                         this.log_activity("Customer Group Deleted [ID:" + id + "]");
                         return true;
                     }
@@ -85,7 +88,7 @@ namespace ApiGateway.Models
         public bool SyncCustomerGroups(int id, List<int> groups_in = default(List<int>))
         {
             if (groups_in == default(List<int>)) groups_in.Clear();
-            int affectedRows = 0;
+            var affectedRows = 0;
             var customer_groups = this.GetCustomerGroups(id);
 
             return (affectedRows > 0);

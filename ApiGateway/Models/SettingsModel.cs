@@ -1,5 +1,5 @@
-using JamfahCrm.Controllers.Core;
 using System.Collections.Generic;
+using ApiGateway.Core;
 
 namespace ApiGateway.Models
 {

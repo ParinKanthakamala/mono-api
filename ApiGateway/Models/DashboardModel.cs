@@ -1,10 +1,8 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
-using System;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using WiseSystem.Libraries.Helpers.Date;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -31,8 +29,8 @@ namespace ApiGateway.Models
 
         public int GetUpcomingEventsNextWeek()
         {
-            var monday_this_week = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
-            var sunday_this_week = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
+            // var monday_this_week = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
+            // var sunday_this_week = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
 
             return 0;
         }

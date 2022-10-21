@@ -1,22 +1,20 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Core;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
+using static ApiGateway.System.Language;
 
 namespace ApiGateway.Models
 {
     public class TicketsModel : MyModel
     {
-
         public string InsertPipedTicket(dynamic data)
         {
-            this.hooks().ApplyFilters("piped_ticket_data", data);
+            hooks().ApplyFilters("piped_ticket_data", data);
 
             var attachments = data.attachments;
             string subject = data["subject"];
@@ -28,9 +26,9 @@ namespace ApiGateway.Models
                 "Undelivered Mail Returned to Sender"
             };
 
-            bool subject_blocked = false;
+            var subject_blocked = false;
 
-            foreach (string sb in system_blocked_subjects)
+            foreach (var sb in system_blocked_subjects)
             {
                 if (sb.Contains("x" + subject))
                 {
@@ -39,7 +37,7 @@ namespace ApiGateway.Models
                 }
             }
 
-            if (subject_blocked == true) return null;
+            if (subject_blocked) return null;
 
             string message = data["body"];
             string name = data["fromname"];
@@ -47,7 +45,7 @@ namespace ApiGateway.Models
             string email = data["email"];
             string to = data["to"];
 
-            string mailstatus = this.spam_filters_model().Check(email, subject, message, "tickets");
+            var mailstatus = this.spam_filters_model().Check(email, subject, message, "tickets");
 
             if (string.IsNullOrEmpty(mailstatus))
             {
@@ -105,7 +103,7 @@ namespace ApiGateway.Models
 
         public bool DeleteTicketAttachment(int id)
         {
-            bool deleted = false;
+            var deleted = false;
             return deleted;
         }
 
@@ -121,7 +119,7 @@ namespace ApiGateway.Models
         public List<Tickets> GetTicketReplies(int? id)
         {
             var ticket_replies_order = this.get_option<string>("ticket_replies_order");
-            this.hooks().ApplyFilters("ticket_replies_order", ticket_replies_order);
+            hooks().ApplyFilters("ticket_replies_order", ticket_replies_order);
 
             return default(List<Tickets>);
         }
@@ -141,8 +139,8 @@ namespace ApiGateway.Models
 
         public bool Delete(int ticket_id)
         {
-            int affectedRows = 0;
-            this.hooks().DoAction("before_ticket_deleted", ticket_id);
+            var affectedRows = 0;
+            hooks().DoAction("before_ticket_deleted", ticket_id);
             if (affectedRows > 0)
             {
                 affectedRows++;
@@ -165,7 +163,7 @@ namespace ApiGateway.Models
 
         public bool UpdateSingleTicketSettings(Tickets data)
         {
-            this.hooks().ApplyFilters("before_ticket_settings_updated", data);
+            hooks().ApplyFilters("before_ticket_settings_updated", data);
             var ticketBeforeUpdate = this.GetTicketById(data.TicketId);
 
             return false;
@@ -177,15 +175,15 @@ namespace ApiGateway.Models
             {
                 var tickets = db.Tickets.SingleOrDefault(table => table.TicketId == id);
                 tickets.Status = status;
-                int affectedRows = db.SaveChanges();
+                var affectedRows = db.SaveChanges();
 
-                string alert = "warning";
-                string message = this.label("ticket_status_changed_fail");
+                var alert = "warning";
+                string message = label("ticket_status_changed_fail");
                 if (affectedRows > 0)
                 {
                     alert = "success";
-                    message = this.label("ticket_status_changed_successfully");
-                    this.hooks().DoAction("after_ticket_status_changed", new
+                    message = label("ticket_status_changed_successfully");
+                    hooks().DoAction("after_ticket_status_changed", new
                     {
                         Id = id,
                         status = status
@@ -218,7 +216,7 @@ namespace ApiGateway.Models
             using (var db = new DBContext())
             {
                 db.TicketsPriorities.Add(data);
-                int insertId = db.SaveChanges();
+                var insertId = db.SaveChanges();
 
                 if (insertId > 0)
                 {
@@ -231,7 +229,7 @@ namespace ApiGateway.Models
 
         public bool UpdatePriority(int id, dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
 
             if (affectedRows > 0)
             {
@@ -243,13 +241,13 @@ namespace ApiGateway.Models
 
         public bool DeletePriority(int id)
         {
-            Tickets current = (Tickets)this.Get(id);
+            var current = (Tickets) this.Get(id);
             if (this.is_reference_in_table("Priority", "tickets", id))
             {
                 return true;
             }
 
-            int affectedRows = 0;
+            var affectedRows = 0;
 
             if (affectedRows > 0)
             {
@@ -277,7 +275,7 @@ namespace ApiGateway.Models
 
         public int AddPredefinedReply(TicketsPredefinedReplies data)
         {
-            int insertid = 0;
+            var insertid = 0;
 
             this.log_activity("New Predefined Reply Added [ID: " + insertid + ", " + data.Name + "]");
 
@@ -286,7 +284,7 @@ namespace ApiGateway.Models
 
         public bool UpdatePredefinedReply(int id, dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
 
             if (affectedRows > 0)
             {
@@ -298,7 +296,7 @@ namespace ApiGateway.Models
 
         public bool DeletePredefinedReply(int id)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
 
             if (affectedRows > 0)
             {
@@ -325,7 +323,7 @@ namespace ApiGateway.Models
 
         public int AddTicketStatus(TicketsStatus data)
         {
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 this.log_activity("New Ticket Status Added [ID: " + insert_id + ", " + data.Name + "]");
@@ -337,7 +335,7 @@ namespace ApiGateway.Models
 
         public bool UpdateTicketStatus(int id, dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             if (affectedRows > 0)
             {
                 return true;
@@ -348,7 +346,7 @@ namespace ApiGateway.Models
 
         public bool DeleteTicketStatus(int id)
         {
-            TicketsStatus current = this.GetTicketStatus(id).FirstOrDefault();
+            var current = this.GetTicketStatus(id).FirstOrDefault();
             if (current.IsDefault == 1)
             {
                 return true;
@@ -358,7 +356,7 @@ namespace ApiGateway.Models
                 return true;
             }
 
-            int affectedRows = 0;
+            var affectedRows = 0;
             if (affectedRows > 0)
             {
                 this.log_activity("Ticket Status Deleted [ID: " + id + "]");
@@ -375,7 +373,7 @@ namespace ApiGateway.Models
 
         public int AddService(Services data)
         {
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 this.log_activity("New Ticket Service Added [ID: " + insert_id + "." + data.Name + "]");
@@ -386,7 +384,7 @@ namespace ApiGateway.Models
 
         public bool UpdateService(int id, dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             if (affectedRows > 0)
             {
                 return true;
@@ -402,7 +400,7 @@ namespace ApiGateway.Models
                 return true;
             }
 
-            int affectedRows = 0;
+            var affectedRows = 0;
             if (affectedRows > 0)
             {
                 this.log_activity("Ticket Service Deleted [ID: " + id + "]");
@@ -428,7 +426,7 @@ namespace ApiGateway.Models
                 return false;
             }
 
-            int customer_id = this.get_user_id_by_contact_id(contact_id);
+            var customer_id = this.get_user_id_by_contact_id(contact_id);
 
             return true;
         }

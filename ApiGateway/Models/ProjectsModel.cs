@@ -1,15 +1,13 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
-using JamfahCrm.Library.Services.Utilities;
+﻿using ApiGateway.Library.Helpers;
+using ApiGateway.Library.Services.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries;
-using WiseSystem.Libraries.Core;
-using WiseSystem.Libraries.Helpers;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
+using static ApiGateway.System.Language;
 
 namespace ApiGateway.Models
 {
@@ -34,7 +32,7 @@ namespace ApiGateway.Models
                 {
                     id = 1,
                     color = "#989898",
-                    name = this.label("project_status_1"),
+                    name = label("project_status_1"),
                     order = 1,
                     filter_default = true,
                 },
@@ -42,7 +40,7 @@ namespace ApiGateway.Models
                 {
                     id = 2,
                     color = "#03a9f4",
-                    name = this.label("project_status_2"),
+                    name = label("project_status_2"),
                     order = 2,
                     filter_default = true,
                 },
@@ -50,7 +48,7 @@ namespace ApiGateway.Models
                 {
                     id = 3,
                     color = "#ff6f00",
-                    name = this.label("project_status_3"),
+                    name = label("project_status_3"),
                     order = 3,
                     filter_default = true,
                 },
@@ -58,7 +56,7 @@ namespace ApiGateway.Models
                 {
                     id = 4,
                     color = "#84c529",
-                    name = this.label("project_status_4"),
+                    name = label("project_status_4"),
                     order = 100,
                     filter_default = false,
                 },
@@ -66,12 +64,12 @@ namespace ApiGateway.Models
                 {
                     id = 5,
                     color = "#989898",
-                    name = this.label("project_status_5"),
+                    name = label("project_status_5"),
                     order = 4,
                     filter_default = false,
                 }
             };
-            this.hooks().ApplyFilters("before_get_project_statuses", statuses);
+            hooks().ApplyFilters("before_get_project_statuses", statuses);
 
             return statuses;
         }
@@ -96,7 +94,7 @@ namespace ApiGateway.Models
         {
             using (var db = new DBContext())
             {
-                int total_rows = db.PinnedProjects
+                var total_rows = db.PinnedProjects
                     .Where(table => table.UserId == this.get_staff_user_id() && table.ProjectId == id).ToList().Count;
 
                 if (total_rows == 0)
@@ -135,18 +133,18 @@ namespace ApiGateway.Models
                 return this.calc_progress_by_tasks(id);
             }
 
-            return (int)project.Progress;
+            return (int) project.Progress;
         }
 
         public int calc_progress_by_tasks(int id)
         {
-            int percent = 0;
+            var percent = 0;
             using (var db = new DBContext())
             {
-                int total_project_tasks = db.Tasks.Where(table => table.RelType == "project" && table.RelId == id)
+                var total_project_tasks = db.Tasks.Where(table => table.RelType == "project" && table.RelId == id)
                     .ToList().Count;
 
-                int total_finished_tasks = db.Tasks
+                var total_finished_tasks = db.Tasks
                     .Where(table => table.RelType == "project" && table.RelId == id && table.Status == 5).ToList()
                     .Count;
 
@@ -186,8 +184,8 @@ namespace ApiGateway.Models
 
         public dynamic calculate_total_by_task_hourly_rate(List<Tasks> tasks)
         {
-            int total_money = 0;
-            int _total_seconds = 0;
+            var total_money = 0;
+            var _total_seconds = 0;
             foreach (var task in tasks)
             {
             }
@@ -244,7 +242,7 @@ namespace ApiGateway.Models
 
         public bool remove_file(int id, bool logActivity = true)
         {
-            this.hooks().DoAction("before_remove_project_file", id);
+            hooks().DoAction("before_remove_project_file", id);
             return false;
         }
 
@@ -278,13 +276,13 @@ namespace ApiGateway.Models
         public int add_milestone(Milestones data)
         {
             data.DateCreated = DateTime.Now;
-            data.Description = data.Description.nl2br();
+            // data.Description = data.Description.nl2br();
 
-            int insert_id = 0;
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 var milestone = new Milestones();
-                var project = (Projects)this.Get(milestone.ProjectId);
+                var project = (Projects) this.Get(milestone.ProjectId);
                 this.log_activity("Project Milestone Created [ID:" + insert_id + "]");
 
                 return insert_id;
@@ -296,9 +294,9 @@ namespace ApiGateway.Models
         public bool update_milestone(int id, Milestones data)
         {
             var milestone = new Milestones();
-            data.Description = data.Description.nl2br();
+            // data.Description = data.Description.nl2br();
 
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {
@@ -328,7 +326,7 @@ namespace ApiGateway.Models
         {
             var milestone = new Milestones();
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 var project = this.Get(milestone.ProjectId);
@@ -358,10 +356,10 @@ namespace ApiGateway.Models
 
         public bool send_project_customer_email(int id, string template)
         {
-            int clientid = 0;
+            var clientid = 0;
 
             var sent = false;
-            var contacts = this.clients_model().GetContacts(clientid, new { Active = true, ProjectEmails = true });
+            var contacts = this.clients_model().GetContacts(clientid, new {Active = true, ProjectEmails = true});
 
             foreach (var contact in contacts)
             {
@@ -383,7 +381,7 @@ namespace ApiGateway.Models
 
         private void _mark_all_project_tasks_as_completed(int id)
         {
-            var tasks = (List<Tasks>)this.get_tasks(id);
+            var tasks = (List<Tasks>) this.get_tasks(id);
             foreach (var task in tasks)
             {
             }
@@ -401,7 +399,7 @@ namespace ApiGateway.Models
                 staff_id = this.get_staff_user_id();
             }
 
-            int member = 0;
+            var member = 0;
             using (var db = new DBContext())
             {
                 member = db.ProjectMembers
@@ -432,7 +430,7 @@ namespace ApiGateway.Models
 
         public bool remove_team_member(int project_id, int staff_id)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;
@@ -498,7 +496,7 @@ namespace ApiGateway.Models
         {
             var comment = this.get_discussion_comment(data.ProjectDiscussionCommentId);
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this._update_discussion_last_activity(comment.DiscussionId, comment.DiscussionType);
@@ -511,7 +509,7 @@ namespace ApiGateway.Models
         {
             var comment = this.get_discussion_comment(id);
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.delete_discussion_comment_attachment(comment.FileName, comment.DiscussionId);
@@ -562,7 +560,7 @@ namespace ApiGateway.Models
         public bool delete_discussion(int id, bool logActivity = true)
         {
             var discussion = this.get_discussion(id);
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 if (logActivity)
@@ -698,7 +696,7 @@ namespace ApiGateway.Models
                 "view_team_members",
                 "hide_tasks_on_main_tasks_table"
             };
-            this.hooks().ApplyFilters("project_settings", project_settings);
+            hooks().ApplyFilters("project_settings", project_settings);
         }
     }
 

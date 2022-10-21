@@ -1,5 +1,5 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
+﻿using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {

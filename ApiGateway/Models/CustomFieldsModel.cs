@@ -1,7 +1,7 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -54,7 +54,7 @@ namespace ApiGateway.Models
                 data["disalow_client_to_edit"] = 0;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 if (data["type"] == "checkbox" || data["type"] == "select" || data["type"] == "multiselect")
@@ -69,7 +69,7 @@ namespace ApiGateway.Models
 
         public bool Delete(int id)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Custom Field Deleted [" + id + "]");

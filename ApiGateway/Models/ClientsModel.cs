@@ -1,14 +1,14 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
-using JamfahCrm.Library.Services.Utilities;
+using ApiGateway.Library.Helpers;
+using ApiGateway.Library.Services.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries.Core.Compat;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -45,8 +45,8 @@ namespace ApiGateway.Models
 
         public int Add(dynamic data, bool client_or_lead_convert_request = false)
         {
-            Dictionary<string, object> contact_data = new Dictionary<string, object>();
-            Clients client = new Clients();
+            var contact_data = new Dictionary<string, object>();
+            var client = new Clients();
             this.contact_columns.ForEach((field) =>
             {
                 if (data.ContainsKey(field))
@@ -69,7 +69,7 @@ namespace ApiGateway.Models
                 client.AddedFrom = this.get_staff_user_id();
             }
 
-            this.hooks().ApplyFilters("before_client_added", data);
+            hooks().ApplyFilters("before_client_added", data);
             return 0;
         }
 
@@ -84,7 +84,7 @@ namespace ApiGateway.Models
 
         public object UpdateContact(Contacts data, bool client_request = false, bool send_set_password_email = false)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             using (var db = new DBContext())
             {
                 var clients = this.GetContact(data.ContactId);
@@ -101,7 +101,7 @@ namespace ApiGateway.Models
                 var set_password_email_sent = false;
                 var permissions =
                     new List<Permission>();
-                if (client_request == true)
+                if (client_request)
                 {
                     data.IsPrimary = 0;
                 }
@@ -110,11 +110,11 @@ namespace ApiGateway.Models
                 {
                 }
 
-                this.hooks().ApplyFilters("before_update_contact", data);
+                hooks().ApplyFilters("before_update_contact", data);
 
                 var contact = db.Contacts.Find(data.ContactId);
                 db.Entry(contact).CurrentValues.SetValues(data);
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
 
                 if (affected_rows > 0)
                 {
@@ -249,19 +249,18 @@ namespace ApiGateway.Models
 
         public bool AssignAdmins(dynamic data)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             return (affectedRows > 0);
         }
 
         public bool Delete(int? id)
         {
-
             return false;
         }
 
         public bool DeleteContact(int? id)
         {
-            this.hooks().DoAction("before_delete_contact", id);
+            hooks().DoAction("before_delete_contact", id);
             return false;
         }
 
@@ -282,13 +281,13 @@ namespace ApiGateway.Models
 
         public bool DeleteAttachment(int id)
         {
-            bool deleted = false;
+            var deleted = false;
             return deleted;
         }
 
         public bool ChangeContactStatus(int id, bool status)
         {
-            this.hooks().ApplyFilters<int>("change_contact_status");
+            hooks().ApplyFilters("change_contact_status");
             using (var db = new DBContext())
             {
                 var entry = db.Contacts.FirstOrDefault(table => table.ContactId == id);
@@ -296,7 +295,7 @@ namespace ApiGateway.Models
                 {
                     Active = status
                 });
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
                 this.log_activity("Contact Status Changed [ContactID: " + id + " Status(Active/Inactive): " + status +
                                   "]");
                 return (affected_rows > 0);
@@ -393,13 +392,13 @@ namespace ApiGateway.Models
 
         public bool require_confirmation(int client_id)
         {
-            int ContactId = this.get_primary_contact_user_id(client_id);
+            var ContactId = this.get_primary_contact_user_id(client_id);
             return true;
         }
 
         public bool ConfirmRegistration(int client_id)
         {
-            int ContactId = this.get_primary_contact_user_id(client_id);
+            var ContactId = this.get_primary_contact_user_id(client_id);
             var contact = this.GetContact(ContactId);
             if (contact != null)
             {
@@ -427,7 +426,7 @@ namespace ApiGateway.Models
                         db.Countries,
                         clients => clients.Country,
                         countries => countries.CountryId,
-                        (clients, countries) => new { clients, countries })
+                        (clients, countries) => new {clients, countries})
                     .ToList();
             }
         }

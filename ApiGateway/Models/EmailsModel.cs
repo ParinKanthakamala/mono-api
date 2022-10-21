@@ -1,7 +1,7 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -42,7 +42,7 @@ namespace ApiGateway.Models
 
         public bool MarkAsByType(string type, bool enabled)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             return (affected_rows > 0);
         }
 

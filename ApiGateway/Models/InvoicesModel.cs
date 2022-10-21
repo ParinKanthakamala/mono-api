@@ -1,11 +1,11 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using JamfahCrm.Library.Helpers.Staff;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library.Helpers.Staff;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -67,14 +67,14 @@ namespace ApiGateway.Models
 
         public bool mark_as_cancelled(int id)
         {
-            Invoices invoices = new Invoices();
+            var invoices = new Invoices();
             invoices.Status = InvoicesModel.STATUS_CANCELLED;
             invoices.Sent = true;
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_invoice_activity(id, "invoice_activity_marked_as_cancelled");
-                this.hooks().DoAction("invoice_marked_as_cancelled", id);
+                hooks().DoAction("invoice_marked_as_cancelled", id);
                 return true;
             }
 
@@ -83,9 +83,9 @@ namespace ApiGateway.Models
 
         public bool UnmarkAsCancelled(int id)
         {
-            Invoices invoices = new Invoices();
+            var invoices = new Invoices();
             invoices.Status = InvoicesModel.STATUS_UNPAID;
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 return true;
@@ -148,7 +148,8 @@ namespace ApiGateway.Models
             return false;
         }
 
-        public void set_invoice_sent(int id, bool manually = false, List<string> emails_sent = default(List<string>), bool is_status_updated = false)
+        public void set_invoice_sent(int id, bool manually = false, List<string> emails_sent = default(List<string>),
+            bool is_status_updated = false)
         {
         }
 
@@ -157,7 +158,8 @@ namespace ApiGateway.Models
             return false;
         }
 
-        public bool send_invoice_to_client(int id, string template_name = "", bool attachpdf = true, string cc = "", bool manually = false,
+        public bool send_invoice_to_client(int id, string template_name = "", bool attachpdf = true, string cc = "",
+            bool manually = false,
             List<object> attachStatement = default(List<object>))
         {
             return false;
@@ -173,7 +175,6 @@ namespace ApiGateway.Models
         {
             var staffid = this.get_staff_user_id();
             var fullname = this.get_staff_fullname(staffid);
-
         }
 
         public void get_invoices_years()

@@ -1,12 +1,10 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System;
 using System.Linq;
-using WiseSystem.Libraries.Core.Compat;
-using WiseSystem.Libraries.Helpers;
-using WiseSystem.Libraries.Services;
-using WiseSystem.Libraries.WiseSession;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
+using static ApiGateway.System.Url;
 
 namespace ApiGateway.Models
 {
@@ -31,20 +29,20 @@ namespace ApiGateway.Models
 
                             if (user.Password == password && user.Active == 1)
                             {
-                                this.session().Set("user_id", user.UserId);
+                                session().Set("user_id", user.UserId);
 
                                 db.Entry(user)
                                     .CurrentValues
                                     .SetValues(new Users()
                                     {
                                         LastActivity = DateTime.Now,
-                                        LastIp = this.input.ip_address()
+                                        LastIp = input().ip_address()
                                     });
                                 db.SaveChanges();
 
                                 this.log_activity("Failed Login Attempt [Email: " + email + ", Is Staff Member: " +
-                                                  (isStaff == true ? "Yes" : "No") + ", IP: " +
-                                                  this.input.ip_address() + "]");
+                                                  (isStaff ? "Yes" : "No") + ", IP: " +
+                                                  input().ip_address() + "]");
                                 return true;
                             }
                         }
@@ -59,7 +57,7 @@ namespace ApiGateway.Models
                         if (contacts != null && contacts.Active.HasValue)
                         {
                             this.log_activity("Failed Login Attempt [Email: " + email + ", Is Staff Member: " +
-                                              (isStaff ? "Yes" : "No") + ", IP: " + this.input.ip_address() +
+                                              (isStaff ? "Yes" : "No") + ", IP: " + input().ip_address() +
                                               "]");
                         }
                     }
@@ -77,24 +75,19 @@ namespace ApiGateway.Models
 
             if (this.is_client_logged_in())
             {
-                this.hooks().DoAction("before_contact_logout", this.get_client_user_id());
+                hooks().DoAction("before_contact_logout", this.get_client_user_id());
             }
             else
             {
-                this.hooks().DoAction("before_user_logout", this.get_staff_user_id());
+                hooks().DoAction("before_user_logout", this.get_staff_user_id());
             }
         }
 
         private bool create_autoLogin(int user_id, bool user)
         {
-            var key = PasswordHandler.CreatePasswordHash("".RandomString(16));
-            this.userautologin_model().Delete(user_id, key, user);
-
-            if (this.userautologin_model().Set(user_id, key, user))
-            {
-                return true;
-            }
-
+            // var key = PasswordHandler.CreatePasswordHash("".RandomString(16));
+            // this.userautologin_model().Delete(user_id, key, user);
+            // return this.userautologin_model().Set(user_id, key, user);
             return false;
         }
 
@@ -113,8 +106,8 @@ namespace ApiGateway.Models
 
         private void UpdateLoginInfo(int user_id, bool user)
         {
-            string table = (user) ? "Staff" : "Contacts";
-            string id = (user) ? "StaffId" : "Id";
+            var table = (user) ? "Staff" : "Contacts";
+            var id = (user) ? "StaffId" : "Id";
         }
 
         public bool SetPasswordEmail(string email)
@@ -140,7 +133,7 @@ namespace ApiGateway.Models
                         db.SaveChanges();
                     }
 
-                    int affected_rows = db.SaveChanges();
+                    var affected_rows = db.SaveChanges();
 
                     if (affected_rows > 0)
                     {
@@ -152,7 +145,7 @@ namespace ApiGateway.Models
 
                         if (sent != null)
                         {
-                            this.hooks().DoAction("set_password_email_sent", new {is_user_member = false, user = user});
+                            hooks().DoAction("set_password_email_sent", new {is_user_member = false, user = user});
                             return true;
                         }
 
@@ -168,8 +161,8 @@ namespace ApiGateway.Models
 
         public bool ForgotPassword(string email, bool user = false)
         {
-            string table = (user) ? "Staff" : "Contacts";
-            string _id = (user) ? "StaffId" : "Id";
+            var table = (user) ? "Staff" : "Contacts";
+            var _id = (user) ? "StaffId" : "Id";
             return false;
         }
 
@@ -223,7 +216,7 @@ namespace ApiGateway.Models
 
         public void two_factor_auth_Login(Users user)
         {
-            this.hooks().DoAction("before_user_login", new
+            hooks().DoAction("before_user_login", new
             {
                 email = user.Email,
                 user_id = user.UserId,

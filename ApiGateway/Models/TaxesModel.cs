@@ -1,8 +1,8 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -16,7 +16,7 @@ namespace ApiGateway.Models
         public bool Add(Taxes data)
         {
             data.Name = data.Name.Trim();
-            int effected = 0;
+            var effected = 0;
 
             if (effected > 0)
             {
@@ -51,7 +51,7 @@ namespace ApiGateway.Models
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
 
             if (affected_rows > 0)
             {

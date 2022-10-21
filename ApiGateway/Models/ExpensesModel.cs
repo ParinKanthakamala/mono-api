@@ -1,11 +1,10 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries.Helpers;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -18,7 +17,7 @@ namespace ApiGateway.Models
 
         public int Add(Expenses data)
         {
-            data.Note = data.Note.nl2br();
+            // data.Note = data.Note.nl2br();
 
             return 0;
         }
@@ -37,8 +36,8 @@ namespace ApiGateway.Models
         public bool Update(int id, dynamic data)
         {
             var original_expense = this.Get(id);
-            int affectedRows = 0;
-            int affected_rows = 0;
+            var affectedRows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Expense Updated [" + id + "]");
@@ -51,13 +50,13 @@ namespace ApiGateway.Models
         public bool Delete(int id, bool simple_delete = false)
         {
             var tasks_model = new TasksModel();
-            var _expense = (Expenses)this.Get(id);
+            var _expense = (Expenses) this.Get(id);
             if (_expense.InvoiceId != null && simple_delete == false)
             {
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 var tasks = new List<Tasks>();
@@ -91,8 +90,8 @@ namespace ApiGateway.Models
 
         public int AddCategory(ExpensesCategories data)
         {
-            data.Description = data.Description.nl2br();
-            int insert_id = 0;
+            // data.Description = data.Description.nl2br();
+            var insert_id = 0;
             if (insert_id > 0)
             {
                 this.log_activity("New Expense Category Added [ID: " + insert_id + "]");
@@ -105,7 +104,7 @@ namespace ApiGateway.Models
         public bool UpdateCategory(int id, dynamic data)
         {
             data.Description = Convert.ToString(data.Description).nl2br();
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Expense Category Updated [ID: " + id + "]");
@@ -122,7 +121,7 @@ namespace ApiGateway.Models
                 return true;
             }
 
-            int affected_rows = 0;
+            var affected_rows = 0;
             using (var db = new DBContext())
             {
                 var entry = db.ExpensesCategories.FirstOrDefault(table => table.ExpensesCategoriesId == id);

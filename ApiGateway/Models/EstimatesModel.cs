@@ -1,13 +1,12 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
-using JamfahCrm.Library.Services.Utilities;
+using ApiGateway.Library.Helpers;
+using ApiGateway.Library.Services.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using JamfahCrm.Library.Helpers.Staff;
-using WiseSystem.Libraries;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library.Helpers.Staff;
 
 namespace ApiGateway.Models
 {
@@ -35,7 +34,7 @@ namespace ApiGateway.Models
 
         public bool ClearSignature(int id)
         {
-            Estimates estimate = new Estimates();
+            var estimate = new Estimates();
             if (estimate != default(Estimates))
             {
                 if (!string.IsNullOrEmpty(estimate.Signature))
@@ -58,7 +57,7 @@ namespace ApiGateway.Models
             var _estimate = this.Get(id).FirstOrDefault();
 
             var new_invoice_data = new Invoices();
-            if (draft_invoice == true)
+            if (draft_invoice)
             {
             }
 
@@ -135,7 +134,7 @@ namespace ApiGateway.Models
             new_estimate_data.ShippingState = _estimate.ShippingState;
             new_estimate_data.ShippingZip = _estimate.ShippingZip;
             new_estimate_data.ShippingCountry = _estimate.ShippingCountry;
-            if (_estimate.IncludeShipping == true)
+            if (_estimate.IncludeShipping)
             {
                 new_estimate_data.IncludeShipping = _estimate.IncludeShipping;
             }
@@ -150,12 +149,12 @@ namespace ApiGateway.Models
         public void GetEstimatesTotal(dynamic data)
         {
             statuses = this.GetStatuses();
-            bool has_permission_view = Permission.CanView("estimates");
+            var has_permission_view = Permission.CanView("estimates");
         }
 
         public bool Add(Estimates data)
         {
-            data.DateCreated = SharePoint.Now;
+            // data.DateCreated = SharePoint.Now;
             data.AddedFrom = this.get_staff_user_id();
             data.Prefix = this.get_option<string>("estimate_prefix");
 
@@ -183,8 +182,8 @@ namespace ApiGateway.Models
                     Status = action
                 });
 
-                int affected_rows = db.SaveChanges();
-                List<Users> notified_users = new List<Users>();
+                var affected_rows = db.SaveChanges();
+                var notified_users = new List<Users>();
                 if (affected_rows > 0)
                 {
                     var estimate = this.Get(id).FirstOrDefault();
@@ -192,7 +191,7 @@ namespace ApiGateway.Models
                     {
                         var staff_estimate = db.Users.Where(table => table.UserId == estimate.AddedFrom || table.UserId == estimate.SaleAgent).ToList();
                         var invoice_id = 0;
-                        int contact_id = !this.is_client_logged_in()
+                        var contact_id = !this.is_client_logged_in()
                             ? this.get_primary_contact_user_id(estimate.ClientId)
                             : this.get_contact_user_id();
                         if (action == 4)
@@ -244,14 +243,14 @@ namespace ApiGateway.Models
         public bool DeleteAttachment(int id)
         {
             var attachment = (Files)this.GetAttachments(0, id);
-            bool deleted = false;
+            var deleted = false;
             if (attachment != null)
             {
                 if (string.IsNullOrEmpty(attachment.External))
                 {
                 }
 
-                int affected_rows = 0;
+                var affected_rows = 0;
 
                 if (affected_rows > 0)
                 {

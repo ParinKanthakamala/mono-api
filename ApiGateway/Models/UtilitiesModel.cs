@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
-using JamfahCrm.Library.Helpers.Staff;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library.Helpers.Staff;
 
 namespace ApiGateway.Models
 {
@@ -11,7 +11,7 @@ namespace ApiGateway.Models
     {
         public bool Event(dynamic data)
         {
-            Events events = new Events();
+            var events = new Events();
             events.UserId = this.get_staff_user_id();
             events.Start = DateTime.Now;
 
@@ -25,7 +25,7 @@ namespace ApiGateway.Models
 
         public List<Events> GetAllEvents(int start, int end)
         {
-            bool isStaffMember = this.is_staff_member();
+            var isStaffMember = this.is_staff_member();
             return null;
         }
 

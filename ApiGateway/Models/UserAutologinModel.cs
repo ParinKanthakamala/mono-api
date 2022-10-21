@@ -1,7 +1,7 @@
 ﻿using System;
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
 using System.Linq;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {

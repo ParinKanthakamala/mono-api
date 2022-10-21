@@ -1,6 +1,6 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Core;
+using ApiGateway.Entities;
+using ApiGateway.Library.Helpers;
 
 namespace ApiGateway.Models
 {
@@ -13,7 +13,7 @@ namespace ApiGateway.Models
                 db.ContractsTypes.Add(data);
                 db.SaveChanges();
 
-                int insert_id = data.ContractsTypeId;
+                var insert_id = data.ContractsTypeId;
                 if (insert_id > 0)
                 {
                     this.log_activity("New Contract Type Added[" + data.Name + "]");
@@ -26,7 +26,7 @@ namespace ApiGateway.Models
 
         public bool Update(int id, ContractsTypes data)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             if (affected_rows > 0)
             {
                 this.log_activity("Contract Type Updated [" + data.Name + ", ID:" + id + "]");

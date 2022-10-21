@@ -1,10 +1,10 @@
-using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+using ApiGateway.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -39,7 +39,7 @@ namespace ApiGateway.Models
 
         public bool Update(Contracts contract)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
             if (contract.DateEnd == null)
             {
             }
@@ -88,7 +88,7 @@ namespace ApiGateway.Models
 
         public bool Delete(int id)
         {
-            this.hooks().DoAction("before_contract_deleted", id);
+            hooks().DoAction("before_contract_deleted", id);
             this.ClearSignature(id);
             return false;
         }
@@ -100,7 +100,7 @@ namespace ApiGateway.Models
 
         public bool DeleteContractAttachment(int attachment_id)
         {
-            bool deleted = false;
+            var deleted = false;
             return deleted;
         }
 

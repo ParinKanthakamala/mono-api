@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using WiseSystem.Libraries.Services;
+using ApiGateway.Core;
+using ApiGateway.Entities;
+using static ApiGateway.Core.MyHooks;
 
 namespace ApiGateway.Models
 {
@@ -16,7 +16,7 @@ namespace ApiGateway.Models
             get
             {
                 this._todo_limit = 20;
-                this.hooks().ApplyFilters("todos_limit", this._todo_limit);
+                hooks().ApplyFilters("todos_limit", this._todo_limit);
                 return this._todo_limit;
             }
             set => _todo_limit = value;
@@ -53,9 +53,7 @@ namespace ApiGateway.Models
                     .ToList();
             }
 
-            todos.ForEach((todo) =>
-            {
-            });
+            todos.ForEach((todo) => { });
             return todos;
         }
 

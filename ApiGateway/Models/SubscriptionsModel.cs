@@ -1,9 +1,9 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using JamfahCrm.Library.Helpers;
+﻿using ApiGateway.Library.Helpers;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -47,7 +47,7 @@ namespace ApiGateway.Models
                 var entry = db.Subscriptions.FirstOrDefault(table => table.SubscriptionId == id);
                 if (entry == null) return false;
                 db.Entry(entry).CurrentValues.SetValues(data);
-                int affected_rows = db.SaveChanges();
+                var affected_rows = db.SaveChanges();
                 return (affected_rows > 0);
             }
         }
@@ -59,7 +59,7 @@ namespace ApiGateway.Models
 
         public bool Delete(int id, bool simpleDelete = false)
         {
-            int affected_rows = 0;
+            var affected_rows = 0;
             using (var db = new DBContext())
             {
                 var entry = db.Subscriptions.FirstOrDefault(table => table.DescriptionInItem);

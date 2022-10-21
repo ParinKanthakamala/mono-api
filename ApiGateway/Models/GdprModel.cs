@@ -1,9 +1,8 @@
-﻿using Entities.Models;
-using JamfahCrm.Controllers.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using WiseSystem.Libraries;
+using ApiGateway.Core;
+using ApiGateway.Entities;
 
 namespace ApiGateway.Models
 {
@@ -44,7 +43,7 @@ namespace ApiGateway.Models
 
         public int add_consent_purpose(ConsentPurposes data)
         {
-            data.DateCreated = SharePoint.Now;
+            // data.DateCreated = SharePoint.Now;
             return 0;
         }
 
